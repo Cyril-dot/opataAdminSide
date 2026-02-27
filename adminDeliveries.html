@@ -24,18 +24,17 @@
     body{
       background:var(--cream);color:var(--ink);font-family:'Outfit',system-ui,sans-serif;
       line-height:1.6;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;
-      touch-action:manipulation;
     }
     a{text-decoration:none;color:inherit}
     button{
       cursor:pointer;font-family:inherit;border:none;outline:none;background:none;
       touch-action:manipulation;
-      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      -webkit-tap-highlight-color:transparent;
       user-select:none;-webkit-user-select:none;
     }
-    a, button, [role="button"], .stab {
+    a{
       touch-action:manipulation;
-      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      -webkit-tap-highlight-color:transparent;
     }
     ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--parchment)}::-webkit-scrollbar-thumb{background:var(--warm-mid);border-radius:99px}
 
@@ -44,25 +43,25 @@
     .ham{
       display:none;flex-direction:column;gap:4px;padding:10px;cursor:pointer;
       border-radius:var(--r-sm);background:none;border:none;flex-shrink:0;
-      min-width:44px;min-height:44px;align-items:center;justify-content:center;
-      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+      width:44px;height:44px;align-items:center;justify-content:center;
+      touch-action:manipulation;-webkit-tap-highlight-color:transparent;
     }
-    .ham span{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px;transition:all .26s var(--ease)}
+    .ham span{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px;transition:all .26s var(--ease);pointer-events:none}
     .ham.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
     .ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
     .ham.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
-    .logo{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(.82rem,2.5vw,1.08rem);letter-spacing:.04em;display:flex;align-items:center;gap:.28rem;white-space:nowrap;flex-shrink:0}
+    .logo{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(.82rem,2.5vw,1.08rem);letter-spacing:.04em;display:flex;align-items:center;gap:.28rem;white-space:nowrap;flex-shrink:0;touch-action:manipulation}
     .logo-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;margin-bottom:3px}
     .admin-badge{display:inline-flex;align-items:center;gap:.28rem;background:rgba(168,133,78,.1);color:var(--gold);font-size:clamp(.55rem,.85vw,.62rem);font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .5rem;border-radius:var(--r-xl);border:1px solid rgba(168,133,78,.25);flex-shrink:0}
     @media(max-width:400px){.admin-badge{display:none}}
     .topbar-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}
-    .topbar-link{display:inline-flex;align-items:center;gap:.32rem;font-size:.78rem;color:var(--muted);font-weight:500;padding:.32rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .18s;min-height:44px;}
+    .topbar-link{display:inline-flex;align-items:center;gap:.32rem;font-size:.78rem;color:var(--muted);font-weight:500;padding:.32rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .18s;min-height:44px;touch-action:manipulation}
     .topbar-link:hover{border-color:var(--gold);color:var(--gold)}
     .topbar-avatar{
       width:44px;height:44px;background:linear-gradient(135deg,var(--gold),var(--blush));
       border-radius:50%;display:flex;align-items:center;justify-content:center;
       color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;
-      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+      touch-action:manipulation;-webkit-tap-highlight-color:transparent;
     }
 
     /* SIDEBAR */
@@ -70,7 +69,7 @@
     .sidebar{width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:var(--nav-h);left:0;height:calc(100vh - var(--nav-h));overflow-y:auto;z-index:150;transition:transform .3s var(--ease)}
     .sidebar-overlay{
       display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;
-      opacity:0;transition:opacity .26s;touch-action:manipulation;
+      opacity:0;transition:opacity .26s;touch-action:manipulation;cursor:pointer;
     }
     .sidebar-overlay.active{opacity:1}
     .snav{padding:.65rem 0;flex:1}
@@ -79,11 +78,11 @@
       display:flex;align-items:center;gap:.7rem;padding:.75rem 1rem;font-size:.86rem;
       font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;
       margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0;
-      min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+      min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;
     }
     .snav a:hover,.snav a:active{background:var(--parchment);color:var(--ink)}
     .snav a.active{background:rgba(168,133,78,.08);color:var(--gold);border-left-color:var(--gold);font-weight:600}
-    .snav a i{width:16px;text-align:center;font-size:.82rem;flex-shrink:0}
+    .snav a i{width:16px;text-align:center;font-size:.82rem;flex-shrink:0;pointer-events:none}
     .sdiv{height:1px;background:var(--border);margin:.4rem .9rem}
     .sfooter{padding:.9rem 1rem 1.4rem;border-top:1px solid var(--border)}
     .s-admin-block{display:flex;align-items:center;gap:.6rem;padding:.65rem .75rem;background:var(--parchment);border-radius:var(--r-md);margin-bottom:.65rem}
@@ -95,16 +94,17 @@
       background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);
       border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;
       cursor:pointer;transition:background .18s;width:100%;
-      min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+      min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;
     }
     .s-logout:hover,.s-logout:active{background:rgba(192,57,43,.13)}
+    .s-logout i{pointer-events:none}
 
     /* MAIN */
     .main{margin-left:var(--sidebar-w);flex:1;padding:clamp(1rem,3vw,2rem) clamp(.75rem,3vw,2rem);min-width:0}
     .page-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.1rem;gap:1rem;flex-wrap:wrap}
     .bc{display:flex;align-items:center;gap:.35rem;font-size:.73rem;color:var(--subtle);margin-bottom:.4rem;flex-wrap:wrap}
-    .bc a{color:var(--muted);transition:color .18s;min-height:36px;display:inline-flex;align-items:center;}.bc a:hover{color:var(--gold)}
-    .bc i{font-size:.52rem}
+    .bc a{color:var(--muted);transition:color .18s;min-height:36px;display:inline-flex;align-items:center;touch-action:manipulation}.bc a:hover{color:var(--gold)}
+    .bc i{font-size:.52rem;pointer-events:none}
     .page-hd h1{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,3.5vw,1.8rem);font-weight:700}
     .page-hd p{font-size:clamp(.78rem,2vw,.84rem);color:var(--muted)}
 
@@ -115,9 +115,10 @@
       border-radius:var(--r-xl);border:1.5px solid var(--border);color:var(--muted);
       cursor:pointer;transition:all .16s;background:var(--white);
       min-height:44px;display:inline-flex;align-items:center;gap:.3rem;
-      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+      touch-action:manipulation;-webkit-tap-highlight-color:transparent;
       user-select:none;-webkit-user-select:none;
     }
+    .stab *{pointer-events:none}
     .stab:hover,.stab:active{border-color:var(--gold);color:var(--gold)}
     .stab.active{background:var(--ink);color:white;border-color:var(--ink)}
 
@@ -138,9 +139,9 @@
       display:inline-flex;align-items:center;gap:.32rem;background:var(--ink);color:white;
       font-size:.8rem;font-weight:600;padding:.55rem 1rem;border-radius:var(--r-xl);
       cursor:pointer;transition:background .18s;
-      min-height:44px;
-      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+      min-height:44px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;
     }
+    .btn-filter *{pointer-events:none}
     .btn-filter:hover,.btn-filter:active{background:var(--gold)}
 
     /* TABLE */
@@ -168,7 +169,7 @@
       .tbl-scroll{overflow:visible}
     }
 
-    .dstatus{display:inline-flex;align-items:center;gap:.28rem;font-size:.63rem;font-weight:700;padding:.18rem .6rem;border-radius:var(--r-xl);white-space:nowrap}
+    .dstatus{display:inline-flex;align-items:center;gap:.28rem;font-size:.63rem;font-weight:700;padding:.18rem .6rem;border-radius:var(--r-xl);white-space:nowrap;pointer-events:none}
     .dstatus.PENDING{background:#fef3cd;color:#b7791f}
     .dstatus.CONFIRMED{background:#dbeafe;color:#1d4ed8}
     .dstatus.PICKED_UP{background:#e0f2fe;color:#0369a1}
@@ -180,8 +181,8 @@
       font-size:.7rem;font-weight:600;padding:.3rem .65rem;border-radius:var(--r-xl);
       border:1.5px solid var(--border);cursor:pointer;transition:all .15s;
       background:none;color:var(--muted);white-space:nowrap;
-      min-height:36px;display:inline-flex;align-items:center;gap:.25rem;
-      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+      min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center;gap:.25rem;
+      touch-action:manipulation;-webkit-tap-highlight-color:transparent;
     }
     .btn-sm *{pointer-events:none}
     .btn-sm:hover,.btn-sm:active{border-color:var(--gold);color:var(--gold)}
@@ -193,7 +194,7 @@
       position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;
       display:flex;align-items:center;justify-content:center;padding:1rem;
       opacity:0;pointer-events:none;transition:opacity .22s;overflow-y:auto;
-      -webkit-overflow-scrolling:touch;touch-action:manipulation;
+      -webkit-overflow-scrolling:touch;
     }
     .modal-overlay.open{opacity:1;pointer-events:all}
     .modal{background:var(--white);border-radius:var(--r-lg);padding:clamp(1.2rem,4vw,1.8rem);max-width:520px;width:100%;box-shadow:var(--sh-lg);transform:scale(.95);transition:transform .22s var(--spring);margin:auto}
@@ -204,8 +205,9 @@
       width:44px;height:44px;background:var(--parchment);border-radius:50%;
       display:flex;align-items:center;justify-content:center;font-size:.82rem;
       color:var(--muted);cursor:pointer;border:none;flex-shrink:0;
-      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+      touch-action:manipulation;-webkit-tap-highlight-color:transparent;
     }
+    .modal-close *{pointer-events:none}
     .modal-close:hover,.modal-close:active{background:var(--sand)}
     .fg{margin-bottom:.85rem}
     .fl{display:block;font-size:.68rem;font-weight:700;color:var(--muted);margin-bottom:.28rem;letter-spacing:.06em;text-transform:uppercase}
@@ -226,15 +228,16 @@
       padding:.6rem 1.2rem;border:1.5px solid var(--border);border-radius:var(--r-xl);
       font-size:.84rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .16s;
       background:none;min-height:48px;
-      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+      touch-action:manipulation;-webkit-tap-highlight-color:transparent;
     }
     .btn-cancel-modal:hover,.btn-cancel-modal:active{border-color:var(--gold);color:var(--gold)}
     .btn-save{
       padding:.62rem 1.4rem;background:var(--gold);color:white;border:none;
       border-radius:var(--r-xl);font-size:.84rem;font-weight:700;cursor:pointer;
       transition:opacity .16s;min-height:48px;
-      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+      touch-action:manipulation;-webkit-tap-highlight-color:transparent;
     }
+    .btn-save *{pointer-events:none}
     .btn-save:hover,.btn-save:active{opacity:.85}
     .btn-save:disabled{opacity:.55;cursor:not-allowed}
     .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem .8rem;margin-bottom:1rem}
@@ -410,16 +413,6 @@
   function toast(ico,msg){const el=document.createElement('div');el.className='toast';el.innerHTML='<i class="'+ico+'"></i><span>'+msg+'</span>';$('tc').appendChild(el);setTimeout(()=>{el.classList.add('out');el.addEventListener('animationend',()=>el.remove(),{once:true});},3000);}
   function fmtDate(str){if(!str)return'—';try{return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}catch{return str;}}
 
-  /* ── FIX: universal touch+click helper (checks cancelable) ── */
-  function onTap(el, fn){
-    if(!el) return;
-    el.addEventListener('touchend', function(e){
-      if(e.cancelable) e.preventDefault();
-      fn(e);
-    }, {passive: false});
-    el.addEventListener('click', fn);
-  }
-
   /* ── IDENTITY ──────────────────────────────────────── */
   const name=admin.name||admin.firstName||admin.email?.split('@')[0]||'Admin';
   $('topAv').textContent=name.charAt(0).toUpperCase();
@@ -429,45 +422,55 @@
 
   /* ── HAMBURGER ─────────────────────────────────────── */
   const ham=$('ham'),sidebar=$('sidebar'),overlay=$('sOverlay');
-  function toggleSidebar(open){sidebar.classList.toggle('open',open);overlay.classList.toggle('active',open);ham.classList.toggle('open',open);document.body.style.overflow=open?'hidden':'';}
-  onTap(ham,     ()=>toggleSidebar(!sidebar.classList.contains('open')));
-  onTap(overlay, ()=>toggleSidebar(false));
+  function toggleSidebar(open){
+    sidebar.classList.toggle('open',open);
+    overlay.classList.toggle('active',open);
+    ham.classList.toggle('open',open);
+    document.body.style.overflow=open?'hidden':'';
+  }
+  ham.addEventListener('click', ()=>toggleSidebar(!sidebar.classList.contains('open')));
+  overlay.addEventListener('click', ()=>toggleSidebar(false));
 
   /* ── LOGOUT ────────────────────────────────────────── */
-  onTap($('logoutBtn'),()=>doLogout());
-  window.doLogout=function(){localStorage.removeItem(SESSION_KEY);toast('fas fa-sign-out-alt','Signed out…');setTimeout(()=>location.href='adminLogin.html',900);};
+  $('logoutBtn').addEventListener('click', ()=>{
+    localStorage.removeItem(SESSION_KEY);
+    toast('fas fa-sign-out-alt','Signed out…');
+    setTimeout(()=>location.href='adminLogin.html',900);
+  });
 
   /* ── STATUS TABS ───────────────────────────────────── */
   document.querySelectorAll('.stab').forEach(btn=>{
-    onTap(btn,()=>setFilter(btn.dataset.filter, btn));
+    btn.addEventListener('click', ()=>setFilter(btn.dataset.filter, btn));
   });
 
-  window.setFilter=function(f,btn){
+  function setFilter(f, btn){
     currentFilter=f;
     document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
     if(btn) btn.classList.add('active');
-    else {
+    else{
       const match=document.querySelector(`.stab[data-filter="${f}"]`);
       if(match) match.classList.add('active');
     }
     loadDeliveries();
-  };
+  }
 
   /* ── TOOLBAR ───────────────────────────────────────── */
-  onTap($('btnRefresh'),()=>loadDeliveries());
-  $('searchInput').addEventListener('input',()=>renderDeliveries());
+  $('btnRefresh').addEventListener('click', ()=>loadDeliveries());
+  $('searchInput').addEventListener('input', ()=>renderDeliveries());
 
   /* ── LOAD DELIVERIES ───────────────────────────────── */
-  window.loadDeliveries=async function(){
+  async function loadDeliveries(){
     $('deliveriesBody').innerHTML='<tr><td colspan="8"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Loading…</div></td></tr>';
     let url=API_BASE+'/api/admin/deliveries';
-    if(currentFilter==='active')  url=API_BASE+'/api/admin/deliveries/active';
+    if(currentFilter==='active')       url=API_BASE+'/api/admin/deliveries/active';
     else if(currentFilter==='overdue') url=API_BASE+'/api/admin/deliveries/overdue';
-    else if(currentFilter!=='all') url=API_BASE+`/api/admin/deliveries/status/${currentFilter}`;
+    else if(currentFilter!=='all')     url=API_BASE+`/api/admin/deliveries/status/${currentFilter}`;
     try{
       const r=await fetch(url,{headers:authHeaders()});
-      const d=await r.json();if(!r.ok)throw new Error();
-      deliveries=d.data||[];renderDeliveries();
+      const d=await r.json();
+      if(!r.ok) throw new Error();
+      deliveries=d.data||[];
+      renderDeliveries();
     }catch{
       deliveries=[
         {id:501,orderId:1001,status:'PENDING',deliveryAddress:'456 Oak Ave, Accra',contactNumber:'+233501234567',requestDate:'2024-01-15T10:00:00Z',trackingNumber:null,courier:null,deliveryFee:null,estimatedDeliveryDate:null},
@@ -477,16 +480,19 @@
       ];
       renderDeliveries();
     }
-  };
+  }
 
   /* ── RENDER DELIVERIES ─────────────────────────────── */
-  window.renderDeliveries=function(){
+  function renderDeliveries(){
     const search=$('searchInput').value.toLowerCase();
-    let list=deliveries.filter(d=>{
-      if(search&&!String(d.id).includes(search)&&!(d.deliveryAddress||'').toLowerCase().includes(search))return false;
+    const list=deliveries.filter(d=>{
+      if(search && !String(d.id).includes(search) && !(d.deliveryAddress||'').toLowerCase().includes(search)) return false;
       return true;
     });
-    if(!list.length){$('deliveriesBody').innerHTML='<tr><td colspan="8"><div class="empty-state"><i class="fas fa-truck"></i>No deliveries found</div></td></tr>';return;}
+    if(!list.length){
+      $('deliveriesBody').innerHTML='<tr><td colspan="8"><div class="empty-state"><i class="fas fa-truck"></i>No deliveries found</div></td></tr>';
+      return;
+    }
     $('deliveriesBody').innerHTML=list.map(d=>`
       <tr>
         <td data-label="ID"><span style="font-weight:700;font-family:'Playfair Display',serif">#${d.id}</span></td>
@@ -498,46 +504,31 @@
         <td data-label="Status"><span class="dstatus ${d.status}">${d.status}</span></td>
         <td data-label="Actions">
           <div class="tbl-actions">
-            <button class="btn-sm"       data-action="view"   data-id="${d.id}"><i class="fas fa-eye fa-xs"></i> View</button>
-            <button class="btn-sm blue"  data-action="update" data-id="${d.id}" data-status="${d.status}" data-tracking="${d.trackingNumber||''}" data-courier="${d.courier||''}"><i class="fas fa-pen fa-xs"></i> Update</button>
-            <button class="btn-sm"       data-action="chat"   data-id="${d.id}" title="Open chat"><i class="fas fa-comment fa-xs"></i></button>
+            <button class="btn-sm"        data-action="view"   data-id="${d.id}"><i class="fas fa-eye fa-xs"></i> View</button>
+            <button class="btn-sm blue"   data-action="update" data-id="${d.id}" data-status="${d.status}" data-tracking="${d.trackingNumber||''}" data-courier="${d.courier||''}"><i class="fas fa-pen fa-xs"></i> Update</button>
+            <button class="btn-sm"        data-action="chat"   data-id="${d.id}" title="Open chat"><i class="fas fa-comment fa-xs"></i></button>
             <button class="btn-sm danger" data-action="cancel" data-id="${d.id}"><i class="fas fa-ban fa-xs"></i></button>
           </div>
         </td>
       </tr>`).join('');
 
-    attachTableListeners();
-  };
-
-  function attachTableListeners(){
-    const tbody=$('deliveriesBody');
-
-    function handleAction(e){
-      let btn=e.target;
-      while(btn && btn!==tbody){
-        if(btn.dataset&&btn.dataset.action) break;
-        btn=btn.parentElement;
-      }
-      if(!btn||!btn.dataset.action) return;
-      const {action,id,status,tracking,courier}=btn.dataset;
-      const numId=parseInt(id,10);
-      if(action==='view')   viewDelivery(numId);
-      if(action==='update') openUpdateModal(numId, status, tracking, courier);
-      if(action==='chat')   openChat(numId);
-      if(action==='cancel') cancelDelivery(numId);
-    }
-
-    /* FIX: check cancelable before preventDefault */
-    tbody.addEventListener('touchend', function(e){
-      if(e.cancelable) e.preventDefault();
-      handleAction(e);
-    }, {passive: false});
-    tbody.addEventListener('click', handleAction);
+    /* Attach click directly to each action button — no delegation, no touchend */
+    $('deliveriesBody').querySelectorAll('[data-action]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const {action,id,status,tracking,courier}=btn.dataset;
+        const numId=parseInt(id,10);
+        if(action==='view')   viewDelivery(numId);
+        if(action==='update') openUpdateModal(numId, status, tracking, courier);
+        if(action==='chat')   openChat(numId);
+        if(action==='cancel') cancelDelivery(numId);
+      });
+    });
   }
 
   /* ── VIEW DELIVERY ─────────────────────────────────── */
-  window.viewDelivery=function(id){
-    const d=deliveries.find(x=>x.id===id);if(!d)return;
+  function viewDelivery(id){
+    const d=deliveries.find(x=>x.id===id);
+    if(!d) return;
     $('detailTitle').textContent='Delivery #'+id;
     $('detailBody').innerHTML=`
       <div class="detail-grid">
@@ -553,52 +544,38 @@
         <div class="detail-item"><label>Est. Delivery</label><span>${fmtDate(d.estimatedDeliveryDate)}</span></div>
       </div>`;
     $('detailModal').classList.add('open');
-  };
+  }
 
   /* ── UPDATE MODAL ──────────────────────────────────── */
-  onTap($('btnCloseUpdate'),  ()=>closeUpdateModal());
-  onTap($('btnCancelUpdate'), ()=>closeUpdateModal());
-  onTap($('btnUpdateSave'),   ()=>saveUpdate());
+  $('btnCloseUpdate').addEventListener('click',  ()=>closeUpdateModal());
+  $('btnCancelUpdate').addEventListener('click', ()=>closeUpdateModal());
+  $('btnUpdateSave').addEventListener('click',   ()=>saveUpdate());
 
-  /* FIX: modal overlay close — check cancelable */
-  $('updateModal').addEventListener('touchend', function(e){
-    if(e.target===this){
-      if(e.cancelable) e.preventDefault();
-      closeUpdateModal();
-    }
-  }, {passive: false});
-  $('updateModal').addEventListener('click', function(e){
-    if(e.target===this) closeUpdateModal();
-  });
+  /* Close modals by clicking the dark overlay background */
+  $('updateModal').addEventListener('click', function(e){ if(e.target===this) closeUpdateModal(); });
+  $('detailModal').addEventListener('click', function(e){ if(e.target===this) closeDetailModal(); });
 
-  $('detailModal').addEventListener('touchend', function(e){
-    if(e.target===this){
-      if(e.cancelable) e.preventDefault();
-      closeDetailModal();
-    }
-  }, {passive: false});
-  $('detailModal').addEventListener('click', function(e){
-    if(e.target===this) closeDetailModal();
-  });
+  $('btnCloseDetail').addEventListener('click',       ()=>closeDetailModal());
+  $('btnCloseDetailFooter').addEventListener('click', ()=>closeDetailModal());
 
-  onTap($('btnCloseDetail'),       ()=>closeDetailModal());
-  onTap($('btnCloseDetailFooter'), ()=>closeDetailModal());
+  function closeDetailModal(){ $('detailModal').classList.remove('open'); }
 
-  function closeDetailModal(){$('detailModal').classList.remove('open');}
-
-  window.openUpdateModal=function(id,status,tracking,courier){
+  function openUpdateModal(id, status, tracking, courier){
     pendingUpdate.id=id;
     $('uStatus').value=status||'PENDING';
     $('uTracking').value=tracking||'';
     $('uCourier').value=courier||'';
-    $('uFee').value='';$('uEta').value='';$('uMessage').value='';
+    $('uFee').value='';
+    $('uEta').value='';
+    $('uMessage').value='';
     $('updateLabel').textContent='Updating Delivery #'+id;
     $('updateErr').classList.remove('show');
     $('updateModal').classList.add('open');
-  };
-  window.closeUpdateModal=function(){$('updateModal').classList.remove('open');};
+  }
 
-  window.saveUpdate=async function(){
+  function closeUpdateModal(){ $('updateModal').classList.remove('open'); }
+
+  async function saveUpdate(){
     const id=pendingUpdate.id;
     const body={status:$('uStatus').value};
     if($('uTracking').value) body.trackingNumber=$('uTracking').value;
@@ -606,33 +583,57 @@
     if($('uFee').value)      body.deliveryFee=parseFloat($('uFee').value);
     if($('uEta').value)      body.estimatedDeliveryDate=$('uEta').value;
     if($('uMessage').value)  body.messageToUser=$('uMessage').value;
-    const btn=$('btnUpdateSave');btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin fa-xs"></i> Saving…';
+    const btn=$('btnUpdateSave');
+    btn.disabled=true;
+    btn.innerHTML='<i class="fas fa-spinner fa-spin fa-xs"></i> Saving…';
     try{
-      const r=await fetch(API_BASE+`/api/admin/deliveries/${id}/status`,{method:'PATCH',headers:{...authHeaders(),'Content-Type':'application/json'},body:JSON.stringify(body)});
-      const d=await r.json();if(!r.ok)throw new Error();
-      toast('fas fa-check-circle','Delivery #'+id+' updated');closeUpdateModal();loadDeliveries();
-    }catch{toast('fas fa-check-circle','Delivery updated (demo)');closeUpdateModal();loadDeliveries();}
-    finally{btn.disabled=false;btn.innerHTML='<i class="fas fa-check fa-xs"></i> Update Delivery';}
-  };
+      const r=await fetch(API_BASE+`/api/admin/deliveries/${id}/status`,{
+        method:'PATCH',
+        headers:{...authHeaders(),'Content-Type':'application/json'},
+        body:JSON.stringify(body)
+      });
+      const d=await r.json();
+      if(!r.ok) throw new Error();
+      toast('fas fa-check-circle','Delivery #'+id+' updated');
+      closeUpdateModal();
+      loadDeliveries();
+    }catch{
+      toast('fas fa-check-circle','Delivery updated (demo)');
+      closeUpdateModal();
+      loadDeliveries();
+    }finally{
+      btn.disabled=false;
+      btn.innerHTML='<i class="fas fa-check fa-xs"></i> Update Delivery';
+    }
+  }
 
   /* ── CHAT & CANCEL ─────────────────────────────────── */
-  window.openChat=async function(id){
+  async function openChat(id){
     try{
       const r=await fetch(API_BASE+`/api/admin/deliveries/${id}/chat`,{method:'POST',headers:authHeaders()});
-      const d=await r.json();if(!r.ok)throw new Error();
+      const d=await r.json();
+      if(!r.ok) throw new Error();
       toast('fas fa-comment-dots','Chat opened for delivery #'+id);
       setTimeout(()=>location.href='adminChats.html',800);
-    }catch{toast('fas fa-comment-dots','Opening chat… (demo)');setTimeout(()=>location.href='adminChats.html',800);}
-  };
+    }catch{
+      toast('fas fa-comment-dots','Opening chat… (demo)');
+      setTimeout(()=>location.href='adminChats.html',800);
+    }
+  }
 
-  window.cancelDelivery=async function(id){
-    if(!confirm('Cancel delivery #'+id+'?'))return;
+  async function cancelDelivery(id){
+    if(!confirm('Cancel delivery #'+id+'?')) return;
     try{
       const r=await fetch(API_BASE+`/api/admin/deliveries/${id}/cancel`,{method:'PATCH',headers:authHeaders()});
-      const d=await r.json();if(!r.ok)throw new Error();
-      toast('fas fa-ban','Delivery #'+id+' cancelled');loadDeliveries();
-    }catch{toast('fas fa-ban','Delivery cancelled (demo)');loadDeliveries();}
-  };
+      const d=await r.json();
+      if(!r.ok) throw new Error();
+      toast('fas fa-ban','Delivery #'+id+' cancelled');
+      loadDeliveries();
+    }catch{
+      toast('fas fa-ban','Delivery cancelled (demo)');
+      loadDeliveries();
+    }
+  }
 
   /* ── INIT ──────────────────────────────────────────── */
   loadDeliveries();
