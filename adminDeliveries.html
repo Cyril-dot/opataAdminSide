@@ -128,7 +128,7 @@
     .search-input{
       width:100%;padding:.55rem .9rem .55rem 2.4rem;background:var(--parchment);
       border:1.5px solid var(--border);border-radius:var(--r-xl);
-      font-size:16px;/* FIX: prevent iOS zoom */
+      font-size:16px;
       font-family:'Outfit',sans-serif;color:var(--ink);outline:none;
       transition:border-color .18s;-webkit-appearance:none;
     }
@@ -176,7 +176,6 @@
     .dstatus.DELIVERED{background:#dcfce7;color:#15803d}
     .dstatus.CANCELLED{background:#fee2e2;color:var(--danger)}
     .tbl-actions{display:flex;gap:.32rem;flex-wrap:nowrap}
-    /* FIX: row buttons - proper touch targets, pointer-events on children */
     .btn-sm{
       font-size:.7rem;font-weight:600;padding:.3rem .65rem;border-radius:var(--r-xl);
       border:1.5px solid var(--border);cursor:pointer;transition:all .15s;
@@ -212,7 +211,7 @@
     .fl{display:block;font-size:.68rem;font-weight:700;color:var(--muted);margin-bottom:.28rem;letter-spacing:.06em;text-transform:uppercase}
     .fi{
       width:100%;padding:.6rem .9rem;background:var(--parchment);border:1.5px solid var(--border);
-      border-radius:var(--r-sm);font-size:16px;/* FIX: prevent iOS zoom */
+      border-radius:var(--r-sm);font-size:16px;
       font-family:'Outfit',sans-serif;color:var(--ink);outline:none;
       transition:border-color .18s;-webkit-appearance:none;
     }
@@ -411,11 +410,14 @@
   function toast(ico,msg){const el=document.createElement('div');el.className='toast';el.innerHTML='<i class="'+ico+'"></i><span>'+msg+'</span>';$('tc').appendChild(el);setTimeout(()=>{el.classList.add('out');el.addEventListener('animationend',()=>el.remove(),{once:true});},3000);}
   function fmtDate(str){if(!str)return'—';try{return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}catch{return str;}}
 
-  /* ── FIX: universal touch+click helper ─────────────── */
+  /* ── FIX: universal touch+click helper (checks cancelable) ── */
   function onTap(el, fn){
     if(!el) return;
-    el.addEventListener('touchend',function(e){e.preventDefault();fn(e);},{passive:false});
-    el.addEventListener('click',fn);
+    el.addEventListener('touchend', function(e){
+      if(e.cancelable) e.preventDefault();
+      fn(e);
+    }, {passive: false});
+    el.addEventListener('click', fn);
   }
 
   /* ── IDENTITY ──────────────────────────────────────── */
@@ -504,7 +506,6 @@
         </td>
       </tr>`).join('');
 
-    // FIX: delegated listener on tbody
     attachTableListeners();
   };
 
@@ -526,7 +527,11 @@
       if(action==='cancel') cancelDelivery(numId);
     }
 
-    tbody.addEventListener('touchend',function(e){e.preventDefault();handleAction(e);},{passive:false});
+    /* FIX: check cancelable before preventDefault */
+    tbody.addEventListener('touchend', function(e){
+      if(e.cancelable) e.preventDefault();
+      handleAction(e);
+    }, {passive: false});
     tbody.addEventListener('click', handleAction);
   }
 
@@ -555,11 +560,26 @@
   onTap($('btnCancelUpdate'), ()=>closeUpdateModal());
   onTap($('btnUpdateSave'),   ()=>saveUpdate());
 
-  // FIX: close modals on overlay tap
-  $('updateModal').addEventListener('touchend',function(e){if(e.target===this){e.preventDefault();closeUpdateModal();}},{passive:false});
-  $('updateModal').addEventListener('click',function(e){if(e.target===this)closeUpdateModal();});
-  $('detailModal').addEventListener('touchend',function(e){if(e.target===this){e.preventDefault();closeDetailModal();}},{passive:false});
-  $('detailModal').addEventListener('click',function(e){if(e.target===this)closeDetailModal();});
+  /* FIX: modal overlay close — check cancelable */
+  $('updateModal').addEventListener('touchend', function(e){
+    if(e.target===this){
+      if(e.cancelable) e.preventDefault();
+      closeUpdateModal();
+    }
+  }, {passive: false});
+  $('updateModal').addEventListener('click', function(e){
+    if(e.target===this) closeUpdateModal();
+  });
+
+  $('detailModal').addEventListener('touchend', function(e){
+    if(e.target===this){
+      if(e.cancelable) e.preventDefault();
+      closeDetailModal();
+    }
+  }, {passive: false});
+  $('detailModal').addEventListener('click', function(e){
+    if(e.target===this) closeDetailModal();
+  });
 
   onTap($('btnCloseDetail'),       ()=>closeDetailModal());
   onTap($('btnCloseDetailFooter'), ()=>closeDetailModal());
