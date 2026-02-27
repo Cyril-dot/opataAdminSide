@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard · Admin · Esuo's Beauty Empire</title>
+  <link rel="icon" href="data:,">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -25,19 +26,18 @@
     body{
       background:var(--cream);color:var(--ink);font-family:'Outfit',system-ui,sans-serif;
       line-height:1.6;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;
-      /* FIX: disable double-tap zoom delay globally */
       touch-action:manipulation;
     }
     a{text-decoration:none;color:inherit}
-    button{cursor:pointer;font-family:inherit;border:none;outline:none;background:none;
+    button{
+      cursor:pointer;font-family:inherit;border:none;outline:none;background:none;
       touch-action:manipulation;
       -webkit-tap-highlight-color:rgba(0,0,0,0);
       user-select:none;-webkit-user-select:none;
     }
-    /* FIX: all interactive elements get instant touch response */
     a, button, [role="button"], .stat-card, .nav-card, .order-row, .del-row, .snav a {
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: rgba(0,0,0,0);
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:rgba(0,0,0,0);
     }
     ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--parchment)}::-webkit-scrollbar-thumb{background:var(--warm-mid);border-radius:99px}
 
@@ -46,10 +46,8 @@
     .ham{
       display:none;flex-direction:column;gap:4px;padding:10px;cursor:pointer;
       border-radius:var(--r-sm);background:none;border:none;flex-shrink:0;
-      /* FIX: minimum 44x44 touch target */
       min-width:44px;min-height:44px;align-items:center;justify-content:center;
-      touch-action:manipulation;
-      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
     }
     .ham span{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px;transition:all .26s var(--ease)}
     .ham.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
@@ -66,9 +64,7 @@
       width:44px;height:44px;background:linear-gradient(135deg,var(--gold),var(--blush));
       border-radius:50%;display:flex;align-items:center;justify-content:center;
       color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;
-      transition:opacity .18s;
-      touch-action:manipulation;
-      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      transition:opacity .18s;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
     }
     .topbar-avatar:hover{opacity:.82}
 
@@ -78,20 +74,17 @@
     .sidebar::-webkit-scrollbar{width:3px}
     .sidebar-overlay{
       display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;
-      opacity:0;transition:opacity .26s;
+      opacity:0;transition:opacity .26s;pointer-events:none;
       touch-action:manipulation;
     }
-    .sidebar-overlay.active{opacity:1}
+    .sidebar-overlay.active{opacity:1;pointer-events:auto}
     .snav{padding:.65rem 0;flex:1}
     .snav-label{padding:.55rem .9rem .2rem;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
     .snav a{
       display:flex;align-items:center;gap:.7rem;padding:.75rem 1rem;font-size:.86rem;
       font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;
       margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0;
-      /* FIX: minimum touch target */
-      min-height:48px;
-      touch-action:manipulation;
-      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
     }
     .snav a:hover,.snav a:active{background:var(--parchment);color:var(--ink)}
     .snav a.active{background:rgba(168,133,78,.08);color:var(--gold);border-left-color:var(--gold);font-weight:600}
@@ -107,10 +100,7 @@
       background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);
       border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;
       cursor:pointer;transition:background .18s;width:100%;
-      /* FIX: minimum touch target */
-      min-height:48px;
-      touch-action:manipulation;
-      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
     }
     .s-logout:hover,.s-logout:active{background:rgba(192,57,43,.13)}
 
@@ -127,9 +117,7 @@
       padding:clamp(.9rem,3vw,1.2rem) clamp(.9rem,3vw,1.3rem);
       display:flex;flex-direction:column;gap:.5rem;transition:box-shadow .18s,border-color .18s;
       position:relative;overflow:hidden;cursor:pointer;
-      /* FIX: touch response */
-      touch-action:manipulation;
-      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
       user-select:none;-webkit-user-select:none;
     }
     .stat-card:hover{box-shadow:var(--sh-sm);border-color:var(--warm-mid)}
@@ -146,7 +134,6 @@
     .stat-sub{font-size:.7rem;color:var(--subtle);display:flex;align-items:center;gap:.28rem}
     .stat-sub.up{color:var(--success)}
     .stat-sub.down{color:var(--danger)}
-    /* FIX: prevent child elements blocking taps on stat cards */
     .stat-card *{pointer-events:none}
 
     /* SECTION TITLE */
@@ -160,9 +147,7 @@
       padding:clamp(1rem,3vw,1.3rem);cursor:pointer;transition:all .2s var(--spring);
       display:flex;flex-direction:column;gap:.6rem;text-decoration:none;color:inherit;
       position:relative;overflow:hidden;
-      /* FIX: touch response */
-      touch-action:manipulation;
-      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
     }
     .nav-card:hover{box-shadow:var(--sh-md);border-color:var(--gold);transform:translateY(-3px)}
     .nav-card:active{opacity:.85;transform:scale(.98)}
@@ -189,12 +174,7 @@
     .sc-head-left{display:flex;align-items:center;gap:.6rem}
     .sc-head-icon{width:32px;height:32px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:.82rem;color:white}
     .sc-head h3{font-family:'Playfair Display',serif;font-size:clamp(.88rem,2.2vw,.95rem);font-weight:700}
-    .sc-view-all{font-size:.75rem;color:var(--gold);font-weight:600;display:flex;align-items:center;gap:.28rem;transition:opacity .16s;white-space:nowrap;
-      /* FIX: touch target */
-      min-height:44px;padding:0 .25rem;
-      touch-action:manipulation;
-      -webkit-tap-highlight-color:rgba(0,0,0,0);
-    }
+    .sc-view-all{font-size:.75rem;color:var(--gold);font-weight:600;display:inline-flex;align-items:center;gap:.28rem;transition:opacity .16s;white-space:nowrap;min-height:44px;padding:0 .25rem;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);}
     .sc-view-all:hover{opacity:.72}
     .sc-body{padding:.8rem 1rem}
     .order-list{display:flex;flex-direction:column;gap:.42rem}
@@ -202,14 +182,10 @@
       display:flex;align-items:center;justify-content:space-between;
       padding:.5rem .65rem;background:var(--parchment);border-radius:var(--r-sm);
       gap:.45rem;transition:background .15s;flex-wrap:wrap;cursor:pointer;
-      /* FIX: touch target and response */
-      min-height:48px;
-      touch-action:manipulation;
-      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
       user-select:none;-webkit-user-select:none;
     }
     .order-row:hover,.order-row:active{background:var(--sand)}
-    /* FIX: prevent child elements blocking taps */
     .order-row *{pointer-events:none}
     .order-id{font-size:.78rem;font-weight:700;color:var(--ink)}
     .order-date{font-size:.68rem;color:var(--subtle)}
@@ -225,14 +201,10 @@
       display:flex;align-items:center;justify-content:space-between;
       padding:.5rem .65rem;background:var(--parchment);border-radius:var(--r-sm);
       gap:.45rem;transition:background .15s;flex-wrap:wrap;cursor:pointer;
-      /* FIX: touch target */
-      min-height:48px;
-      touch-action:manipulation;
-      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
       user-select:none;-webkit-user-select:none;
     }
     .del-row:hover,.del-row:active{background:var(--sand)}
-    /* FIX: prevent child elements blocking taps */
     .del-row *{pointer-events:none}
     .dstatus{font-size:.62rem;font-weight:700;padding:.14rem .5rem;border-radius:var(--r-xl);white-space:nowrap}
     .dstatus.PENDING{background:#fef3cd;color:#b7791f}
@@ -258,7 +230,6 @@
     .empty-state{text-align:center;padding:2rem 1rem;color:var(--subtle);font-size:.82rem}
     .empty-state i{display:block;font-size:1.8rem;margin-bottom:.5rem;color:var(--sand)}
 
-    /* RESPONSIVE */
     @media(max-width:1024px){.bottom-grid{grid-template-columns:1fr}}
     @media(max-width:860px){
       .sidebar{transform:translateX(-100%)}
@@ -330,7 +301,6 @@
       <p id="welcomeSub">Here's what's happening at your store today</p>
     </div>
 
-    <!-- STAT CARDS -->
     <div class="stats-grid" id="statsGrid">
       <div class="stat-card"><div class="stat-icon gold"><i class="fas fa-coins"></i></div><div class="stat-val sk" style="width:80px;height:28px;border-radius:4px"></div><div class="stat-label">Total Revenue</div><div class="stat-sub sk" style="width:60px;height:14px;border-radius:4px"></div></div>
       <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-box"></i></div><div class="stat-val sk" style="width:60px;height:28px;border-radius:4px"></div><div class="stat-label">Total Orders</div><div class="stat-sub sk" style="width:50px;height:14px;border-radius:4px"></div></div>
@@ -338,7 +308,6 @@
       <div class="stat-card"><div class="stat-icon green"><i class="fas fa-truck-fast"></i></div><div class="stat-val sk" style="width:50px;height:28px;border-radius:4px"></div><div class="stat-label">Active Deliveries</div></div>
     </div>
 
-    <!-- QUICK ACCESS CARDS -->
     <div class="section-title"><i class="fas fa-bolt" style="color:var(--gold);font-size:.8rem"></i> Quick Access</div>
     <div class="nav-cards">
       <a class="nav-card" href="adminOrders.html">
@@ -385,7 +354,6 @@
       </a>
     </div>
 
-    <!-- BOTTOM GRID -->
     <div class="bottom-grid">
       <div class="section-card">
         <div class="sc-head">
@@ -413,7 +381,6 @@
       </div>
     </div>
 
-    <!-- CHART -->
     <div class="section-card" style="margin-bottom:1.8rem">
       <div class="sc-head">
         <div class="sc-head-left">
@@ -454,69 +421,35 @@
   $('sShop').textContent=admin.shopName||'Beauty Empire';
 
   const hr=new Date().getHours();
-  const greeting=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
-  $('welcomeMsg').textContent=greeting+', '+name+' 👋';
+  $('welcomeMsg').textContent=(hr<12?'Good morning':hr<17?'Good afternoon':'Good evening')+', '+name+' 👋';
 
-  // ─── FIX: attach touchend+click helper ───────────────────────
-  function attachBtn(id, fn){
-    const el=$(id);if(!el)return;
-    el.addEventListener('touchend',function(e){e.preventDefault();fn();},{passive:false});
-    el.addEventListener('click',fn);
-  }
-
-  // ─── FIX: attach tap handler to dynamically created rows ─────
-  function attachRowTaps(selector, href){
-    document.querySelectorAll(selector).forEach(el=>{
-      el.addEventListener('touchend',function(e){
-        e.preventDefault();
-        location.href=href;
-      },{passive:false});
-      el.addEventListener('click',function(){
-        location.href=href;
-      });
-    });
-  }
-
-  // ─── TOPBAR AVATAR ───────────────────────────────────────────
-  attachBtn('topAv', ()=>location.href='adminProfile.html');
-
-  // ─── LOGOUT ──────────────────────────────────────────────────
-  attachBtn('logoutBtn', ()=>doLogout());
-
-  // ─── HAMBURGER ───────────────────────────────────────────────
+  // ── SIDEBAR ──────────────────────────────────────────────
+  // FIX: use click only — touch-action:manipulation on CSS handles
+  // the 300ms delay removal without needing touchend listeners.
+  // touchend with passive:false was causing the browser intervention warning.
   const ham=$('ham'),sidebar=$('sidebar'),overlay=$('sOverlay');
-
   function toggleSidebar(open){
     sidebar.classList.toggle('open',open);
     overlay.classList.toggle('active',open);
     ham.classList.toggle('open',open);
     document.body.style.overflow=open?'hidden':'';
   }
+  ham.addEventListener('click',()=>toggleSidebar(!sidebar.classList.contains('open')));
+  overlay.addEventListener('click',()=>toggleSidebar(false));
+  sidebar.querySelectorAll('.snav a').forEach(a=>
+    a.addEventListener('click',()=>{ if(window.innerWidth<=860) toggleSidebar(false); }));
 
-  ham.addEventListener('touchend',function(e){
-    e.preventDefault();
-    toggleSidebar(!sidebar.classList.contains('open'));
-  },{passive:false});
-  ham.addEventListener('click',function(){
-    toggleSidebar(!sidebar.classList.contains('open'));
-  });
-
-  overlay.addEventListener('touchend',function(e){
-    e.preventDefault();
-    toggleSidebar(false);
-  },{passive:false});
-  overlay.addEventListener('click',function(){
-    toggleSidebar(false);
-  });
-
-  // ─── LOGOUT FN ───────────────────────────────────────────────
-  window.doLogout=function(){
+  // ── LOGOUT ───────────────────────────────────────────────
+  $('logoutBtn').addEventListener('click',()=>{
     localStorage.removeItem(SESSION_KEY);
     toast('fas fa-sign-out-alt','Signed out…');
     setTimeout(()=>location.href='adminLogin.html',900);
-  };
+  });
 
-  // ─── LOAD SUMMARY ────────────────────────────────────────────
+  // ── TOPBAR AVATAR ────────────────────────────────────────
+  $('topAv').addEventListener('click',()=>location.href='adminProfile.html');
+
+  // ── SUMMARY / STATS ──────────────────────────────────────
   async function loadSummary(){
     try{
       const r=await fetch(API_BASE+'/api/admin/orders/summary',{headers:authHeaders()});
@@ -552,22 +485,14 @@
         <div class="stat-sub"><i class="fas fa-location-dot fa-xs"></i> In transit</div>
       </div>`;
 
-    // FIX: attach touch+click to stat cards after rendering
+    // click only — touch-action:manipulation in CSS removes the delay
     document.querySelectorAll('.stat-card[data-href]').forEach(card=>{
-      const href=card.dataset.href;
-      card.addEventListener('touchend',function(e){
-        e.preventDefault();
-        location.href=href;
-      },{passive:false});
-      card.addEventListener('click',function(){
-        location.href=href;
-      });
+      card.addEventListener('click',()=>location.href=card.dataset.href);
     });
-
     if($('ncPending'))$('ncPending').textContent=s.pendingCount||0;
   }
 
-  // ─── RECENT ORDERS ───────────────────────────────────────────
+  // ── RECENT ORDERS ────────────────────────────────────────
   async function loadRecentOrders(){
     try{
       const r=await fetch(API_BASE+'/api/admin/orders/recent?limit=6',{headers:authHeaders()});
@@ -591,11 +516,13 @@
         <div class="order-amt">GHS ${Number(o.totalAmount||0).toLocaleString()}</div>
         <span class="ostatus ${o.status}">${o.status}</span>
       </div>`).join('');
-    // FIX: attach events after rendering
-    attachRowTaps('.order-row','adminOrders.html');
+    // delegated click on parent list — no per-row listeners needed
+    $('recentOrders').addEventListener('click',e=>{
+      if(e.target.closest('.order-row')) location.href='adminOrders.html';
+    });
   }
 
-  // ─── ACTIVE DELIVERIES ───────────────────────────────────────
+  // ── ACTIVE DELIVERIES ────────────────────────────────────
   async function loadActiveDeliveries(){
     try{
       const r=await fetch(API_BASE+'/api/admin/deliveries/active',{headers:authHeaders()});
@@ -605,7 +532,7 @@
     }catch{
       renderActiveDeliveries([
         {id:501,orderId:1001,status:'PENDING',deliveryAddress:'456 Oak Ave, Accra'},
-        {id:502,orderId:1002,status:'SHIPPED',deliveryAddress:'123 Ring Rd, Kumasi',trackingNumber:'TRACK502XYZ'},
+        {id:502,orderId:1002,status:'SHIPPED',deliveryAddress:'123 Ring Rd, Kumasi'},
       ]);
       if($('ncDeliveries'))$('ncDeliveries').textContent='2';
     }
@@ -618,11 +545,12 @@
         <div><div class="order-id">Delivery #${d.id}</div><div class="order-date">${(d.deliveryAddress||'—').substring(0,28)}</div></div>
         <span class="dstatus ${d.status}">${d.status}</span>
       </div>`).join('');
-    // FIX: attach events after rendering
-    attachRowTaps('.del-row','adminDeliveries.html');
+    $('activeDeliveries').addEventListener('click',e=>{
+      if(e.target.closest('.del-row')) location.href='adminDeliveries.html';
+    });
   }
 
-  // ─── CHART ───────────────────────────────────────────────────
+  // ── CHART ────────────────────────────────────────────────
   async function loadChart(){
     try{
       const r=await fetch(API_BASE+'/api/admin/orders/summary/per-day',{headers:authHeaders()});
@@ -650,7 +578,6 @@
     }).join('');
   }
 
-  // ─── INIT ────────────────────────────────────────────────────
   loadSummary();
   loadRecentOrders();
   loadActiveDeliveries();

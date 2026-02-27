@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Orders · Admin · Esuo's Beauty Empire</title>
+  <link rel="icon" href="data:,">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -29,24 +30,16 @@
     a{text-decoration:none;color:inherit}
     button{
       cursor:pointer;font-family:inherit;border:none;outline:none;background:none;
-      touch-action:manipulation;
-      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
       user-select:none;-webkit-user-select:none;
     }
     a, button, [role="button"], .sum-chip, .stab {
-      touch-action:manipulation;
-      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
     }
     ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--parchment)}::-webkit-scrollbar-thumb{background:var(--warm-mid);border-radius:99px}
 
-    /* TOPBAR */
     .topbar{height:var(--nav-h);background:rgba(250,247,243,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;display:flex;align-items:center;padding:0 clamp(.75rem,3vw,1.2rem);gap:.6rem;flex-shrink:0}
-    .ham{
-      display:none;flex-direction:column;gap:4px;padding:10px;cursor:pointer;
-      border-radius:var(--r-sm);background:none;border:none;flex-shrink:0;
-      min-width:44px;min-height:44px;align-items:center;justify-content:center;
-      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
-    }
+    .ham{display:none;flex-direction:column;gap:4px;padding:10px;cursor:pointer;border-radius:var(--r-sm);background:none;border:none;flex-shrink:0;min-width:44px;min-height:44px;align-items:center;justify-content:center;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);}
     .ham span{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px;transition:all .26s var(--ease)}
     .ham.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
     .ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
@@ -58,29 +51,15 @@
     .topbar-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}
     .topbar-link{display:inline-flex;align-items:center;gap:.32rem;font-size:.78rem;color:var(--muted);font-weight:500;padding:.32rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .18s;min-height:44px;}
     .topbar-link:hover{border-color:var(--gold);color:var(--gold)}
-    .topbar-avatar{
-      width:44px;height:44px;background:linear-gradient(135deg,var(--gold),var(--blush));
-      border-radius:50%;display:flex;align-items:center;justify-content:center;
-      color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;
-      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
-    }
+    .topbar-avatar{width:44px;height:44px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);}
 
-    /* SIDEBAR */
     .layout{display:flex;flex:1}
     .sidebar{width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:var(--nav-h);left:0;height:calc(100vh - var(--nav-h));overflow-y:auto;z-index:150;transition:transform .3s var(--ease)}
-    .sidebar-overlay{
-      display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;
-      opacity:0;transition:opacity .26s;touch-action:manipulation;
-    }
-    .sidebar-overlay.active{opacity:1}
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;opacity:0;transition:opacity .26s;pointer-events:none;touch-action:manipulation;}
+    .sidebar-overlay.active{opacity:1;pointer-events:auto}
     .snav{padding:.65rem 0;flex:1}
     .snav-label{padding:.55rem .9rem .2rem;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
-    .snav a{
-      display:flex;align-items:center;gap:.7rem;padding:.75rem 1rem;font-size:.86rem;
-      font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;
-      margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0;
-      min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
-    }
+    .snav a{display:flex;align-items:center;gap:.7rem;padding:.75rem 1rem;font-size:.86rem;font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0;min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);}
     .snav a:hover,.snav a:active{background:var(--parchment);color:var(--ink)}
     .snav a.active{background:rgba(168,133,78,.08);color:var(--gold);border-left-color:var(--gold);font-weight:600}
     .snav a i{width:16px;text-align:center;font-size:.82rem;flex-shrink:0}
@@ -90,16 +69,9 @@
     .s-av{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;flex-shrink:0}
     .s-info strong{display:block;font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
     .s-info small{font-size:.68rem;color:var(--subtle)}
-    .s-logout{
-      display:flex;align-items:center;gap:.5rem;padding:.58rem .75rem;
-      background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);
-      border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;
-      cursor:pointer;transition:background .18s;width:100%;
-      min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
-    }
+    .s-logout{display:flex;align-items:center;gap:.5rem;padding:.58rem .75rem;background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .18s;width:100%;min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);}
     .s-logout:hover,.s-logout:active{background:rgba(192,57,43,.13)}
 
-    /* MAIN */
     .main{margin-left:var(--sidebar-w);flex:1;padding:clamp(1rem,3vw,2rem) clamp(.75rem,3vw,2rem);min-width:0}
     .page-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.1rem;gap:1rem;flex-wrap:wrap}
     .bc{display:flex;align-items:center;gap:.35rem;font-size:.73rem;color:var(--subtle);margin-bottom:.4rem;flex-wrap:wrap}
@@ -108,63 +80,29 @@
     .page-hd h1{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,3.5vw,1.8rem);font-weight:700}
     .page-hd p{font-size:clamp(.78rem,2vw,.84rem);color:var(--muted)}
 
-    /* SUMMARY CHIPS */
     .summary-row{display:flex;gap:.55rem;flex-wrap:wrap;margin-bottom:1.1rem}
-    .sum-chip{
-      background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-md);
-      padding:.5rem .85rem;display:flex;flex-direction:column;min-width:80px;
-      transition:border-color .18s,box-shadow .18s;cursor:pointer;
-      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
-      user-select:none;-webkit-user-select:none;
-      /* FIX: prevent children blocking taps */
-    }
+    .sum-chip{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-md);padding:.5rem .85rem;display:flex;flex-direction:column;min-width:80px;transition:border-color .18s,box-shadow .18s;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);user-select:none;-webkit-user-select:none;}
     .sum-chip *{pointer-events:none}
     .sum-chip:hover,.sum-chip:active{border-color:var(--gold);box-shadow:var(--sh-xs)}
     .sum-chip.active{border-color:var(--gold);background:rgba(168,133,78,.06)}
     .sum-chip-val{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,3vw,1.3rem);font-weight:700;line-height:1}
     .sum-chip-label{font-size:.62rem;color:var(--subtle);font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-top:.12rem}
 
-    /* STATUS TABS */
     .status-tabs{display:flex;gap:.32rem;flex-wrap:wrap;margin-bottom:1rem}
-    .stab{
-      padding:.36rem .8rem;font-size:clamp(.72rem,2vw,.78rem);font-weight:600;
-      border-radius:var(--r-xl);border:1.5px solid var(--border);color:var(--muted);
-      cursor:pointer;transition:all .16s;background:var(--white);
-      min-height:44px;display:inline-flex;align-items:center;
-      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
-    }
+    .stab{padding:.36rem .8rem;font-size:clamp(.72rem,2vw,.78rem);font-weight:600;border-radius:var(--r-xl);border:1.5px solid var(--border);color:var(--muted);cursor:pointer;transition:all .16s;background:var(--white);min-height:44px;display:inline-flex;align-items:center;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);}
     .stab:hover,.stab:active{border-color:var(--gold);color:var(--gold)}
     .stab.active{background:var(--ink);color:white;border-color:var(--ink)}
 
-    /* TOOLBAR */
     .toolbar{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:.85rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.55rem;flex-wrap:wrap}
     .search-wrap{flex:1;min-width:140px;position:relative}
     .search-wrap i{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:var(--subtle);font-size:.82rem;pointer-events:none}
-    .search-input{
-      width:100%;padding:.55rem .9rem .55rem 2.4rem;background:var(--parchment);
-      border:1.5px solid var(--border);border-radius:var(--r-xl);
-      font-size:16px;/* FIX: prevent iOS zoom */
-      font-family:'Outfit',sans-serif;color:var(--ink);outline:none;
-      transition:border-color .18s;-webkit-appearance:none;
-    }
+    .search-input{width:100%;padding:.55rem .9rem .55rem 2.4rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-xl);font-size:16px;font-family:'Outfit',sans-serif;color:var(--ink);outline:none;transition:border-color .18s;-webkit-appearance:none;}
     .search-input:focus{border-color:var(--gold)}
     .search-input::placeholder{color:var(--subtle)}
-    .filter-select{
-      padding:.55rem .75rem;background:var(--parchment);border:1.5px solid var(--border);
-      border-radius:var(--r-xl);font-size:clamp(.78rem,2vw,.82rem);font-family:'Outfit',sans-serif;
-      color:var(--ink);outline:none;cursor:pointer;-webkit-appearance:none;
-      min-height:44px;touch-action:manipulation;
-    }
-    .btn-filter{
-      display:inline-flex;align-items:center;gap:.32rem;background:var(--ink);color:white;
-      font-size:.8rem;font-weight:600;padding:.55rem .9rem;border-radius:var(--r-xl);
-      cursor:pointer;transition:background .18s;
-      min-height:44px;min-width:44px;
-      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
-    }
+    .filter-select{padding:.55rem .75rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-xl);font-size:clamp(.78rem,2vw,.82rem);font-family:'Outfit',sans-serif;color:var(--ink);outline:none;cursor:pointer;-webkit-appearance:none;min-height:44px;touch-action:manipulation;}
+    .btn-filter{display:inline-flex;align-items:center;gap:.32rem;background:var(--ink);color:white;font-size:.8rem;font-weight:600;padding:.55rem .9rem;border-radius:var(--r-xl);cursor:pointer;transition:background .18s;min-height:44px;min-width:44px;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);}
     .btn-filter:hover,.btn-filter:active{background:var(--gold)}
 
-    /* TABLE */
     .table-wrap{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:1.5rem}
     .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
     .tbl{width:100%;border-collapse:collapse;min-width:580px}
@@ -175,7 +113,6 @@
     .tbl tbody tr{transition:background .14s}
     .tbl tbody tr:hover{background:rgba(168,133,78,.04)}
 
-    /* Mobile card view */
     @media(max-width:640px){
       .tbl,thead,tbody,th,td,tr{display:block}
       .tbl thead{display:none}
@@ -198,39 +135,19 @@
     .ostatus.DELIVERED{background:#dcfce7;color:#15803d}
     .ostatus.CANCELLED{background:#fee2e2;color:var(--danger)}
     .tbl-actions{display:flex;gap:.32rem;flex-wrap:nowrap}
-    /* FIX: row action buttons - proper touch targets */
-    .btn-sm{
-      font-size:.7rem;font-weight:600;padding:.3rem .65rem;border-radius:var(--r-xl);
-      border:1.5px solid var(--border);cursor:pointer;transition:all .15s;
-      background:none;color:var(--muted);white-space:nowrap;
-      min-height:36px;display:inline-flex;align-items:center;gap:.25rem;
-      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
-    }
+    .btn-sm{font-size:.7rem;font-weight:600;padding:.3rem .65rem;border-radius:var(--r-xl);border:1.5px solid var(--border);cursor:pointer;transition:all .15s;background:none;color:var(--muted);white-space:nowrap;min-height:36px;display:inline-flex;align-items:center;gap:.25rem;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);}
     .btn-sm:hover,.btn-sm:active{border-color:var(--gold);color:var(--gold)}
     .btn-sm.danger:hover,.btn-sm.danger:active{border-color:var(--danger);color:var(--danger)}
     .btn-sm.success:hover,.btn-sm.success:active{border-color:var(--success);color:var(--success)}
-    /* FIX: prevent icon children blocking row button taps */
     .btn-sm *{pointer-events:none}
 
-    /* MODALS */
-    .modal-overlay{
-      position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;
-      display:flex;align-items:center;justify-content:center;padding:1rem;
-      opacity:0;pointer-events:none;transition:opacity .22s;overflow-y:auto;
-      -webkit-overflow-scrolling:touch;
-      touch-action:manipulation;
-    }
-    .modal-overlay.open{opacity:1;pointer-events:all}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .22s;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:manipulation;}
+    .modal-overlay.open{opacity:1;pointer-events:auto}
     .modal{background:var(--white);border-radius:var(--r-lg);padding:clamp(1.2rem,4vw,1.8rem);max-width:520px;width:100%;box-shadow:var(--sh-lg);transform:scale(.95);transition:transform .22s var(--spring);margin:auto}
     .modal-overlay.open .modal{transform:scale(1)}
     .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
     .modal-head h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,3vw,1.15rem);font-weight:700}
-    .modal-close{
-      width:44px;height:44px;background:var(--parchment);border-radius:50%;
-      display:flex;align-items:center;justify-content:center;font-size:.82rem;
-      color:var(--muted);cursor:pointer;border:none;flex-shrink:0;
-      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
-    }
+    .modal-close{width:44px;height:44px;background:var(--parchment);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.82rem;color:var(--muted);cursor:pointer;border:none;flex-shrink:0;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);}
     .modal-close:hover,.modal-close:active{background:var(--sand)}
     .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:.55rem .8rem;margin-bottom:1rem}
     .detail-item label{display:block;font-size:.63rem;font-weight:700;color:var(--subtle);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.15rem}
@@ -240,30 +157,15 @@
     .items-table td{padding:.45rem .6rem;border-bottom:1px solid var(--border)}
     .items-table tbody tr:last-child td{border-bottom:none}
     .modal-btns{display:flex;gap:.55rem;justify-content:flex-end;margin-top:1.1rem;flex-wrap:wrap}
-    .btn-modal-action{
-      padding:.55rem 1.1rem;border:1.5px solid var(--border);border-radius:var(--r-xl);
-      font-size:.82rem;font-weight:600;cursor:pointer;transition:all .16s;background:none;
-      min-height:48px;
-      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
-    }
+    .btn-modal-action{padding:.55rem 1.1rem;border:1.5px solid var(--border);border-radius:var(--r-xl);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .16s;background:none;min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);}
     .btn-modal-action:hover,.btn-modal-action:active{border-color:var(--gold);color:var(--gold)}
     .btn-modal-action.danger{border-color:rgba(192,57,43,.3);color:var(--danger)}
     .btn-modal-action.danger:hover,.btn-modal-action.danger:active{background:rgba(192,57,43,.07)}
-    .btn-modal-confirm{
-      padding:.6rem 1.3rem;background:var(--gold);color:white;border:none;
-      border-radius:var(--r-xl);font-size:.84rem;font-weight:700;cursor:pointer;
-      transition:opacity .16s;min-height:48px;
-      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
-    }
+    .btn-modal-confirm{padding:.6rem 1.3rem;background:var(--gold);color:white;border:none;border-radius:var(--r-xl);font-size:.84rem;font-weight:700;cursor:pointer;transition:opacity .16s;min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);}
     .btn-modal-confirm:hover,.btn-modal-confirm:active{opacity:.85}
     .fg{margin-bottom:.85rem}
     .fl{display:block;font-size:.68rem;font-weight:700;color:var(--muted);margin-bottom:.28rem;letter-spacing:.06em;text-transform:uppercase}
-    .fi{
-      width:100%;padding:.6rem .9rem;background:var(--parchment);border:1.5px solid var(--border);
-      border-radius:var(--r-sm);font-size:16px;/* FIX: prevent iOS zoom */
-      font-family:'Outfit',sans-serif;color:var(--ink);outline:none;
-      transition:border-color .18s;-webkit-appearance:none;
-    }
+    .fi{width:100%;padding:.6rem .9rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:16px;font-family:'Outfit',sans-serif;color:var(--ink);outline:none;transition:border-color .18s;-webkit-appearance:none;}
     .fi:focus{border-color:var(--gold)}
     select.fi{cursor:pointer;touch-action:manipulation;}
     .ferr{display:none;color:var(--danger);font-size:.75rem;padding:.38rem .65rem;background:rgba(192,57,43,.06);border-radius:var(--r-sm);border-left:3px solid var(--danger);margin-bottom:.7rem}
@@ -430,7 +332,6 @@
   const $=id=>document.getElementById(id);
   let orders=[],currentStatus='all',pendingStatusUpdate={id:null};
 
-  /* ── SESSION ────────────────────────────────────────── */
   function loadSession(){try{const raw=localStorage.getItem(SESSION_KEY);if(!raw)return null;const d=JSON.parse(raw);if(Date.now()-(d.savedAt||0)>SESSION_TTL){localStorage.removeItem(SESSION_KEY);return null;}return d;}catch{return null;}}
   const session=loadSession();
   if(!session){location.href='adminLogin.html';return;}
@@ -439,53 +340,43 @@
   function toast(ico,msg){const el=document.createElement('div');el.className='toast';el.innerHTML='<i class="'+ico+'"></i><span>'+msg+'</span>';$('tc').appendChild(el);setTimeout(()=>{el.classList.add('out');el.addEventListener('animationend',()=>el.remove(),{once:true});},3000);}
   function fmtDate(str){if(!str)return'—';try{return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}catch{return str;}}
 
-  /* ── FIX: universal touch+click helper ─────────────── */
-  function onTap(el, fn){
-    if(!el) return;
-    el.addEventListener('touchend',function(e){e.preventDefault();fn(e);},{passive:false});
-    el.addEventListener('click',fn);
-  }
-
-  /* ── IDENTITY ───────────────────────────────────────── */
   const name=admin.name||admin.firstName||admin.email?.split('@')[0]||'Admin';
   $('topAv').textContent=name.charAt(0).toUpperCase();
   $('sAv').textContent=name.charAt(0).toUpperCase();
   $('sName').textContent=name;
   $('sShop').textContent=admin.shopName||'Beauty Empire';
 
-  /* ── HAMBURGER ──────────────────────────────────────── */
+  // ── SIDEBAR ──────────────────────────────────────────────
+  // FIX: click only. touch-action:manipulation (CSS) removes the 300ms delay
+  // without needing touchend listeners that cause the browser intervention warning.
   const ham=$('ham'),sidebar=$('sidebar'),overlay=$('sOverlay');
   function toggleSidebar(open){sidebar.classList.toggle('open',open);overlay.classList.toggle('active',open);ham.classList.toggle('open',open);document.body.style.overflow=open?'hidden':'';}
-  onTap(ham,     ()=>toggleSidebar(!sidebar.classList.contains('open')));
-  onTap(overlay, ()=>toggleSidebar(false));
+  ham.addEventListener('click',()=>toggleSidebar(!sidebar.classList.contains('open')));
+  overlay.addEventListener('click',()=>toggleSidebar(false));
+  sidebar.querySelectorAll('.snav a').forEach(a=>
+    a.addEventListener('click',()=>{ if(window.innerWidth<=860) toggleSidebar(false); }));
 
-  /* ── LOGOUT ─────────────────────────────────────────── */
-  onTap($('logoutBtn'),()=>doLogout());
-  window.doLogout=function(){localStorage.removeItem(SESSION_KEY);toast('fas fa-sign-out-alt','Signed out…');setTimeout(()=>location.href='adminLogin.html',900);};
+  // ── LOGOUT ───────────────────────────────────────────────
+  $('logoutBtn').addEventListener('click',()=>{localStorage.removeItem(SESSION_KEY);toast('fas fa-sign-out-alt','Signed out…');setTimeout(()=>location.href='adminLogin.html',900);});
 
-  /* ── TOOLBAR ────────────────────────────────────────── */
-  onTap($('btnRefresh'),()=>loadOrders());
+  // ── TOOLBAR ──────────────────────────────────────────────
+  $('btnRefresh').addEventListener('click',()=>loadOrders());
   $('searchInput').addEventListener('input',()=>renderOrders());
 
-  /* ── STATUS TABS ────────────────────────────────────── */
+  // ── STATUS TABS ──────────────────────────────────────────
   document.querySelectorAll('.stab').forEach(btn=>{
-    onTap(btn,()=>setStatus(btn.dataset.status, btn));
+    btn.addEventListener('click',()=>setStatus(btn.dataset.status, btn));
   });
 
-  window.setStatus=function(s,btn){
+  function setStatus(s, btn){
     currentStatus=s;
     document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
-    // btn may be null when called from summary chips
     if(btn) btn.classList.add('active');
-    else {
-      // find matching tab and activate it
-      const match=document.querySelector(`.stab[data-status="${s}"]`);
-      if(match) match.classList.add('active');
-    }
+    else{ const m=document.querySelector(`.stab[data-status="${s}"]`);if(m)m.classList.add('active'); }
     loadOrders();
-  };
+  }
 
-  /* ── SUMMARY ────────────────────────────────────────── */
+  // ── SUMMARY ──────────────────────────────────────────────
   async function loadSummary(){
     try{
       const r=await fetch(API_BASE+'/api/admin/orders/summary',{headers:authHeaders()});
@@ -500,15 +391,16 @@
         <div class="sum-chip" data-status="CANCELLED"><div class="sum-chip-val">${s.cancelledCount||0}</div><div class="sum-chip-label">Cancelled</div></div>
         <div class="sum-chip"><div class="sum-chip-val" style="font-size:clamp(.85rem,2.5vw,1rem)">GHS ${Number(s.totalRevenue||0).toLocaleString()}</div><div class="sum-chip-label">Revenue</div></div>
       `;
-      // FIX: attach touch+click to summary chips after rendering
-      document.querySelectorAll('.sum-chip[data-status]').forEach(chip=>{
-        onTap(chip,()=>setStatus(chip.dataset.status, null));
+      // delegated click on summary row
+      $('summaryRow').addEventListener('click',e=>{
+        const chip=e.target.closest('[data-status]');
+        if(chip) setStatus(chip.dataset.status, null);
       });
     }catch{$('summaryRow').innerHTML='<div style="font-size:.8rem;color:var(--subtle);padding:.5rem">Could not load summary</div>';}
   }
 
-  /* ── LOAD ORDERS ────────────────────────────────────── */
-  window.loadOrders=async function(){
+  // ── LOAD ORDERS ──────────────────────────────────────────
+  async function loadOrders(){
     $('ordersBody').innerHTML='<tr><td colspan="7"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Loading…</div></td></tr>';
     const dateF=$('dateFilter').value;
     let url=API_BASE+'/api/admin/orders';
@@ -530,15 +422,12 @@
       ];
       renderOrders();
     }
-  };
+  }
 
-  /* ── RENDER ORDERS ──────────────────────────────────── */
-  window.renderOrders=function(){
+  // ── RENDER ORDERS ────────────────────────────────────────
+  function renderOrders(){
     const search=$('searchInput').value.toLowerCase();
-    let list=orders.filter(o=>{
-      if(search&&!String(o.orderId).includes(search)&&!(o.userId||'').toLowerCase().includes(search))return false;
-      return true;
-    });
+    const list=orders.filter(o=>!search||String(o.orderId).includes(search)||(o.userId||'').toLowerCase().includes(search));
     if(!list.length){$('ordersBody').innerHTML='<tr><td colspan="7"><div class="empty-state"><i class="fas fa-box-open"></i>No orders found</div></td></tr>';return;}
     $('ordersBody').innerHTML=list.map(o=>`
       <tr>
@@ -557,33 +446,33 @@
         </td>
       </tr>`).join('');
 
-    // FIX: delegated listener on tbody for all row action buttons
-    attachTableListeners();
-  };
-
-  function attachTableListeners(){
+    // FIX: single delegated click listener on tbody — no per-row touchend needed
     const tbody=$('ordersBody');
-
-    function handleAction(e){
-      let btn=e.target;
-      while(btn && btn!==tbody){
-        if(btn.dataset&&btn.dataset.action) break;
-        btn=btn.parentElement;
-      }
-      if(!btn||!btn.dataset.action) return;
+    tbody.addEventListener('click',function handler(e){
+      const btn=e.target.closest('[data-action]');
+      if(!btn) return;
       const {action,id,status}=btn.dataset;
       const numId=parseInt(id,10);
       if(action==='view')   viewOrder(numId);
       if(action==='status') openStatusModal(numId, status);
       if(action==='cancel') cancelOrder(numId);
-    }
-
-    tbody.addEventListener('touchend',function(e){e.preventDefault();handleAction(e);},{passive:false});
-    tbody.addEventListener('click', handleAction);
+      // remove and re-add on next render prevents stacking listeners
+      tbody.removeEventListener('click',handler);
+    });
+    // Re-add a persistent listener (the above was one-shot; use persistent below)
+    tbody.onclick=e=>{
+      const btn=e.target.closest('[data-action]');
+      if(!btn) return;
+      const {action,id,status}=btn.dataset;
+      const numId=parseInt(id,10);
+      if(action==='view')   viewOrder(numId);
+      if(action==='status') openStatusModal(numId, status);
+      if(action==='cancel') cancelOrder(numId);
+    };
   }
 
-  /* ── VIEW ORDER ─────────────────────────────────────── */
-  window.viewOrder=function(id){
+  // ── VIEW ORDER ───────────────────────────────────────────
+  function viewOrder(id){
     const o=orders.find(x=>x.orderId===id);if(!o)return;
     $('detailTitle').textContent='Order #'+id;
     $('detailErr').classList.remove('show');
@@ -604,62 +493,56 @@
       </div>
       <div style="text-align:right;margin-top:.7rem;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700">Total: GHS ${Number(o.totalAmount||0).toLocaleString()}</div>`;
 
-    // FIX: build modal buttons with JS-attached listeners, not inline onclick
     $('detailBtns').innerHTML=`
       <button class="btn-modal-action danger" id="detailCancelBtn">Cancel Order</button>
       <button class="btn-modal-action" id="detailStatusBtn"><i class="fas fa-pen fa-xs"></i> Update Status</button>
       <button class="btn-modal-confirm" id="detailCloseBtn">Close</button>`;
-
-    onTap($('detailCancelBtn'), ()=>{ cancelOrder(id); closeDetail(); });
-    onTap($('detailStatusBtn'), ()=>{ openStatusModal(id, o.status); closeDetail(); });
-    onTap($('detailCloseBtn'),  ()=>closeDetail());
-
+    $('detailCancelBtn').addEventListener('click',()=>{ cancelOrder(id); closeDetail(); });
+    $('detailStatusBtn').addEventListener('click',()=>{ openStatusModal(id, o.status); closeDetail(); });
+    $('detailCloseBtn').addEventListener('click',  ()=>closeDetail());
     $('detailModal').classList.add('open');
-  };
+  }
 
-  window.closeDetail=function(){$('detailModal').classList.remove('open');};
+  function closeDetail(){$('detailModal').classList.remove('open');}
 
-  /* ── CLOSE MODAL ON OVERLAY TAP ─────────────────────── */
-  $('detailModal').addEventListener('touchend',function(e){if(e.target===this){e.preventDefault();closeDetail();}},{passive:false});
-  $('detailModal').addEventListener('click',function(e){if(e.target===this)closeDetail();});
-  $('statusModal').addEventListener('touchend',function(e){if(e.target===this){e.preventDefault();closeStatusModal();}},{passive:false});
-  $('statusModal').addEventListener('click',function(e){if(e.target===this)closeStatusModal();});
+  // close modals on overlay click
+  $('detailModal').addEventListener('click',e=>{ if(e.target===$('detailModal')) closeDetail(); });
+  $('statusModal').addEventListener('click',e=>{ if(e.target===$('statusModal')) closeStatusModal(); });
 
-  /* ── STATUS MODAL ───────────────────────────────────── */
-  onTap($('btnCloseDetail'),  ()=>closeDetail());
-  onTap($('btnCloseStatus'),  ()=>closeStatusModal());
-  onTap($('btnCancelStatus'), ()=>closeStatusModal());
-  onTap($('btnConfirmStatus'),()=>confirmStatusUpdate());
+  // ── STATUS MODAL ─────────────────────────────────────────
+  $('btnCloseDetail').addEventListener('click',  ()=>closeDetail());
+  $('btnCloseStatus').addEventListener('click',  ()=>closeStatusModal());
+  $('btnCancelStatus').addEventListener('click', ()=>closeStatusModal());
+  $('btnConfirmStatus').addEventListener('click',()=>confirmStatusUpdate());
 
-  window.openStatusModal=function(id,current){
+  function openStatusModal(id, current){
     pendingStatusUpdate.id=id;
     $('statusSelect').value=current;
     $('statusOrderLabel').textContent='Updating Order #'+id;
     $('statusErr').classList.remove('show');
     $('statusModal').classList.add('open');
-  };
-  window.closeStatusModal=function(){$('statusModal').classList.remove('open');};
+  }
+  function closeStatusModal(){$('statusModal').classList.remove('open');}
 
-  window.confirmStatusUpdate=async function(){
+  async function confirmStatusUpdate(){
     const status=$('statusSelect').value;const id=pendingStatusUpdate.id;
     try{
       const r=await fetch(API_BASE+`/api/admin/orders/${id}/status?status=${status}`,{method:'PATCH',headers:authHeaders()});
       const d=await r.json();if(!r.ok)throw new Error(d.message||'Failed');
       toast('fas fa-check-circle','Order #'+id+' → '+status);closeStatusModal();loadOrders();loadSummary();
     }catch{toast('fas fa-check-circle','Status updated (demo)');closeStatusModal();loadOrders();}
-  };
+  }
 
-  /* ── CANCEL ORDER ───────────────────────────────────── */
-  window.cancelOrder=async function(id){
+  // ── CANCEL ORDER ─────────────────────────────────────────
+  async function cancelOrder(id){
     if(!confirm('Cancel order #'+id+'?'))return;
     try{
       const r=await fetch(API_BASE+`/api/admin/orders/${id}/cancel`,{method:'PATCH',headers:authHeaders()});
       const d=await r.json();if(!r.ok)throw new Error();
       toast('fas fa-ban','Order #'+id+' cancelled');loadOrders();loadSummary();
     }catch{toast('fas fa-ban','Order cancelled (demo)');loadOrders();}
-  };
+  }
 
-  /* ── INIT ───────────────────────────────────────────── */
   loadSummary();
   loadOrders();
 })();
