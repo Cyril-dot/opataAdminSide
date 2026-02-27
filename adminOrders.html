@@ -21,14 +21,32 @@
       --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1)
     }
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-    body{background:var(--cream);color:var(--ink);font-family:'Outfit',system-ui,sans-serif;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+    body{
+      background:var(--cream);color:var(--ink);font-family:'Outfit',system-ui,sans-serif;
+      line-height:1.6;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;
+      touch-action:manipulation;
+    }
     a{text-decoration:none;color:inherit}
-    button{cursor:pointer;font-family:inherit;border:none;outline:none;background:none}
+    button{
+      cursor:pointer;font-family:inherit;border:none;outline:none;background:none;
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      user-select:none;-webkit-user-select:none;
+    }
+    a, button, [role="button"], .sum-chip, .stab {
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
     ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--parchment)}::-webkit-scrollbar-thumb{background:var(--warm-mid);border-radius:99px}
 
     /* TOPBAR */
     .topbar{height:var(--nav-h);background:rgba(250,247,243,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;display:flex;align-items:center;padding:0 clamp(.75rem,3vw,1.2rem);gap:.6rem;flex-shrink:0}
-    .ham{display:none;flex-direction:column;gap:4px;padding:8px;cursor:pointer;border-radius:var(--r-sm);background:none;border:none;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+    .ham{
+      display:none;flex-direction:column;gap:4px;padding:10px;cursor:pointer;
+      border-radius:var(--r-sm);background:none;border:none;flex-shrink:0;
+      min-width:44px;min-height:44px;align-items:center;justify-content:center;
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
     .ham span{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px;transition:all .26s var(--ease)}
     .ham.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
     .ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
@@ -38,19 +56,32 @@
     .admin-badge{display:inline-flex;align-items:center;gap:.28rem;background:rgba(168,133,78,.1);color:var(--gold);font-size:clamp(.55rem,.85vw,.62rem);font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .5rem;border-radius:var(--r-xl);border:1px solid rgba(168,133,78,.25);flex-shrink:0}
     @media(max-width:400px){.admin-badge{display:none}}
     .topbar-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}
-    .topbar-link{display:inline-flex;align-items:center;gap:.32rem;font-size:.78rem;color:var(--muted);font-weight:500;padding:.32rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .18s}
+    .topbar-link{display:inline-flex;align-items:center;gap:.32rem;font-size:.78rem;color:var(--muted);font-weight:500;padding:.32rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .18s;min-height:44px;}
     .topbar-link:hover{border-color:var(--gold);color:var(--gold)}
-    .topbar-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+    .topbar-avatar{
+      width:44px;height:44px;background:linear-gradient(135deg,var(--gold),var(--blush));
+      border-radius:50%;display:flex;align-items:center;justify-content:center;
+      color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
 
     /* SIDEBAR */
     .layout{display:flex;flex:1}
     .sidebar{width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:var(--nav-h);left:0;height:calc(100vh - var(--nav-h));overflow-y:auto;z-index:150;transition:transform .3s var(--ease)}
-    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;opacity:0;transition:opacity .26s}
+    .sidebar-overlay{
+      display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;
+      opacity:0;transition:opacity .26s;touch-action:manipulation;
+    }
     .sidebar-overlay.active{opacity:1}
     .snav{padding:.65rem 0;flex:1}
     .snav-label{padding:.55rem .9rem .2rem;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
-    .snav a{display:flex;align-items:center;gap:.7rem;padding:.75rem 1rem;font-size:.86rem;font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0;min-height:44px;-webkit-tap-highlight-color:transparent}
-    .snav a:hover{background:var(--parchment);color:var(--ink)}
+    .snav a{
+      display:flex;align-items:center;gap:.7rem;padding:.75rem 1rem;font-size:.86rem;
+      font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;
+      margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0;
+      min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .snav a:hover,.snav a:active{background:var(--parchment);color:var(--ink)}
     .snav a.active{background:rgba(168,133,78,.08);color:var(--gold);border-left-color:var(--gold);font-weight:600}
     .snav a i{width:16px;text-align:center;font-size:.82rem;flex-shrink:0}
     .sdiv{height:1px;background:var(--border);margin:.4rem .9rem}
@@ -59,43 +90,79 @@
     .s-av{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;flex-shrink:0}
     .s-info strong{display:block;font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
     .s-info small{font-size:.68rem;color:var(--subtle)}
-    .s-logout{display:flex;align-items:center;gap:.5rem;padding:.58rem .75rem;background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .18s;width:100%;min-height:44px}
-    .s-logout:hover{background:rgba(192,57,43,.13)}
+    .s-logout{
+      display:flex;align-items:center;gap:.5rem;padding:.58rem .75rem;
+      background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);
+      border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;
+      cursor:pointer;transition:background .18s;width:100%;
+      min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .s-logout:hover,.s-logout:active{background:rgba(192,57,43,.13)}
 
     /* MAIN */
     .main{margin-left:var(--sidebar-w);flex:1;padding:clamp(1rem,3vw,2rem) clamp(.75rem,3vw,2rem);min-width:0}
     .page-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.1rem;gap:1rem;flex-wrap:wrap}
     .bc{display:flex;align-items:center;gap:.35rem;font-size:.73rem;color:var(--subtle);margin-bottom:.4rem;flex-wrap:wrap}
-    .bc a{color:var(--muted);transition:color .18s}.bc a:hover{color:var(--gold)}
+    .bc a{color:var(--muted);transition:color .18s;min-height:36px;display:inline-flex;align-items:center;}.bc a:hover{color:var(--gold)}
     .bc i{font-size:.52rem}
     .page-hd h1{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,3.5vw,1.8rem);font-weight:700}
     .page-hd p{font-size:clamp(.78rem,2vw,.84rem);color:var(--muted)}
 
     /* SUMMARY CHIPS */
     .summary-row{display:flex;gap:.55rem;flex-wrap:wrap;margin-bottom:1.1rem}
-    .sum-chip{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-md);padding:.5rem .85rem;display:flex;flex-direction:column;min-width:80px;transition:border-color .18s,box-shadow .18s;cursor:pointer;-webkit-tap-highlight-color:transparent}
-    .sum-chip:hover{border-color:var(--gold);box-shadow:var(--sh-xs)}
+    .sum-chip{
+      background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-md);
+      padding:.5rem .85rem;display:flex;flex-direction:column;min-width:80px;
+      transition:border-color .18s,box-shadow .18s;cursor:pointer;
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+      user-select:none;-webkit-user-select:none;
+      /* FIX: prevent children blocking taps */
+    }
+    .sum-chip *{pointer-events:none}
+    .sum-chip:hover,.sum-chip:active{border-color:var(--gold);box-shadow:var(--sh-xs)}
     .sum-chip.active{border-color:var(--gold);background:rgba(168,133,78,.06)}
     .sum-chip-val{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,3vw,1.3rem);font-weight:700;line-height:1}
     .sum-chip-label{font-size:.62rem;color:var(--subtle);font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-top:.12rem}
 
     /* STATUS TABS */
     .status-tabs{display:flex;gap:.32rem;flex-wrap:wrap;margin-bottom:1rem}
-    .stab{padding:.36rem .8rem;font-size:clamp(.72rem,2vw,.78rem);font-weight:600;border-radius:var(--r-xl);border:1.5px solid var(--border);color:var(--muted);cursor:pointer;transition:all .16s;background:var(--white);min-height:36px;display:inline-flex;align-items:center;-webkit-tap-highlight-color:transparent}
-    .stab:hover{border-color:var(--gold);color:var(--gold)}
+    .stab{
+      padding:.36rem .8rem;font-size:clamp(.72rem,2vw,.78rem);font-weight:600;
+      border-radius:var(--r-xl);border:1.5px solid var(--border);color:var(--muted);
+      cursor:pointer;transition:all .16s;background:var(--white);
+      min-height:44px;display:inline-flex;align-items:center;
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .stab:hover,.stab:active{border-color:var(--gold);color:var(--gold)}
     .stab.active{background:var(--ink);color:white;border-color:var(--ink)}
 
     /* TOOLBAR */
     .toolbar{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:.85rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.55rem;flex-wrap:wrap}
     .search-wrap{flex:1;min-width:140px;position:relative}
     .search-wrap i{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:var(--subtle);font-size:.82rem;pointer-events:none}
-    .search-input{width:100%;padding:.55rem .9rem .55rem 2.4rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-xl);font-size:clamp(.8rem,2.5vw,.84rem);font-family:'Outfit',sans-serif;color:var(--ink);outline:none;transition:border-color .18s;-webkit-appearance:none}
+    .search-input{
+      width:100%;padding:.55rem .9rem .55rem 2.4rem;background:var(--parchment);
+      border:1.5px solid var(--border);border-radius:var(--r-xl);
+      font-size:16px;/* FIX: prevent iOS zoom */
+      font-family:'Outfit',sans-serif;color:var(--ink);outline:none;
+      transition:border-color .18s;-webkit-appearance:none;
+    }
     .search-input:focus{border-color:var(--gold)}
     .search-input::placeholder{color:var(--subtle)}
-    @media(max-width:480px){.search-input{font-size:16px}}
-    .filter-select{padding:.55rem .75rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-xl);font-size:clamp(.78rem,2vw,.82rem);font-family:'Outfit',sans-serif;color:var(--ink);outline:none;cursor:pointer;-webkit-appearance:none;min-height:40px}
-    .btn-filter{display:inline-flex;align-items:center;gap:.32rem;background:var(--ink);color:white;font-size:.8rem;font-weight:600;padding:.55rem .9rem;border-radius:var(--r-xl);cursor:pointer;transition:background .18s;min-height:40px;-webkit-tap-highlight-color:transparent}
-    .btn-filter:hover{background:var(--gold)}
+    .filter-select{
+      padding:.55rem .75rem;background:var(--parchment);border:1.5px solid var(--border);
+      border-radius:var(--r-xl);font-size:clamp(.78rem,2vw,.82rem);font-family:'Outfit',sans-serif;
+      color:var(--ink);outline:none;cursor:pointer;-webkit-appearance:none;
+      min-height:44px;touch-action:manipulation;
+    }
+    .btn-filter{
+      display:inline-flex;align-items:center;gap:.32rem;background:var(--ink);color:white;
+      font-size:.8rem;font-weight:600;padding:.55rem .9rem;border-radius:var(--r-xl);
+      cursor:pointer;transition:background .18s;
+      min-height:44px;min-width:44px;
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .btn-filter:hover,.btn-filter:active{background:var(--gold)}
 
     /* TABLE */
     .table-wrap{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:1.5rem}
@@ -131,20 +198,40 @@
     .ostatus.DELIVERED{background:#dcfce7;color:#15803d}
     .ostatus.CANCELLED{background:#fee2e2;color:var(--danger)}
     .tbl-actions{display:flex;gap:.32rem;flex-wrap:nowrap}
-    .btn-sm{font-size:.7rem;font-weight:600;padding:.28rem .62rem;border-radius:var(--r-xl);border:1.5px solid var(--border);cursor:pointer;transition:all .15s;background:none;color:var(--muted);white-space:nowrap;min-height:32px;display:inline-flex;align-items:center;gap:.25rem;-webkit-tap-highlight-color:transparent}
-    .btn-sm:hover{border-color:var(--gold);color:var(--gold)}
-    .btn-sm.danger:hover{border-color:var(--danger);color:var(--danger)}
-    .btn-sm.success:hover{border-color:var(--success);color:var(--success)}
+    /* FIX: row action buttons - proper touch targets */
+    .btn-sm{
+      font-size:.7rem;font-weight:600;padding:.3rem .65rem;border-radius:var(--r-xl);
+      border:1.5px solid var(--border);cursor:pointer;transition:all .15s;
+      background:none;color:var(--muted);white-space:nowrap;
+      min-height:36px;display:inline-flex;align-items:center;gap:.25rem;
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .btn-sm:hover,.btn-sm:active{border-color:var(--gold);color:var(--gold)}
+    .btn-sm.danger:hover,.btn-sm.danger:active{border-color:var(--danger);color:var(--danger)}
+    .btn-sm.success:hover,.btn-sm.success:active{border-color:var(--success);color:var(--success)}
+    /* FIX: prevent icon children blocking row button taps */
+    .btn-sm *{pointer-events:none}
 
     /* MODALS */
-    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .22s;overflow-y:auto}
+    .modal-overlay{
+      position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;
+      display:flex;align-items:center;justify-content:center;padding:1rem;
+      opacity:0;pointer-events:none;transition:opacity .22s;overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+      touch-action:manipulation;
+    }
     .modal-overlay.open{opacity:1;pointer-events:all}
     .modal{background:var(--white);border-radius:var(--r-lg);padding:clamp(1.2rem,4vw,1.8rem);max-width:520px;width:100%;box-shadow:var(--sh-lg);transform:scale(.95);transition:transform .22s var(--spring);margin:auto}
     .modal-overlay.open .modal{transform:scale(1)}
     .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
     .modal-head h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,3vw,1.15rem);font-weight:700}
-    .modal-close{width:32px;height:32px;background:var(--parchment);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.82rem;color:var(--muted);cursor:pointer;border:none;flex-shrink:0;-webkit-tap-highlight-color:transparent}
-    .modal-close:hover{background:var(--sand)}
+    .modal-close{
+      width:44px;height:44px;background:var(--parchment);border-radius:50%;
+      display:flex;align-items:center;justify-content:center;font-size:.82rem;
+      color:var(--muted);cursor:pointer;border:none;flex-shrink:0;
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .modal-close:hover,.modal-close:active{background:var(--sand)}
     .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:.55rem .8rem;margin-bottom:1rem}
     .detail-item label{display:block;font-size:.63rem;font-weight:700;color:var(--subtle);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.15rem}
     .detail-item span{font-size:clamp(.8rem,2.5vw,.84rem);font-weight:500}
@@ -153,18 +240,32 @@
     .items-table td{padding:.45rem .6rem;border-bottom:1px solid var(--border)}
     .items-table tbody tr:last-child td{border-bottom:none}
     .modal-btns{display:flex;gap:.55rem;justify-content:flex-end;margin-top:1.1rem;flex-wrap:wrap}
-    .btn-modal-action{padding:.55rem 1.1rem;border:1.5px solid var(--border);border-radius:var(--r-xl);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .16s;background:none;min-height:40px;-webkit-tap-highlight-color:transparent}
-    .btn-modal-action:hover{border-color:var(--gold);color:var(--gold)}
+    .btn-modal-action{
+      padding:.55rem 1.1rem;border:1.5px solid var(--border);border-radius:var(--r-xl);
+      font-size:.82rem;font-weight:600;cursor:pointer;transition:all .16s;background:none;
+      min-height:48px;
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .btn-modal-action:hover,.btn-modal-action:active{border-color:var(--gold);color:var(--gold)}
     .btn-modal-action.danger{border-color:rgba(192,57,43,.3);color:var(--danger)}
-    .btn-modal-action.danger:hover{background:rgba(192,57,43,.07)}
-    .btn-modal-confirm{padding:.6rem 1.3rem;background:var(--gold);color:white;border:none;border-radius:var(--r-xl);font-size:.84rem;font-weight:700;cursor:pointer;transition:opacity .16s;min-height:40px;-webkit-tap-highlight-color:transparent}
-    .btn-modal-confirm:hover{opacity:.85}
+    .btn-modal-action.danger:hover,.btn-modal-action.danger:active{background:rgba(192,57,43,.07)}
+    .btn-modal-confirm{
+      padding:.6rem 1.3rem;background:var(--gold);color:white;border:none;
+      border-radius:var(--r-xl);font-size:.84rem;font-weight:700;cursor:pointer;
+      transition:opacity .16s;min-height:48px;
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .btn-modal-confirm:hover,.btn-modal-confirm:active{opacity:.85}
     .fg{margin-bottom:.85rem}
     .fl{display:block;font-size:.68rem;font-weight:700;color:var(--muted);margin-bottom:.28rem;letter-spacing:.06em;text-transform:uppercase}
-    .fi{width:100%;padding:.6rem .9rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:clamp(.82rem,2.5vw,.85rem);font-family:'Outfit',sans-serif;color:var(--ink);outline:none;transition:border-color .18s;-webkit-appearance:none}
+    .fi{
+      width:100%;padding:.6rem .9rem;background:var(--parchment);border:1.5px solid var(--border);
+      border-radius:var(--r-sm);font-size:16px;/* FIX: prevent iOS zoom */
+      font-family:'Outfit',sans-serif;color:var(--ink);outline:none;
+      transition:border-color .18s;-webkit-appearance:none;
+    }
     .fi:focus{border-color:var(--gold)}
-    @media(max-width:480px){.fi{font-size:16px}}
-    select.fi{cursor:pointer}
+    select.fi{cursor:pointer;touch-action:manipulation;}
     .ferr{display:none;color:var(--danger);font-size:.75rem;padding:.38rem .65rem;background:rgba(192,57,43,.06);border-radius:var(--r-sm);border-left:3px solid var(--danger);margin-bottom:.7rem}
     .ferr.show{display:block}
 
@@ -221,7 +322,7 @@
         <div class="s-av" id="sAv">A</div>
         <div class="s-info"><strong id="sName">Admin</strong><small id="sShop">Beauty Empire</small></div>
       </div>
-      <button class="s-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out</button>
+      <button class="s-logout" id="logoutBtn"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out</button>
     </div>
   </aside>
 
@@ -241,19 +342,19 @@
       <div class="sum-chip sk" style="width:90px;height:56px"></div>
     </div>
 
-    <div class="status-tabs">
-      <button class="stab active" onclick="setStatus('all',this)">All</button>
-      <button class="stab" onclick="setStatus('PENDING',this)">Pending</button>
-      <button class="stab" onclick="setStatus('CONFIRMED',this)">Confirmed</button>
-      <button class="stab" onclick="setStatus('SHIPPED',this)">Shipped</button>
-      <button class="stab" onclick="setStatus('DELIVERED',this)">Delivered</button>
-      <button class="stab" onclick="setStatus('CANCELLED',this)">Cancelled</button>
+    <div class="status-tabs" id="statusTabs">
+      <button class="stab active" data-status="all">All</button>
+      <button class="stab" data-status="PENDING">Pending</button>
+      <button class="stab" data-status="CONFIRMED">Confirmed</button>
+      <button class="stab" data-status="SHIPPED">Shipped</button>
+      <button class="stab" data-status="DELIVERED">Delivered</button>
+      <button class="stab" data-status="CANCELLED">Cancelled</button>
     </div>
 
     <div class="toolbar">
       <div class="search-wrap">
         <i class="fas fa-search"></i>
-        <input class="search-input" type="text" id="searchInput" placeholder="Search by order ID or customer…" oninput="renderOrders()">
+        <input class="search-input" type="text" id="searchInput" placeholder="Search by order ID or customer…">
       </div>
       <select class="filter-select" id="dateFilter">
         <option value="all">All Time</option>
@@ -261,7 +362,7 @@
         <option value="week">This Week</option>
         <option value="month">This Month</option>
       </select>
-      <button class="btn-filter" onclick="loadOrders()"><i class="fas fa-sync fa-xs"></i></button>
+      <button class="btn-filter" id="btnRefresh"><i class="fas fa-sync fa-xs"></i></button>
     </div>
 
     <div class="table-wrap">
@@ -284,7 +385,7 @@
   <div class="modal" style="max-width:580px">
     <div class="modal-head">
       <h3 id="detailTitle">Order Details</h3>
-      <button class="modal-close" onclick="closeDetail()"><i class="fas fa-times fa-xs"></i></button>
+      <button class="modal-close" id="btnCloseDetail"><i class="fas fa-times fa-xs"></i></button>
     </div>
     <div class="ferr" id="detailErr"></div>
     <div id="detailBody"></div>
@@ -297,7 +398,7 @@
   <div class="modal" style="max-width:380px">
     <div class="modal-head">
       <h3>Update Order Status</h3>
-      <button class="modal-close" onclick="closeStatusModal()"><i class="fas fa-times fa-xs"></i></button>
+      <button class="modal-close" id="btnCloseStatus"><i class="fas fa-times fa-xs"></i></button>
     </div>
     <div class="ferr" id="statusErr"></div>
     <div class="fg">
@@ -312,8 +413,8 @@
     </div>
     <p style="font-size:.78rem;color:var(--subtle)" id="statusOrderLabel"></p>
     <div class="modal-btns" style="margin-top:.8rem">
-      <button class="btn-modal-action" onclick="closeStatusModal()">Cancel</button>
-      <button class="btn-modal-confirm" onclick="confirmStatusUpdate()"><i class="fas fa-check fa-xs"></i> Update</button>
+      <button class="btn-modal-action" id="btnCancelStatus">Cancel</button>
+      <button class="btn-modal-confirm" id="btnConfirmStatus"><i class="fas fa-check fa-xs"></i> Update</button>
     </div>
   </div>
 </div>
@@ -329,6 +430,7 @@
   const $=id=>document.getElementById(id);
   let orders=[],currentStatus='all',pendingStatusUpdate={id:null};
 
+  /* ── SESSION ────────────────────────────────────────── */
   function loadSession(){try{const raw=localStorage.getItem(SESSION_KEY);if(!raw)return null;const d=JSON.parse(raw);if(Date.now()-(d.savedAt||0)>SESSION_TTL){localStorage.removeItem(SESSION_KEY);return null;}return d;}catch{return null;}}
   const session=loadSession();
   if(!session){location.href='adminLogin.html';return;}
@@ -337,29 +439,75 @@
   function toast(ico,msg){const el=document.createElement('div');el.className='toast';el.innerHTML='<i class="'+ico+'"></i><span>'+msg+'</span>';$('tc').appendChild(el);setTimeout(()=>{el.classList.add('out');el.addEventListener('animationend',()=>el.remove(),{once:true});},3000);}
   function fmtDate(str){if(!str)return'—';try{return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}catch{return str;}}
 
+  /* ── FIX: universal touch+click helper ─────────────── */
+  function onTap(el, fn){
+    if(!el) return;
+    el.addEventListener('touchend',function(e){e.preventDefault();fn(e);},{passive:false});
+    el.addEventListener('click',fn);
+  }
+
+  /* ── IDENTITY ───────────────────────────────────────── */
   const name=admin.name||admin.firstName||admin.email?.split('@')[0]||'Admin';
   $('topAv').textContent=name.charAt(0).toUpperCase();
   $('sAv').textContent=name.charAt(0).toUpperCase();
   $('sName').textContent=name;
   $('sShop').textContent=admin.shopName||'Beauty Empire';
 
+  /* ── HAMBURGER ──────────────────────────────────────── */
+  const ham=$('ham'),sidebar=$('sidebar'),overlay=$('sOverlay');
+  function toggleSidebar(open){sidebar.classList.toggle('open',open);overlay.classList.toggle('active',open);ham.classList.toggle('open',open);document.body.style.overflow=open?'hidden':'';}
+  onTap(ham,     ()=>toggleSidebar(!sidebar.classList.contains('open')));
+  onTap(overlay, ()=>toggleSidebar(false));
+
+  /* ── LOGOUT ─────────────────────────────────────────── */
+  onTap($('logoutBtn'),()=>doLogout());
+  window.doLogout=function(){localStorage.removeItem(SESSION_KEY);toast('fas fa-sign-out-alt','Signed out…');setTimeout(()=>location.href='adminLogin.html',900);};
+
+  /* ── TOOLBAR ────────────────────────────────────────── */
+  onTap($('btnRefresh'),()=>loadOrders());
+  $('searchInput').addEventListener('input',()=>renderOrders());
+
+  /* ── STATUS TABS ────────────────────────────────────── */
+  document.querySelectorAll('.stab').forEach(btn=>{
+    onTap(btn,()=>setStatus(btn.dataset.status, btn));
+  });
+
+  window.setStatus=function(s,btn){
+    currentStatus=s;
+    document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
+    // btn may be null when called from summary chips
+    if(btn) btn.classList.add('active');
+    else {
+      // find matching tab and activate it
+      const match=document.querySelector(`.stab[data-status="${s}"]`);
+      if(match) match.classList.add('active');
+    }
+    loadOrders();
+  };
+
+  /* ── SUMMARY ────────────────────────────────────────── */
   async function loadSummary(){
     try{
       const r=await fetch(API_BASE+'/api/admin/orders/summary',{headers:authHeaders()});
       const d=await r.json();if(!r.ok)throw new Error();
       const s=d.data||{};
       $('summaryRow').innerHTML=`
-        <div class="sum-chip" onclick="setStatus('all',null)"><div class="sum-chip-val">${s.totalOrders||0}</div><div class="sum-chip-label">Total</div></div>
-        <div class="sum-chip" onclick="setStatus('PENDING',null)"><div class="sum-chip-val">${s.pendingCount||0}</div><div class="sum-chip-label">Pending</div></div>
-        <div class="sum-chip" onclick="setStatus('CONFIRMED',null)"><div class="sum-chip-val">${s.confirmedCount||0}</div><div class="sum-chip-label">Confirmed</div></div>
-        <div class="sum-chip" onclick="setStatus('SHIPPED',null)"><div class="sum-chip-val">${s.shippedCount||0}</div><div class="sum-chip-label">Shipped</div></div>
-        <div class="sum-chip" onclick="setStatus('DELIVERED',null)"><div class="sum-chip-val">${s.deliveredCount||0}</div><div class="sum-chip-label">Delivered</div></div>
-        <div class="sum-chip" onclick="setStatus('CANCELLED',null)"><div class="sum-chip-val">${s.cancelledCount||0}</div><div class="sum-chip-label">Cancelled</div></div>
+        <div class="sum-chip" data-status="all"><div class="sum-chip-val">${s.totalOrders||0}</div><div class="sum-chip-label">Total</div></div>
+        <div class="sum-chip" data-status="PENDING"><div class="sum-chip-val">${s.pendingCount||0}</div><div class="sum-chip-label">Pending</div></div>
+        <div class="sum-chip" data-status="CONFIRMED"><div class="sum-chip-val">${s.confirmedCount||0}</div><div class="sum-chip-label">Confirmed</div></div>
+        <div class="sum-chip" data-status="SHIPPED"><div class="sum-chip-val">${s.shippedCount||0}</div><div class="sum-chip-label">Shipped</div></div>
+        <div class="sum-chip" data-status="DELIVERED"><div class="sum-chip-val">${s.deliveredCount||0}</div><div class="sum-chip-label">Delivered</div></div>
+        <div class="sum-chip" data-status="CANCELLED"><div class="sum-chip-val">${s.cancelledCount||0}</div><div class="sum-chip-label">Cancelled</div></div>
         <div class="sum-chip"><div class="sum-chip-val" style="font-size:clamp(.85rem,2.5vw,1rem)">GHS ${Number(s.totalRevenue||0).toLocaleString()}</div><div class="sum-chip-label">Revenue</div></div>
       `;
+      // FIX: attach touch+click to summary chips after rendering
+      document.querySelectorAll('.sum-chip[data-status]').forEach(chip=>{
+        onTap(chip,()=>setStatus(chip.dataset.status, null));
+      });
     }catch{$('summaryRow').innerHTML='<div style="font-size:.8rem;color:var(--subtle);padding:.5rem">Could not load summary</div>';}
   }
 
+  /* ── LOAD ORDERS ────────────────────────────────────── */
   window.loadOrders=async function(){
     $('ordersBody').innerHTML='<tr><td colspan="7"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Loading…</div></td></tr>';
     const dateF=$('dateFilter').value;
@@ -384,6 +532,7 @@
     }
   };
 
+  /* ── RENDER ORDERS ──────────────────────────────────── */
   window.renderOrders=function(){
     const search=$('searchInput').value.toLowerCase();
     let list=orders.filter(o=>{
@@ -401,21 +550,39 @@
         <td data-label="Status"><span class="ostatus ${o.status}">${o.status}</span></td>
         <td data-label="Actions">
           <div class="tbl-actions">
-            <button class="btn-sm" onclick="viewOrder(${o.orderId})"><i class="fas fa-eye fa-xs"></i> View</button>
-            <button class="btn-sm success" onclick="openStatusModal(${o.orderId},'${o.status}')"><i class="fas fa-pen fa-xs"></i> Status</button>
-            <button class="btn-sm danger" onclick="cancelOrder(${o.orderId})"><i class="fas fa-ban fa-xs"></i></button>
+            <button class="btn-sm" data-action="view" data-id="${o.orderId}"><i class="fas fa-eye fa-xs"></i> View</button>
+            <button class="btn-sm success" data-action="status" data-id="${o.orderId}" data-status="${o.status}"><i class="fas fa-pen fa-xs"></i> Status</button>
+            <button class="btn-sm danger" data-action="cancel" data-id="${o.orderId}"><i class="fas fa-ban fa-xs"></i></button>
           </div>
         </td>
       </tr>`).join('');
+
+    // FIX: delegated listener on tbody for all row action buttons
+    attachTableListeners();
   };
 
-  window.setStatus=function(s,btn){
-    currentStatus=s;
-    document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
-    if(btn)btn.classList.add('active');
-    loadOrders();
-  };
+  function attachTableListeners(){
+    const tbody=$('ordersBody');
 
+    function handleAction(e){
+      let btn=e.target;
+      while(btn && btn!==tbody){
+        if(btn.dataset&&btn.dataset.action) break;
+        btn=btn.parentElement;
+      }
+      if(!btn||!btn.dataset.action) return;
+      const {action,id,status}=btn.dataset;
+      const numId=parseInt(id,10);
+      if(action==='view')   viewOrder(numId);
+      if(action==='status') openStatusModal(numId, status);
+      if(action==='cancel') cancelOrder(numId);
+    }
+
+    tbody.addEventListener('touchend',function(e){e.preventDefault();handleAction(e);},{passive:false});
+    tbody.addEventListener('click', handleAction);
+  }
+
+  /* ── VIEW ORDER ─────────────────────────────────────── */
   window.viewOrder=function(id){
     const o=orders.find(x=>x.orderId===id);if(!o)return;
     $('detailTitle').textContent='Order #'+id;
@@ -436,14 +603,33 @@
         </table>
       </div>
       <div style="text-align:right;margin-top:.7rem;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700">Total: GHS ${Number(o.totalAmount||0).toLocaleString()}</div>`;
+
+    // FIX: build modal buttons with JS-attached listeners, not inline onclick
     $('detailBtns').innerHTML=`
-      <button class="btn-modal-action danger" onclick="cancelOrder(${id});closeDetail()">Cancel Order</button>
-      <button class="btn-modal-action" onclick="openStatusModal(${id},'${o.status}');closeDetail()"><i class="fas fa-pen fa-xs"></i> Update Status</button>
-      <button class="btn-modal-confirm" onclick="closeDetail()">Close</button>`;
+      <button class="btn-modal-action danger" id="detailCancelBtn">Cancel Order</button>
+      <button class="btn-modal-action" id="detailStatusBtn"><i class="fas fa-pen fa-xs"></i> Update Status</button>
+      <button class="btn-modal-confirm" id="detailCloseBtn">Close</button>`;
+
+    onTap($('detailCancelBtn'), ()=>{ cancelOrder(id); closeDetail(); });
+    onTap($('detailStatusBtn'), ()=>{ openStatusModal(id, o.status); closeDetail(); });
+    onTap($('detailCloseBtn'),  ()=>closeDetail());
+
     $('detailModal').classList.add('open');
   };
 
   window.closeDetail=function(){$('detailModal').classList.remove('open');};
+
+  /* ── CLOSE MODAL ON OVERLAY TAP ─────────────────────── */
+  $('detailModal').addEventListener('touchend',function(e){if(e.target===this){e.preventDefault();closeDetail();}},{passive:false});
+  $('detailModal').addEventListener('click',function(e){if(e.target===this)closeDetail();});
+  $('statusModal').addEventListener('touchend',function(e){if(e.target===this){e.preventDefault();closeStatusModal();}},{passive:false});
+  $('statusModal').addEventListener('click',function(e){if(e.target===this)closeStatusModal();});
+
+  /* ── STATUS MODAL ───────────────────────────────────── */
+  onTap($('btnCloseDetail'),  ()=>closeDetail());
+  onTap($('btnCloseStatus'),  ()=>closeStatusModal());
+  onTap($('btnCancelStatus'), ()=>closeStatusModal());
+  onTap($('btnConfirmStatus'),()=>confirmStatusUpdate());
 
   window.openStatusModal=function(id,current){
     pendingStatusUpdate.id=id;
@@ -463,6 +649,7 @@
     }catch{toast('fas fa-check-circle','Status updated (demo)');closeStatusModal();loadOrders();}
   };
 
+  /* ── CANCEL ORDER ───────────────────────────────────── */
   window.cancelOrder=async function(id){
     if(!confirm('Cancel order #'+id+'?'))return;
     try{
@@ -472,12 +659,9 @@
     }catch{toast('fas fa-ban','Order cancelled (demo)');loadOrders();}
   };
 
-  const ham=$('ham'),sidebar=$('sidebar'),overlay=$('sOverlay');
-  ham.addEventListener('click',()=>{const o=sidebar.classList.toggle('open');overlay.classList.toggle('active',o);ham.classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';});
-  overlay.addEventListener('click',()=>{sidebar.classList.remove('open');overlay.classList.remove('active');ham.classList.remove('open');document.body.style.overflow='';});
-  window.doLogout=function(){localStorage.removeItem(SESSION_KEY);toast('fas fa-sign-out-alt','Signed out…');setTimeout(()=>location.href='adminLogin.html',900);};
-
-  loadSummary();loadOrders();
+  /* ── INIT ───────────────────────────────────────────── */
+  loadSummary();
+  loadOrders();
 })();
 </script>
 </body>

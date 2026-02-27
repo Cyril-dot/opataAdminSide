@@ -27,7 +27,10 @@
     ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--parchment)}::-webkit-scrollbar-thumb{background:var(--warm-mid);border-radius:99px}
 
     .topbar{height:var(--nav-h);background:rgba(250,247,243,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;display:flex;align-items:center;padding:0 1.2rem;gap:.8rem;flex-shrink:0}
-    .ham{display:none;flex-direction:column;gap:4px;padding:7px;cursor:pointer;border-radius:var(--r-sm);background:none;border:none;flex-shrink:0}
+    .ham{display:none;flex-direction:column;gap:4px;padding:7px;cursor:pointer;border-radius:var(--r-sm);background:none;border:none;flex-shrink:0;
+      /* FIX: ensure tappable area is large enough on mobile */
+      min-width:44px;min-height:44px;align-items:center;justify-content:center;
+      -webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .ham span{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px;transition:all .26s var(--ease)}
     .ham.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
     .ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
@@ -38,15 +41,21 @@
     .topbar-right{display:flex;align-items:center;gap:.55rem;margin-left:auto}
     .topbar-link{display:inline-flex;align-items:center;gap:.32rem;font-size:.78rem;color:var(--muted);font-weight:500;padding:.32rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .18s}
     .topbar-link:hover{border-color:var(--gold);color:var(--gold)}
-    .topbar-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0}
+    .topbar-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;
+      /* FIX: ensure tappable */
+      min-width:44px;min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 
     .layout{display:flex;flex:1;min-height:0}
     .sidebar{width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:var(--nav-h);left:0;height:calc(100vh - var(--nav-h));overflow-y:auto;z-index:150;transition:transform .3s var(--ease)}
-    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;opacity:0;transition:opacity .26s}
-    .sidebar-overlay.active{opacity:1}
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;opacity:0;transition:opacity .26s;
+      /* FIX: ensure overlay is always clickable when active */
+      pointer-events:none}
+    .sidebar-overlay.active{opacity:1;pointer-events:auto}
     .snav{padding:.65rem 0;flex:1}
     .snav-label{padding:.55rem .9rem .2rem;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
-    .snav a{display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem;font-size:.86rem;font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0}
+    .snav a{display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem;font-size:.86rem;font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0;
+      /* FIX: better tap targets on mobile */
+      min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .snav a:hover{background:var(--parchment);color:var(--ink)}
     .snav a.active{background:rgba(168,133,78,.08);color:var(--gold);border-left-color:var(--gold);font-weight:600}
     .snav a i{width:16px;text-align:center;font-size:.82rem;flex-shrink:0}
@@ -56,7 +65,9 @@
     .s-av{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;flex-shrink:0}
     .s-info strong{display:block;font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
     .s-info small{font-size:.68rem;color:var(--subtle)}
-    .s-logout{display:flex;align-items:center;gap:.5rem;padding:.58rem .75rem;background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .18s;width:100%}
+    /* FIX: logout button proper tap target */
+    .s-logout{display:flex;align-items:center;gap:.5rem;padding:.65rem .75rem;background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .18s;width:100%;
+      min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .s-logout:hover{background:rgba(192,57,43,.13)}
 
     .main{margin-left:var(--sidebar-w);flex:1;padding:clamp(1.2rem,3vw,2rem) clamp(1rem,3vw,2rem);min-width:0}
@@ -90,8 +101,13 @@
     .danger-card{background:rgba(192,57,43,.04);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-lg);padding:1.3rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
     .danger-info h3{font-size:.95rem;font-weight:700;color:var(--danger);margin-bottom:.2rem}
     .danger-info p{font-size:.8rem;color:var(--muted)}
-    .btn-logout{display:inline-flex;align-items:center;gap:.42rem;background:var(--danger);color:white;font-size:.86rem;font-weight:700;padding:.68rem 1.4rem;border-radius:var(--r-xl);cursor:pointer;border:none;transition:opacity .18s;white-space:nowrap}
+    /* FIX: btn-logout proper tap target and no pointer-events issues */
+    .btn-logout{display:inline-flex;align-items:center;gap:.42rem;background:var(--danger);color:white;font-size:.86rem;font-weight:700;padding:.68rem 1.4rem;border-radius:var(--r-xl);cursor:pointer;border:none;transition:opacity .18s;white-space:nowrap;
+      min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;
+      /* FIX: ensure button is not blocked by anything */
+      position:relative;z-index:1}
     .btn-logout:hover{opacity:.85}
+    .btn-logout:active{opacity:.7}
 
     .sk{background:linear-gradient(90deg,var(--parchment) 25%,var(--sand) 50%,var(--parchment) 75%);background-size:200% 100%;animation:shim 1.4s infinite;border-radius:var(--r-sm)}
     @keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
@@ -110,7 +126,7 @@
 <body>
 
 <header class="topbar">
-  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+  <button class="ham" id="ham" aria-label="Toggle menu"><span></span><span></span><span></span></button>
   <a class="logo" href="adminDashboard.html">Esuo's Beauty Empire<span class="logo-dot"></span></a>
   <span class="admin-badge"><i class="fas fa-shield-halved fa-xs"></i> Admin</span>
   <div class="topbar-right">
@@ -144,7 +160,8 @@
         <div class="s-av" id="sAv">A</div>
         <div class="s-info"><strong id="sName">Admin</strong><small id="sShop">Beauty Empire</small></div>
       </div>
-      <button class="s-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out</button>
+      <!-- FIX: use id instead of inline onclick for reliable mobile event binding -->
+      <button class="s-logout" id="sidebarLogoutBtn"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out</button>
     </div>
   </aside>
 
@@ -198,7 +215,8 @@
         <h3><i class="fas fa-right-from-bracket fa-xs"></i> Sign Out</h3>
         <p>Sign out of your admin account on this device.</p>
       </div>
-      <button class="btn-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out Now</button>
+      <!-- FIX: use id for reliable mobile event binding -->
+      <button class="btn-logout" id="mainLogoutBtn" type="button"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out Now</button>
     </div>
   </main>
 </div>
@@ -209,77 +227,138 @@
 (function(){
   'use strict';
 
-  // ── BASE URL ───────────────────────────────────────────────
   const BASE_URL = 'https://opatawebbackend.onrender.com';
-
-  const SESSION_KEY='esuos_admin_session';
-  const SESSION_TTL=7*24*60*60*1000;
-  const $=id=>document.getElementById(id);
+  const SESSION_KEY = 'esuos_admin_session';
+  const SESSION_TTL = 7*24*60*60*1000;
+  const $ = id => document.getElementById(id);
 
   function loadSession(){
-    try{const raw=localStorage.getItem(SESSION_KEY);if(!raw)return null;const d=JSON.parse(raw);if(Date.now()-(d.savedAt||0)>SESSION_TTL){localStorage.removeItem(SESSION_KEY);return null;}return d;}catch{return null;}
+    try{
+      const raw = localStorage.getItem(SESSION_KEY);
+      if(!raw) return null;
+      const d = JSON.parse(raw);
+      if(Date.now() - (d.savedAt||0) > SESSION_TTL){ localStorage.removeItem(SESSION_KEY); return null; }
+      return d;
+    }catch{ return null; }
   }
-  const session=loadSession();
-  if(!session){location.href='adminLogin.html';return;}
-  const token=session.token;
-  const admin=session.admin||{};
 
-  function toast(ico,msg){const el=document.createElement('div');el.className='toast';el.innerHTML='<i class="'+ico+'"></i><span>'+msg+'</span>';$('tc').appendChild(el);setTimeout(()=>{el.classList.add('out');el.addEventListener('animationend',()=>el.remove(),{once:true});},3000);}
-  function fmtDate(str){if(!str)return'—';try{return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});}catch{return str;}}
-  function authHeaders(){return token?{Authorization:'Bearer '+token}:{};}
+  const session = loadSession();
+  if(!session){ location.href = 'adminLogin.html'; return; }
+  const token = session.token;
+  const admin = session.admin || {};
 
-  // Set sidebar
-  const name=admin.name||admin.firstName||admin.email?.split('@')[0]||'Admin';
-  $('topAv').textContent=name.charAt(0).toUpperCase();
-  $('sAv').textContent=name.charAt(0).toUpperCase();
-  $('sName').textContent=name;
-  $('sShop').textContent=admin.shopName||'Beauty Empire';
+  function toast(ico, msg){
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.innerHTML = '<i class="'+ico+'"></i><span>'+msg+'</span>';
+    $('tc').appendChild(el);
+    setTimeout(()=>{
+      el.classList.add('out');
+      el.addEventListener('animationend', ()=>el.remove(), {once:true});
+    }, 3000);
+  }
 
+  function fmtDate(str){
+    if(!str) return '—';
+    try{ return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}); }
+    catch{ return str; }
+  }
+
+  function authHeaders(){
+    return token ? {Authorization:'Bearer '+token} : {};
+  }
+
+  // Populate sidebar
+  const name = admin.name || admin.firstName || admin.email?.split('@')[0] || 'Admin';
+  $('topAv').textContent = name.charAt(0).toUpperCase();
+  $('sAv').textContent   = name.charAt(0).toUpperCase();
+  $('sName').textContent = name;
+  $('sShop').textContent = admin.shopName || 'Beauty Empire';
+
+  // ── LOGOUT ─────────────────────────────────────────────────
+  // FIX: bind via addEventListener (not inline onclick) so it
+  // works reliably on all mobile browsers / WebViews
+  function doLogout(){
+    localStorage.removeItem(SESSION_KEY);
+    toast('fas fa-sign-out-alt', 'Signed out…');
+    setTimeout(()=> location.href = 'adminLogin.html', 900);
+  }
+
+  $('mainLogoutBtn').addEventListener('click', doLogout);
+  $('sidebarLogoutBtn').addEventListener('click', doLogout);
+
+  // ── HAMBURGER ──────────────────────────────────────────────
+  const ham     = $('ham');
+  const sidebar = $('sidebar');
+  const overlay = $('sOverlay');
+
+  function openSidebar(){
+    sidebar.classList.add('open');
+    overlay.classList.add('active');
+    ham.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSidebar(){
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
+    ham.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  ham.addEventListener('click', ()=>{
+    sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+  });
+  overlay.addEventListener('click', closeSidebar);
+
+  // FIX: close sidebar when a nav link is tapped on mobile
+  sidebar.querySelectorAll('.snav a').forEach(link => {
+    link.addEventListener('click', ()=>{
+      if(window.innerWidth <= 860) closeSidebar();
+    });
+  });
+
+  // ── PROFILE DATA ───────────────────────────────────────────
   async function loadProfile(){
     try{
-      const r=await fetch(BASE_URL + '/api/admin/users/admin/profile',{headers:authHeaders()});
-      const d=await r.json();
+      const r = await fetch(BASE_URL + '/api/admin/users/admin/profile', {headers: authHeaders()});
+      const d = await r.json();
       if(!r.ok) throw new Error();
       renderProfile(d.data);
     }catch{
-      // Fallback to session data
       renderProfile({
-        id: admin.id||'—',
-        name: admin.name||name,
-        email: admin.email||'—',
-        shopName: admin.shopName||'Esuo\'s Beauty Empire',
-        createdAt: admin.createdAt||null
+        id:        admin.id || '—',
+        name:      admin.name || name,
+        email:     admin.email || '—',
+        shopName:  admin.shopName || "Esuo's Beauty Empire",
+        createdAt: admin.createdAt || null
       });
     }
   }
 
   function renderProfile(p){
-    const n=p.name||name;
-    $('pAv').textContent=n.charAt(0).toUpperCase();
-    $('pName').className='profile-name';$('pName').textContent=n;
-    $('pEmail').className='profile-email';$('pEmail').innerHTML='<i class="fas fa-envelope fa-xs"></i> '+(p.email||'—');
-    $('pShop').className='profile-shop';$('pShop').innerHTML='<i class="fas fa-store fa-xs"></i> '+(p.shopName||'—');
-    $('pDate').className='profile-date';$('pDate').innerHTML='<i class="fas fa-calendar fa-xs"></i> Admin since '+fmtDate(p.createdAt);
+    const n = p.name || name;
+    $('pAv').textContent = n.charAt(0).toUpperCase();
+    $('pName').className = 'profile-name';
+    $('pName').textContent = n;
+    $('pEmail').className = 'profile-email';
+    $('pEmail').innerHTML = '<i class="fas fa-envelope fa-xs"></i> '+(p.email||'—');
+    $('pShop').className = 'profile-shop';
+    $('pShop').innerHTML = '<i class="fas fa-store fa-xs"></i> '+(p.shopName||'—');
+    $('pDate').className = 'profile-date';
+    $('pDate').innerHTML = '<i class="fas fa-calendar fa-xs"></i> Admin since '+fmtDate(p.createdAt);
 
-    $('accountDetails').innerHTML=`
+    $('accountDetails').innerHTML = `
       <div class="ic-row"><label>Full Name</label><span>${p.name||'—'}</span></div>
       <div class="ic-row"><label>Email Address</label><span>${p.email||'—'}</span></div>
       <div class="ic-row"><label>Admin ID</label><span style="font-size:.75rem;color:var(--subtle)">${p.id||'—'}</span></div>
       <div class="ic-row"><label>Member Since</label><span>${fmtDate(p.createdAt)}</span></div>
     `;
-    $('shopDetails').innerHTML=`
+    $('shopDetails').innerHTML = `
       <div class="ic-row"><label>Shop Name</label><span>${p.shopName||'—'}</span></div>
       <div class="ic-row"><label>Role</label><span style="color:var(--gold);font-weight:700">Shop Owner / Admin</span></div>
       <div class="ic-row"><label>Status</label><span style="color:var(--success);font-weight:600"><i class="fas fa-circle-check fa-xs"></i> Active</span></div>
     `;
   }
-
-  // Hamburger
-  const ham=$('ham'),sidebar=$('sidebar'),overlay=$('sOverlay');
-  ham.addEventListener('click',()=>{const o=sidebar.classList.toggle('open');overlay.classList.toggle('active',o);ham.classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';});
-  overlay.addEventListener('click',()=>{sidebar.classList.remove('open');overlay.classList.remove('active');ham.classList.remove('open');document.body.style.overflow='';});
-
-  window.doLogout=function(){localStorage.removeItem(SESSION_KEY);toast('fas fa-sign-out-alt','Signed out…');setTimeout(()=>location.href='adminLogin.html',900);};
 
   loadProfile();
 })();

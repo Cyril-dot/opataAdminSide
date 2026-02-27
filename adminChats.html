@@ -21,14 +21,33 @@
       --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1)
     }
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-    body{background:var(--cream);color:var(--ink);font-family:'Outfit',system-ui,sans-serif;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+    body{background:var(--cream);color:var(--ink);font-family:'Outfit',system-ui,sans-serif;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;
+      /* FIX: prevent iOS double-tap zoom which blocks fast taps */
+      touch-action:manipulation;
+    }
     a{text-decoration:none;color:inherit}
-    button{cursor:pointer;font-family:inherit;border:none;outline:none;background:none}
+    button{cursor:pointer;font-family:inherit;border:none;outline:none;background:none;
+      /* FIX: ensure all buttons respond immediately on touch */
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      user-select:none;-webkit-user-select:none;
+    }
+    /* FIX: all clickable elements should use touch-action:manipulation */
+    a, button, [role="button"], .room-item, .cs-tab, .snav a {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
     ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--parchment)}::-webkit-scrollbar-thumb{background:var(--warm-mid);border-radius:99px}
 
     /* TOPBAR */
     .topbar{height:var(--nav-h);background:rgba(250,247,243,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;display:flex;align-items:center;padding:0 clamp(.75rem,3vw,1.2rem);gap:.6rem;flex-shrink:0}
-    .ham{display:none;flex-direction:column;gap:4px;padding:8px;cursor:pointer;border-radius:var(--r-sm);background:none;border:none;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+    .ham{display:none;flex-direction:column;gap:4px;padding:10px;cursor:pointer;border-radius:var(--r-sm);background:none;border:none;flex-shrink:0;
+      /* FIX: ensure tap works immediately */
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      /* FIX: ensure minimum touch target size (44x44) */
+      min-width:44px;min-height:44px;align-items:center;justify-content:center;
+    }
     .ham span{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px;transition:all .26s var(--ease)}
     .ham.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
     .ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
@@ -38,19 +57,27 @@
     .admin-badge{display:inline-flex;align-items:center;gap:.28rem;background:rgba(168,133,78,.1);color:var(--gold);font-size:clamp(.55rem,.85vw,.62rem);font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .5rem;border-radius:var(--r-xl);border:1px solid rgba(168,133,78,.25);flex-shrink:0}
     @media(max-width:400px){.admin-badge{display:none}}
     .topbar-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}
-    .topbar-link{display:inline-flex;align-items:center;gap:.32rem;font-size:.78rem;color:var(--muted);font-weight:500;padding:.32rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .18s}
+    .topbar-link{display:inline-flex;align-items:center;gap:.32rem;font-size:.78rem;color:var(--muted);font-weight:500;padding:.32rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .18s;min-height:44px}
     .topbar-link:hover{border-color:var(--gold);color:var(--gold)}
-    .topbar-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+    .topbar-avatar{width:44px;height:44px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);}
 
     /* SIDEBAR */
     .layout{display:flex;flex:1}
     .sidebar{width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:var(--nav-h);left:0;height:calc(100vh - var(--nav-h));overflow-y:auto;z-index:150;transition:transform .3s var(--ease)}
-    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;opacity:0;transition:opacity .26s}
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;opacity:0;transition:opacity .26s;
+      /* FIX: ensure overlay tap works */
+      touch-action:manipulation;
+    }
     .sidebar-overlay.active{opacity:1}
     .snav{padding:.65rem 0;flex:1}
     .snav-label{padding:.55rem .9rem .2rem;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
-    .snav a{display:flex;align-items:center;gap:.7rem;padding:.75rem 1rem;font-size:.86rem;font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0;min-height:44px;-webkit-tap-highlight-color:transparent}
-    .snav a:hover{background:var(--parchment);color:var(--ink)}
+    .snav a{display:flex;align-items:center;gap:.7rem;padding:.75rem 1rem;font-size:.86rem;font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0;
+      /* FIX: minimum touch target */
+      min-height:48px;
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .snav a:hover,.snav a:active{background:var(--parchment);color:var(--ink)}
     .snav a.active{background:rgba(168,133,78,.08);color:var(--gold);border-left-color:var(--gold);font-weight:600}
     .snav a i{width:16px;text-align:center;font-size:.82rem;flex-shrink:0}
     .sdiv{height:1px;background:var(--border);margin:.4rem .9rem}
@@ -59,14 +86,19 @@
     .s-av{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;flex-shrink:0}
     .s-info strong{display:block;font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
     .s-info small{font-size:.68rem;color:var(--subtle)}
-    .s-logout{display:flex;align-items:center;gap:.5rem;padding:.58rem .75rem;background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .18s;width:100%;min-height:44px}
-    .s-logout:hover{background:rgba(192,57,43,.13)}
+    .s-logout{display:flex;align-items:center;gap:.5rem;padding:.58rem .75rem;background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .18s;width:100%;
+      /* FIX: minimum touch target */
+      min-height:48px;
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .s-logout:hover,.s-logout:active{background:rgba(192,57,43,.13)}
 
     /* MAIN */
     .main{margin-left:var(--sidebar-w);flex:1;padding:clamp(1rem,3vw,2rem) clamp(.75rem,3vw,2rem);min-width:0;display:flex;flex-direction:column;height:calc(100vh - var(--nav-h));overflow:hidden}
     .page-hd{margin-bottom:.9rem;flex-shrink:0}
     .bc{display:flex;align-items:center;gap:.35rem;font-size:.73rem;color:var(--subtle);margin-bottom:.4rem;flex-wrap:wrap}
-    .bc a{color:var(--muted);transition:color .18s}.bc a:hover{color:var(--gold)}
+    .bc a{color:var(--muted);transition:color .18s;min-height:36px;display:inline-flex;align-items:center;}.bc a:hover{color:var(--gold)}
     .bc i{font-size:.52rem}
     .page-hd h1{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,3.5vw,1.8rem);font-weight:700}
 
@@ -75,18 +107,40 @@
     .chat-sidebar{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r-lg);display:flex;flex-direction:column;overflow:hidden}
     .cs-head{padding:.85rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-shrink:0}
     .cs-head h3{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700}
+    /* FIX: refresh button needs proper touch target */
+    .cs-head button{font-size:.72rem;color:var(--gold);font-weight:600;min-height:44px;min-width:44px;padding:0 .5rem;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);}
     .cs-search{padding:.5rem .9rem;border-bottom:1px solid var(--border);flex-shrink:0}
-    .cs-search input{width:100%;padding:.45rem .8rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-xl);font-size:.8rem;font-family:'Outfit',sans-serif;outline:none;color:var(--ink);-webkit-appearance:none}
+    .cs-search input{width:100%;padding:.55rem .8rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-xl);font-size:16px;/* FIX: 16px prevents iOS zoom on focus */font-family:'Outfit',sans-serif;outline:none;color:var(--ink);-webkit-appearance:none}
     .cs-search input:focus{border-color:var(--gold)}
-    @media(max-width:480px){.cs-search input{font-size:16px}}
     .cs-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
-    .cs-tab{flex:1;padding:.5rem;font-size:.72rem;font-weight:700;color:var(--muted);cursor:pointer;text-align:center;transition:all .16s;border-bottom:2px solid transparent;min-height:40px;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
+    .cs-tab{flex:1;padding:.5rem;font-size:.72rem;font-weight:700;color:var(--muted);cursor:pointer;text-align:center;transition:all .16s;border-bottom:2px solid transparent;
+      /* FIX: proper touch targets for tabs */
+      min-height:48px;display:flex;align-items:center;justify-content:center;
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      user-select:none;-webkit-user-select:none;
+    }
     .cs-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
-    .cs-tab:hover{color:var(--ink)}
+    .cs-tab:hover,.cs-tab:active{color:var(--ink)}
     .rooms-list{overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
-    .room-item{padding:.75rem 1rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .14s;display:flex;gap:.65rem;align-items:flex-start;-webkit-tap-highlight-color:transparent;min-height:60px}
-    .room-item:hover{background:var(--parchment)}
+    /* FIX: room items MUST be <button> or <a> for reliable mobile taps.
+       We keep them as divs but apply all necessary touch fixes */
+    .room-item{padding:.75rem 1rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .14s;display:flex;gap:.65rem;align-items:flex-start;
+      /* FIX: critical mobile tap fixes */
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      user-select:none;-webkit-user-select:none;
+      /* FIX: ensure tappable area is large enough */
+      min-height:64px;
+      /* FIX: ensure nothing blocks pointer events */
+      position:relative;
+      /* FIX: role for accessibility and some browser tap handling */
+      cursor:pointer;
+    }
+    .room-item:hover,.room-item:active{background:var(--parchment)}
     .room-item.active{background:rgba(168,133,78,.07);border-left:3px solid var(--gold)}
+    /* FIX: prevent child elements from intercepting taps */
+    .room-item *{pointer-events:none}
     .room-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:white;flex-shrink:0}
     .room-av.product{background:linear-gradient(135deg,var(--blush),#e8b4a0)}
     .room-av.order{background:linear-gradient(135deg,var(--gold),var(--gold-light))}
@@ -102,14 +156,20 @@
     /* CHAT WINDOW */
     .chat-window{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r-lg);display:flex;flex-direction:column;overflow:hidden;min-height:0}
     .cw-head{padding:.85rem 1.2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.75rem;flex-shrink:0}
-    /* Mobile back button in chat window */
-    .cw-back{display:none;width:32px;height:32px;background:var(--parchment);border-radius:50%;align-items:center;justify-content:center;font-size:.8rem;color:var(--muted);cursor:pointer;border:none;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+    .cw-back{display:none;width:44px;height:44px;background:var(--parchment);border-radius:50%;align-items:center;justify-content:center;font-size:.8rem;color:var(--muted);cursor:pointer;border:none;flex-shrink:0;
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .cw-back:active{background:var(--sand)}
     .cw-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;color:white;flex-shrink:0}
     .cw-info strong{display:block;font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700}
     .cw-info small{font-size:.72rem;color:var(--subtle)}
     .cw-actions{margin-left:auto;display:flex;gap:.4rem}
-    .cw-action-btn{width:32px;height:32px;background:var(--parchment);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;color:var(--muted);cursor:pointer;transition:all .16s;border:none;-webkit-tap-highlight-color:transparent}
-    .cw-action-btn:hover{background:var(--sand);color:var(--ink)}
+    .cw-action-btn{width:44px;height:44px;background:var(--parchment);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;color:var(--muted);cursor:pointer;transition:all .16s;border:none;
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .cw-action-btn:hover,.cw-action-btn:active{background:var(--sand);color:var(--ink)}
     .cw-messages{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.65rem;-webkit-overflow-scrolling:touch}
     .msg{max-width:75%;display:flex;flex-direction:column;gap:.18rem}
     .msg.mine{align-self:flex-end;align-items:flex-end}
@@ -119,11 +179,17 @@
     .msg.theirs .msg-bubble{background:var(--parchment);color:var(--ink);border-bottom-left-radius:4px}
     .msg-meta{font-size:.63rem;color:var(--subtle)}
     .cw-input{border-top:1px solid var(--border);padding:.65rem 1rem;display:flex;gap:.55rem;align-items:flex-end;flex-shrink:0}
-    .cw-textarea{flex:1;padding:.6rem .9rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-lg);font-size:.84rem;font-family:'Outfit',sans-serif;color:var(--ink);outline:none;resize:none;max-height:100px;transition:border-color .18s;line-height:1.45;-webkit-appearance:none}
+    .cw-textarea{flex:1;padding:.6rem .9rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-lg);
+      /* FIX: 16px prevents iOS auto-zoom on focus */
+      font-size:16px;
+      font-family:'Outfit',sans-serif;color:var(--ink);outline:none;resize:none;max-height:100px;transition:border-color .18s;line-height:1.45;-webkit-appearance:none;touch-action:auto;}
     .cw-textarea:focus{border-color:var(--gold)}
-    @media(max-width:480px){.cw-textarea{font-size:16px}}
-    .cw-send{width:42px;height:42px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.9rem;cursor:pointer;transition:opacity .16s;flex-shrink:0;border:none;-webkit-tap-highlight-color:transparent}
-    .cw-send:hover{opacity:.82}
+    /* FIX: send button needs a solid touch target */
+    .cw-send{width:48px;height:48px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.9rem;cursor:pointer;transition:opacity .16s;flex-shrink:0;border:none;
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .cw-send:hover,.cw-send:active{opacity:.82}
     .cw-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--subtle);font-size:.84rem;text-align:center;gap:.5rem;padding:2rem}
     .cw-empty i{font-size:2.5rem;color:var(--sand)}
 
@@ -145,7 +211,6 @@
       .main{margin-left:0;height:calc(100vh - var(--nav-h))}
     }
     @media(max-width:700px){
-      /* Stack chat layout: rooms list on top, window below */
       .chat-layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}
       .chat-sidebar{max-height:45vh;min-height:200px}
       .chat-window{min-height:280px}
@@ -154,7 +219,6 @@
       .topbar-link{display:none}
       .main{padding:.75rem}
     }
-    /* On very small screens, when a chat is open, hide rooms list */
     @media(max-width:500px){
       .chat-layout.chat-open .chat-sidebar{display:none}
       .chat-layout.chat-open .chat-window{display:flex}
@@ -200,7 +264,7 @@
         <div class="s-av" id="sAv">A</div>
         <div class="s-info"><strong id="sName">Admin</strong><small id="sShop">Beauty Empire</small></div>
       </div>
-      <button class="s-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out</button>
+      <button class="s-logout" id="logoutBtn"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out</button>
     </div>
   </aside>
 
@@ -215,15 +279,15 @@
       <div class="chat-sidebar">
         <div class="cs-head">
           <h3>Conversations</h3>
-          <button onclick="loadRooms()" style="font-size:.72rem;color:var(--gold);font-weight:600;min-height:36px;padding:0 .5rem"><i class="fas fa-sync fa-xs"></i> Refresh</button>
+          <button id="refreshBtn"><i class="fas fa-sync fa-xs"></i> Refresh</button>
         </div>
         <div class="cs-search">
-          <input type="text" id="roomSearch" placeholder="Search chats…" oninput="filterRooms()">
+          <input type="text" id="roomSearch" placeholder="Search chats…">
         </div>
         <div class="cs-tabs">
-          <div class="cs-tab active" onclick="setRoomTab('all',this)">All</div>
-          <div class="cs-tab" onclick="setRoomTab('orders',this)">Orders</div>
-          <div class="cs-tab" onclick="setRoomTab('deliveries',this)">Deliveries</div>
+          <div class="cs-tab active" data-tab="all">All</div>
+          <div class="cs-tab" data-tab="orders">Orders</div>
+          <div class="cs-tab" data-tab="deliveries">Deliveries</div>
         </div>
         <div class="rooms-list" id="roomsList">
           <div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Loading…</div>
@@ -239,20 +303,20 @@
         </div>
         <div id="cwActive" style="display:none;flex-direction:column;overflow:hidden;flex:1">
           <div class="cw-head">
-            <button class="cw-back" id="cwBack" onclick="closeChatWindow()" aria-label="Back to rooms"><i class="fas fa-arrow-left fa-xs"></i></button>
+            <button class="cw-back" id="cwBack" aria-label="Back to rooms"><i class="fas fa-arrow-left fa-xs"></i></button>
             <div class="cw-av" id="cwAv" style="background:linear-gradient(135deg,var(--gold),var(--blush))">C</div>
             <div class="cw-info">
               <strong id="cwTitle">Chat</strong>
               <small id="cwSub">—</small>
             </div>
             <div class="cw-actions">
-              <button class="cw-action-btn" onclick="loadHistory(activeChatId)" title="Refresh"><i class="fas fa-sync fa-xs"></i></button>
+              <button class="cw-action-btn" id="refreshHistoryBtn" title="Refresh"><i class="fas fa-sync fa-xs"></i></button>
             </div>
           </div>
           <div class="cw-messages" id="cwMessages"></div>
           <div class="cw-input">
-            <textarea class="cw-textarea" id="cwTextarea" placeholder="Type a message…" rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
-            <button class="cw-send" onclick="sendMessage()"><i class="fas fa-paper-plane fa-xs"></i></button>
+            <textarea class="cw-textarea" id="cwTextarea" placeholder="Type a message…" rows="1"></textarea>
+            <button class="cw-send" id="cwSendBtn"><i class="fas fa-paper-plane fa-xs"></i></button>
           </div>
         </div>
       </div>
@@ -299,6 +363,7 @@
     4:[],
   };
 
+  // ─── LOAD ROOMS ───────────────────────────────────────────────
   window.loadRooms=async function(){
     $('roomsList').innerHTML='<div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Loading…</div>';
     let url=API_BASE+'/api/admin/chat/rooms';
@@ -327,7 +392,7 @@
     if(!list.length){$('roomsList').innerHTML='<div class="empty-state"><i class="fas fa-comment"></i>No chats found</div>';return;}
     $('roomsList').innerHTML=list.map(r=>{
       const ti=roomTypeInfo(r);const u=r.user;
-      return`<div class="room-item ${activeChatId===r.id?'active':''}" onclick="openRoom(${r.id})">
+      return`<div class="room-item ${activeChatId===r.id?'active':''}" data-room-id="${r.id}" role="button" tabindex="0">
         <div class="room-av ${ti.cls}"><i class="${ti.icon} fa-xs"></i></div>
         <div class="room-meta">
           <div class="room-title">${u?.firstName||'User'} ${u?.lastName||''}</div>
@@ -336,9 +401,41 @@
         <span class="room-badge ${ti.badge}">${ti.label}</span>
       </div>`;
     }).join('');
+
+    // FIX: attach events via JS (not inline onclick) and use BOTH click AND touchend
+    // This is the most reliable approach across all mobile browsers
+    document.querySelectorAll('.room-item').forEach(item=>{
+      const id=parseInt(item.dataset.roomId,10);
+      
+      // FIX: use touchend for fast response on mobile, prevent ghost click
+      item.addEventListener('touchend',function(e){
+        e.preventDefault(); // prevents 300ms delay ghost click
+        openRoom(id);
+      },{passive:false});
+      
+      // Keep click as fallback for desktop/mouse
+      item.addEventListener('click',function(e){
+        openRoom(id);
+      });
+    });
   }
 
   window.filterRooms=function(){renderRooms();};
+
+  // ─── SEARCH INPUT ─────────────────────────────────────────────
+  $('roomSearch').addEventListener('input',filterRooms);
+
+  // ─── TABS ─────────────────────────────────────────────────────
+  // FIX: attach tab events properly with both touch and click
+  document.querySelectorAll('.cs-tab').forEach(btn=>{
+    btn.addEventListener('touchend',function(e){
+      e.preventDefault();
+      setRoomTab(this.dataset.tab, this);
+    },{passive:false});
+    btn.addEventListener('click',function(){
+      setRoomTab(this.dataset.tab, this);
+    });
+  });
 
   window.setRoomTab=function(t,btn){
     activeRoomTab=t;
@@ -347,6 +444,41 @@
     loadRooms();
   };
 
+  // ─── REFRESH BUTTON ───────────────────────────────────────────
+  attachBtn('refreshBtn', ()=>loadRooms());
+
+  // ─── BACK BUTTON ──────────────────────────────────────────────
+  attachBtn('cwBack', ()=>closeChatWindow());
+
+  // ─── REFRESH HISTORY BUTTON ───────────────────────────────────
+  attachBtn('refreshHistoryBtn', ()=>{ if(activeChatId) loadHistory(activeChatId); });
+
+  // ─── SEND BUTTON ──────────────────────────────────────────────
+  attachBtn('cwSendBtn', ()=>sendMessage());
+
+  // ─── LOGOUT BUTTON ────────────────────────────────────────────
+  attachBtn('logoutBtn', ()=>doLogout());
+
+  // ─── TEXTAREA: Enter to send (keep Shift+Enter for newline) ───
+  $('cwTextarea').addEventListener('keydown',function(e){
+    if(e.key==='Enter'&&!e.shiftKey){
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  // FIX: helper to attach touchend + click to any button by id
+  function attachBtn(id, fn){
+    const el=$(id);
+    if(!el) return;
+    el.addEventListener('touchend',function(e){
+      e.preventDefault();
+      fn();
+    },{passive:false});
+    el.addEventListener('click', fn);
+  }
+
+  // ─── CLOSE CHAT WINDOW ────────────────────────────────────────
   window.closeChatWindow=function(){
     activeChatId=null;
     $('chatLayout').classList.remove('chat-open');
@@ -355,6 +487,7 @@
     renderRooms();
   };
 
+  // ─── OPEN ROOM ────────────────────────────────────────────────
   window.openRoom=async function(id){
     activeChatId=id;
     const room=rooms.find(r=>r.id===id);
@@ -367,11 +500,11 @@
     $('cwSub').textContent=ti.sub;
     $('cwEmpty').style.display='none';
     $('cwActive').style.display='flex';
-    // On small screens, show chat window fullscreen
     $('chatLayout').classList.add('chat-open');
     await loadHistory(id);
   };
 
+  // ─── LOAD HISTORY ─────────────────────────────────────────────
   window.loadHistory=async function(id){
     $('cwMessages').innerHTML='<div style="text-align:center;padding:1rem;color:var(--subtle);font-size:.8rem"><i class="fas fa-spinner fa-spin"></i> Loading…</div>';
     try{
@@ -394,6 +527,7 @@
     $('cwMessages').scrollTop=$('cwMessages').scrollHeight;
   }
 
+  // ─── SEND MESSAGE ─────────────────────────────────────────────
   window.sendMessage=async function(){
     if(!activeChatId){toast('fas fa-info-circle','Select a chat room first');return;}
     const content=$('cwTextarea').value.trim();
@@ -413,11 +547,40 @@
     }
   };
 
+  // ─── HAMBURGER ────────────────────────────────────────────────
   const ham=$('ham'),sidebar=$('sidebar'),overlay=$('sOverlay');
-  ham.addEventListener('click',()=>{const o=sidebar.classList.toggle('open');overlay.classList.toggle('active',o);ham.classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';});
-  overlay.addEventListener('click',()=>{sidebar.classList.remove('open');overlay.classList.remove('active');ham.classList.remove('open');document.body.style.overflow='';});
-  window.doLogout=function(){localStorage.removeItem(SESSION_KEY);toast('fas fa-sign-out-alt','Signed out…');setTimeout(()=>location.href='adminLogin.html',900);};
 
+  function toggleSidebar(open){
+    sidebar.classList.toggle('open',open);
+    overlay.classList.toggle('active',open);
+    ham.classList.toggle('open',open);
+    document.body.style.overflow=open?'hidden':'';
+  }
+
+  ham.addEventListener('touchend',function(e){
+    e.preventDefault();
+    toggleSidebar(!sidebar.classList.contains('open'));
+  },{passive:false});
+  ham.addEventListener('click',function(){
+    toggleSidebar(!sidebar.classList.contains('open'));
+  });
+
+  overlay.addEventListener('touchend',function(e){
+    e.preventDefault();
+    toggleSidebar(false);
+  },{passive:false});
+  overlay.addEventListener('click',function(){
+    toggleSidebar(false);
+  });
+
+  // ─── LOGOUT ───────────────────────────────────────────────────
+  window.doLogout=function(){
+    localStorage.removeItem(SESSION_KEY);
+    toast('fas fa-sign-out-alt','Signed out…');
+    setTimeout(()=>location.href='adminLogin.html',900);
+  };
+
+  // ─── INIT ─────────────────────────────────────────────────────
   loadRooms();
 })();
 </script>

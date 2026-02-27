@@ -28,7 +28,10 @@
 
     /* ── TOPBAR ── */
     .topbar{height:var(--nav-h);background:rgba(250,247,243,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;display:flex;align-items:center;padding:0 clamp(.75rem,3vw,1.4rem);gap:.6rem;flex-shrink:0}
-    .ham{display:none;flex-direction:column;gap:4.5px;padding:9px;cursor:pointer;border-radius:var(--r-sm);flex-shrink:0;-webkit-tap-highlight-color:transparent}
+    .ham{display:none;flex-direction:column;gap:4.5px;padding:9px;cursor:pointer;border-radius:var(--r-sm);flex-shrink:0;
+      /* FIX: adequate tap target */
+      min-width:44px;min-height:44px;align-items:center;justify-content:center;
+      -webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .ham span{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px;transition:all .25s var(--ease)}
     .ham.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
     .ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
@@ -40,16 +43,19 @@
     .topbar-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}
     .topbar-link{display:inline-flex;align-items:center;gap:.32rem;font-size:.78rem;color:var(--muted);font-weight:500;padding:.32rem .8rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .18s}
     .topbar-link:hover{border-color:var(--gold);color:var(--gold)}
-    .topbar-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;box-shadow:0 2px 8px rgba(168,133,78,.3)}
+    .topbar-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;box-shadow:0 2px 8px rgba(168,133,78,.3);
+      min-width:44px;min-height:44px;-webkit-tap-highlight-color:transparent}
 
     /* ── SIDEBAR ── */
     .layout{display:flex;flex:1}
     .sidebar{width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:var(--nav-h);left:0;height:calc(100vh - var(--nav-h));overflow-y:auto;z-index:150;transition:transform .3s var(--ease)}
-    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;opacity:0;transition:opacity .26s}
-    .sidebar-overlay.active{opacity:1}
+    /* FIX: overlay pointer-events only when active */
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;opacity:0;transition:opacity .26s;pointer-events:none}
+    .sidebar-overlay.active{opacity:1;pointer-events:auto}
     .snav{padding:.7rem 0;flex:1}
     .snav-label{padding:.6rem .95rem .22rem;font-size:.58rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--subtle)}
-    .snav a{display:flex;align-items:center;gap:.72rem;padding:.78rem 1rem;font-size:.85rem;font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0;min-height:44px;-webkit-tap-highlight-color:transparent}
+    .snav a{display:flex;align-items:center;gap:.72rem;padding:.78rem 1rem;font-size:.85rem;font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0;
+      min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .snav a:hover{background:var(--parchment);color:var(--ink)}
     .snav a.active{background:rgba(168,133,78,.09);color:var(--gold);border-left-color:var(--gold);font-weight:600}
     .snav a i{width:16px;text-align:center;font-size:.82rem;flex-shrink:0}
@@ -59,7 +65,9 @@
     .s-av{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;flex-shrink:0}
     .s-info strong{display:block;font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
     .s-info small{font-size:.68rem;color:var(--subtle)}
-    .s-logout{display:flex;align-items:center;gap:.5rem;padding:.58rem .78rem;background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .18s;width:100%;min-height:44px}
+    /* FIX: proper tap target for logout */
+    .s-logout{display:flex;align-items:center;gap:.5rem;padding:.58rem .78rem;background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .18s;width:100%;
+      min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .s-logout:hover{background:rgba(192,57,43,.14)}
 
     /* ── MAIN ── */
@@ -101,7 +109,9 @@
     .tdesc{font-size:.77rem;color:var(--muted);line-height:1.55;flex:1}
 
     /* ── OUTLINE TRIGGER BUTTON ── */
-    .tbtn{display:inline-flex;align-items:center;justify-content:center;gap:.38rem;padding:.48rem .95rem;border-radius:var(--r-sm);font-size:.79rem;font-weight:600;cursor:pointer;transition:background .15s,color .15s;border:1.5px solid;background:transparent;min-height:36px;width:100%;-webkit-tap-highlight-color:transparent}
+    .tbtn{display:inline-flex;align-items:center;justify-content:center;gap:.38rem;padding:.48rem .95rem;border-radius:var(--r-sm);font-size:.79rem;font-weight:600;cursor:pointer;transition:background .15s,color .15s;border:1.5px solid;background:transparent;
+      /* FIX: proper tap target */
+      min-height:44px;width:100%;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .tbtn:active{transform:scale(.98)}
     .tbtn.tg{border-color:#229ED9;color:#229ED9}.tbtn.tg:hover{background:#229ED9;color:#fff}
     .tbtn.gold{border-color:var(--gold);color:var(--gold)}.tbtn.gold:hover{background:var(--gold);color:#fff}
@@ -112,13 +122,15 @@
 
     /* ── MODAL ── */
     .modal-overlay{position:fixed;inset:0;background:rgba(18,12,8,.58);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .2s var(--ease)}
-    .modal-overlay.active{opacity:1;pointer-events:all}
+    .modal-overlay.active{opacity:1;pointer-events:auto}
     .modal{background:var(--white);border-radius:var(--r-lg);width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:var(--sh-lg);transform:translateY(16px) scale(.97);transition:transform .22s var(--spring),opacity .2s;opacity:0}
     .modal-overlay.active .modal{transform:none;opacity:1}
     .mhead{display:flex;align-items:center;gap:.7rem;padding:1.05rem 1.2rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--white);z-index:2;border-radius:var(--r-lg) var(--r-lg) 0 0}
     .mico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.82rem;color:white;flex-shrink:0}
     .mhead h2{font-family:'Playfair Display',serif;font-size:.98rem;font-weight:700;flex:1;color:var(--ink)}
-    .mx{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--subtle);transition:all .14s;cursor:pointer;background:var(--parchment);flex-shrink:0;font-size:.75rem}
+    .mx{width:34px;height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--subtle);transition:all .14s;cursor:pointer;background:var(--parchment);flex-shrink:0;font-size:.75rem;
+      /* FIX: adequate tap target */
+      min-width:44px;min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .mx:hover{background:var(--sand);color:var(--ink)}
     .mbody{padding:1.1rem 1.2rem}
     .mfoot{padding:.8rem 1.2rem;border-top:1px solid var(--border);display:flex;gap:.5rem;justify-content:flex-end;flex-wrap:wrap}
@@ -153,10 +165,11 @@
     .fupload-text{flex:1;min-width:0}
     .fupload-label{display:block;font-size:.8rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .fupload-hint{display:block;font-size:.68rem;color:var(--subtle)}
-    /* preview thumbnail */
     .fupload-thumb{width:28px;height:28px;border-radius:6px;object-fit:cover;flex-shrink:0;display:none;border:1.5px solid var(--border)}
     .fupload-thumb.show{display:block}
-    .fupload-clear{width:20px;height:20px;border-radius:4px;display:none;align-items:center;justify-content:center;color:var(--subtle);font-size:.62rem;background:var(--parchment);flex-shrink:0;cursor:pointer;z-index:3;position:relative;transition:background .14s}
+    .fupload-clear{width:28px;height:28px;border-radius:4px;display:none;align-items:center;justify-content:center;color:var(--subtle);font-size:.62rem;background:var(--parchment);flex-shrink:0;cursor:pointer;z-index:3;position:relative;transition:background .14s;
+      /* FIX: adequate tap target */
+      min-width:44px;min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .fupload-clear:hover{background:var(--sand);color:var(--danger)}
     .fupload-clear.show{display:flex}
 
@@ -169,7 +182,9 @@
     .nsbody{padding:.8rem .88rem .88rem}
 
     /* ── MODAL BUTTONS ── */
-    .mbtn{display:inline-flex;align-items:center;gap:.35rem;padding:.5rem 1.05rem;border-radius:var(--r-sm);font-size:.79rem;font-weight:600;cursor:pointer;transition:all .14s;min-height:36px}
+    .mbtn{display:inline-flex;align-items:center;gap:.35rem;padding:.5rem 1.05rem;border-radius:var(--r-sm);font-size:.79rem;font-weight:600;cursor:pointer;transition:all .14s;
+      /* FIX: adequate tap target */
+      min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .mbtn:active{transform:scale(.97)}
     .mbtn.cancel{border:1.5px solid var(--border);color:var(--muted);background:var(--white)}.mbtn.cancel:hover{background:var(--parchment);color:var(--ink)}
     .mbtn.sub{border:none;color:white}
@@ -180,7 +195,7 @@
     .mbtn.sgreen{background:#27855c}.mbtn.sgreen:hover{background:#1e6b4a}
     .mbtn.spurple{background:#8b5cf6}.mbtn.spurple:hover{background:#7c3aed}
     .mbtn:disabled{opacity:.5;cursor:not-allowed}
-    .mbtn.sm{padding:.36rem .75rem;font-size:.75rem;min-height:32px}
+    .mbtn.sm{padding:.36rem .75rem;font-size:.75rem;min-height:40px}
 
     /* ── TOAST ── */
     .tcontainer{position:fixed;bottom:clamp(.75rem,3vw,1rem);right:clamp(.75rem,3vw,1rem);z-index:9999;display:flex;flex-direction:column;gap:.4rem;max-width:min(300px,calc(100vw - 1.5rem));pointer-events:none}
@@ -242,7 +257,8 @@
         <div class="s-av" id="sAv">A</div>
         <div class="s-info"><strong id="sName">Admin</strong><small id="sShop">Beauty Empire</small></div>
       </div>
-      <button class="s-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out</button>
+      <!-- FIX: id-based binding instead of inline onclick -->
+      <button class="s-logout" id="sidebarLogoutBtn"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out</button>
     </div>
   </aside>
 
@@ -268,25 +284,26 @@
       <div class="tile t-gold">
         <div class="tile-top"><div class="tico gold"><i class="fas fa-bullhorn"></i></div><span class="ttitle">Broadcast Message</span></div>
         <p class="tdesc">Post a custom announcement to your Telegram channel and reach all subscribers instantly.</p>
-        <button class="tbtn gold" onclick="openModal('modalBcast')"><i class="fas fa-paper-plane fa-xs"></i> Open Broadcast</button>
+        <!-- FIX: data-modal attribute, no inline onclick -->
+        <button class="tbtn gold" data-modal="modalBcast"><i class="fas fa-paper-plane fa-xs"></i> Open Broadcast</button>
       </div>
 
       <div class="tile t-red">
         <div class="tile-top"><div class="tico red"><i class="fas fa-fire"></i></div><span class="ttitle">Sale Announcement</span></div>
         <p class="tdesc">Post a sale alert with the name, discount and end date to drive urgency on your channel.</p>
-        <button class="tbtn red" onclick="openModal('modalSale')"><i class="fas fa-tag fa-xs"></i> Post a Sale</button>
+        <button class="tbtn red" data-modal="modalSale"><i class="fas fa-tag fa-xs"></i> Post a Sale</button>
       </div>
 
       <div class="tile t-blush">
         <div class="tile-top"><div class="tico blush"><i class="fas fa-shirt"></i></div><span class="ttitle">Announce Clothing</span></div>
         <p class="tdesc">Announce a clothing product with sizes, colors, price and image to the channel.</p>
-        <button class="tbtn blush" onclick="openModal('modalClothing')"><i class="fas fa-shirt fa-xs"></i> Announce Clothing</button>
+        <button class="tbtn blush" data-modal="modalClothing"><i class="fas fa-shirt fa-xs"></i> Announce Clothing</button>
       </div>
 
       <div class="tile t-green">
         <div class="tile-top"><div class="tico green"><i class="fas fa-box"></i></div><span class="ttitle">Announce Product</span></div>
         <p class="tdesc">Announce skincare, accessories or any general product with tags and an image.</p>
-        <button class="tbtn green" onclick="openModal('modalGeneral')"><i class="fas fa-box fa-xs"></i> Announce Product</button>
+        <button class="tbtn green" data-modal="modalGeneral"><i class="fas fa-box fa-xs"></i> Announce Product</button>
       </div>
 
     </div>
@@ -296,7 +313,7 @@
       <div class="tile t-purple">
         <div class="tile-top"><div class="tico purple"><i class="fas fa-bell"></i></div><span class="ttitle">Manual Notifications</span></div>
         <p class="tdesc">Manually re-send or test order status, delivery request and delivery status notifications to your Telegram.</p>
-        <button class="tbtn purple" onclick="openModal('modalNotif')"><i class="fas fa-bell fa-xs"></i> Send Notification</button>
+        <button class="tbtn purple" data-modal="modalNotif"><i class="fas fa-bell fa-xs"></i> Send Notification</button>
       </div>
     </div>
 
@@ -311,7 +328,7 @@
     <div class="mhead">
       <div class="mico" style="background:var(--gold)"><i class="fas fa-bullhorn"></i></div>
       <h2>Broadcast to Channel</h2>
-      <button class="mx" onclick="closeModal('modalBcast')"><i class="fas fa-times"></i></button>
+      <button class="mx" data-close="modalBcast"><i class="fas fa-times"></i></button>
     </div>
     <div class="mbody">
       <div class="fmsg err" id="bcastErr"><i class="fas fa-exclamation-circle fa-xs"></i><span></span></div>
@@ -322,8 +339,8 @@
       </div>
     </div>
     <div class="mfoot">
-      <button class="mbtn cancel" onclick="closeModal('modalBcast')">Cancel</button>
-      <button class="mbtn sub sgold" id="btnBcast" onclick="broadcastMsg()"><i class="fas fa-paper-plane fa-xs"></i> Send Broadcast</button>
+      <button class="mbtn cancel" data-close="modalBcast">Cancel</button>
+      <button class="mbtn sub sgold" id="btnBcast"><i class="fas fa-paper-plane fa-xs"></i> Send Broadcast</button>
     </div>
   </div>
 </div>
@@ -334,7 +351,7 @@
     <div class="mhead">
       <div class="mico" style="background:#e74c3c"><i class="fas fa-fire"></i></div>
       <h2>Sale Announcement</h2>
-      <button class="mx" onclick="closeModal('modalSale')"><i class="fas fa-times"></i></button>
+      <button class="mx" data-close="modalSale"><i class="fas fa-times"></i></button>
     </div>
     <div class="mbody">
       <div class="fmsg err" id="saleErr"><i class="fas fa-exclamation-circle fa-xs"></i><span></span></div>
@@ -355,25 +372,23 @@
       </div>
     </div>
     <div class="mfoot">
-      <button class="mbtn cancel" onclick="closeModal('modalSale')">Cancel</button>
-      <button class="mbtn sub sred" id="btnSale" onclick="postSale()"><i class="fas fa-fire fa-xs"></i> Post Sale</button>
+      <button class="mbtn cancel" data-close="modalSale">Cancel</button>
+      <button class="mbtn sub sred" id="btnSale"><i class="fas fa-fire fa-xs"></i> Post Sale</button>
     </div>
   </div>
 </div>
 
-<!-- Clothing — no Product ID field, image is a file upload -->
+<!-- Clothing -->
 <div class="modal-overlay" id="modalClothing">
   <div class="modal" role="dialog" aria-modal="true">
     <div class="mhead">
       <div class="mico" style="background:var(--blush)"><i class="fas fa-shirt"></i></div>
       <h2>Announce Clothing Product</h2>
-      <button class="mx" onclick="closeModal('modalClothing')"><i class="fas fa-times"></i></button>
+      <button class="mx" data-close="modalClothing"><i class="fas fa-times"></i></button>
     </div>
     <div class="mbody">
       <div class="fmsg err" id="cpErr"><i class="fas fa-exclamation-circle fa-xs"></i><span></span></div>
       <div class="fmsg ok" id="cpOk"><i class="fas fa-check-circle fa-xs"></i><span></span></div>
-
-      <!-- Row: Name + Price -->
       <div class="fr2">
         <div class="fg">
           <label class="fl" for="cpName">Product Name <span class="req">*</span></label>
@@ -384,8 +399,6 @@
           <div class="fwrap"><i class="fic fas fa-coins"></i><input class="fi ic" type="text" id="cpPrice" placeholder="GHS 120"></div>
         </div>
       </div>
-
-      <!-- Row: Category + Sub-Category -->
       <div class="fr2">
         <div class="fg">
           <label class="fl" for="cpCat">Category <span class="req">*</span></label>
@@ -396,8 +409,6 @@
           <div class="fwrap"><i class="fic fas fa-folder-open"></i><input class="fi ic" type="text" id="cpSubCat" placeholder="Casual"></div>
         </div>
       </div>
-
-      <!-- Row: Sizes + Colors -->
       <div class="fr2">
         <div class="fg">
           <label class="fl" for="cpSizes">Sizes</label>
@@ -408,8 +419,6 @@
           <div class="fwrap"><i class="fic fas fa-palette"></i><input class="fi ic" type="text" id="cpColors" placeholder="BLACK,WHITE"></div>
         </div>
       </div>
-
-      <!-- Row: Material + Style -->
       <div class="fr2">
         <div class="fg">
           <label class="fl" for="cpMaterial">Material</label>
@@ -420,18 +429,14 @@
           <div class="fwrap"><i class="fic fas fa-star"></i><input class="fi ic" type="text" id="cpStyle" placeholder="Streetwear"></div>
         </div>
       </div>
-
-      <!-- Description -->
       <div class="fg">
         <label class="fl" for="cpDesc">Description</label>
         <div class="fwrap"><i class="fic tp fas fa-align-left"></i><textarea class="fi ic" id="cpDesc" rows="2" placeholder="Short product description…"></textarea></div>
       </div>
-
-      <!-- Image Upload -->
       <div class="fg">
-        <label class="fl">Product Image <span style="color:var(--subtle);font-weight:400;text-transform:none;letter-spacing:0">(optional — uploaded to Cloudinary)</span></label>
+        <label class="fl">Product Image <span style="color:var(--subtle);font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
         <div class="fupload" id="cpImgWrap">
-          <input type="file" id="cpImg" accept="image/*" onchange="handleFileChange('cpImg','cpImgThumb','cpImgClear','cpImgLabel','cpImgHint')">
+          <input type="file" id="cpImg" accept="image/*">
           <div class="fupload-face">
             <div class="fupload-ico"><i class="fas fa-cloud-arrow-up"></i></div>
             <div class="fupload-text">
@@ -439,32 +444,29 @@
               <span class="fupload-hint" id="cpImgHint">JPG, PNG, WEBP · max 10 MB</span>
             </div>
             <img class="fupload-thumb" id="cpImgThumb" alt="">
-            <button type="button" class="fupload-clear" id="cpImgClear" onclick="clearFile('cpImg','cpImgThumb','cpImgClear','cpImgLabel','cpImgHint')" aria-label="Remove image"><i class="fas fa-times"></i></button>
+            <button type="button" class="fupload-clear" id="cpImgClear" data-clear="cpImg,cpImgThumb,cpImgClear,cpImgLabel,cpImgHint" aria-label="Remove image"><i class="fas fa-times"></i></button>
           </div>
         </div>
       </div>
-
     </div>
     <div class="mfoot">
-      <button class="mbtn cancel" onclick="closeModal('modalClothing')">Cancel</button>
-      <button class="mbtn sub sblush" id="btnCp" onclick="announceClothing()"><i class="fas fa-shirt fa-xs"></i> Announce</button>
+      <button class="mbtn cancel" data-close="modalClothing">Cancel</button>
+      <button class="mbtn sub sblush" id="btnCp"><i class="fas fa-shirt fa-xs"></i> Announce</button>
     </div>
   </div>
 </div>
 
-<!-- General Product — no Product ID field, image is a file upload -->
+<!-- General Product -->
 <div class="modal-overlay" id="modalGeneral">
   <div class="modal" role="dialog" aria-modal="true">
     <div class="mhead">
       <div class="mico" style="background:#27855c"><i class="fas fa-box"></i></div>
       <h2>Announce General Product</h2>
-      <button class="mx" onclick="closeModal('modalGeneral')"><i class="fas fa-times"></i></button>
+      <button class="mx" data-close="modalGeneral"><i class="fas fa-times"></i></button>
     </div>
     <div class="mbody">
       <div class="fmsg err" id="gpErr"><i class="fas fa-exclamation-circle fa-xs"></i><span></span></div>
       <div class="fmsg ok" id="gpOk"><i class="fas fa-check-circle fa-xs"></i><span></span></div>
-
-      <!-- Row: Name + Price -->
       <div class="fr2">
         <div class="fg">
           <label class="fl" for="gpName">Product Name <span class="req">*</span></label>
@@ -475,8 +477,6 @@
           <div class="fwrap"><i class="fic fas fa-coins"></i><input class="fi ic" type="text" id="gpPrice" placeholder="GHS 45"></div>
         </div>
       </div>
-
-      <!-- Row: Category + Sub-Category -->
       <div class="fr2">
         <div class="fg">
           <label class="fl" for="gpCat">Category <span class="req">*</span></label>
@@ -487,24 +487,18 @@
           <div class="fwrap"><i class="fic fas fa-folder-open"></i><input class="fi ic" type="text" id="gpSubCat" placeholder="Moisturiser"></div>
         </div>
       </div>
-
-      <!-- Tags -->
       <div class="fg">
         <label class="fl" for="gpTags">Tags</label>
         <div class="fwrap"><i class="fic fas fa-tags"></i><input class="fi ic" type="text" id="gpTags" placeholder="Hydration, Daily Use"></div>
       </div>
-
-      <!-- Description -->
       <div class="fg">
         <label class="fl" for="gpDesc">Description</label>
         <div class="fwrap"><i class="fic tp fas fa-align-left"></i><textarea class="fi ic" id="gpDesc" rows="2" placeholder="Short product description…"></textarea></div>
       </div>
-
-      <!-- Image Upload -->
       <div class="fg">
-        <label class="fl">Product Image <span style="color:var(--subtle);font-weight:400;text-transform:none;letter-spacing:0">(optional — uploaded to Cloudinary)</span></label>
+        <label class="fl">Product Image <span style="color:var(--subtle);font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
         <div class="fupload" id="gpImgWrap">
-          <input type="file" id="gpImg" accept="image/*" onchange="handleFileChange('gpImg','gpImgThumb','gpImgClear','gpImgLabel','gpImgHint')">
+          <input type="file" id="gpImg" accept="image/*">
           <div class="fupload-face">
             <div class="fupload-ico"><i class="fas fa-cloud-arrow-up"></i></div>
             <div class="fupload-text">
@@ -512,15 +506,14 @@
               <span class="fupload-hint" id="gpImgHint">JPG, PNG, WEBP · max 10 MB</span>
             </div>
             <img class="fupload-thumb" id="gpImgThumb" alt="">
-            <button type="button" class="fupload-clear" id="gpImgClear" onclick="clearFile('gpImg','gpImgThumb','gpImgClear','gpImgLabel','gpImgHint')" aria-label="Remove image"><i class="fas fa-times"></i></button>
+            <button type="button" class="fupload-clear" id="gpImgClear" data-clear="gpImg,gpImgThumb,gpImgClear,gpImgLabel,gpImgHint" aria-label="Remove image"><i class="fas fa-times"></i></button>
           </div>
         </div>
       </div>
-
     </div>
     <div class="mfoot">
-      <button class="mbtn cancel" onclick="closeModal('modalGeneral')">Cancel</button>
-      <button class="mbtn sub sgreen" id="btnGp" onclick="announceGeneral()"><i class="fas fa-box fa-xs"></i> Announce</button>
+      <button class="mbtn cancel" data-close="modalGeneral">Cancel</button>
+      <button class="mbtn sub sgreen" id="btnGp"><i class="fas fa-box fa-xs"></i> Announce</button>
     </div>
   </div>
 </div>
@@ -531,7 +524,7 @@
     <div class="mhead">
       <div class="mico" style="background:#8b5cf6"><i class="fas fa-bell"></i></div>
       <h2>Manual Notifications</h2>
-      <button class="mx" onclick="closeModal('modalNotif')"><i class="fas fa-times"></i></button>
+      <button class="mx" data-close="modalNotif"><i class="fas fa-times"></i></button>
     </div>
     <div class="mbody">
 
@@ -548,7 +541,7 @@
             <div class="fg"><label class="fl" for="noOldStatus">Old Status</label><div class="fwrap"><i class="fic fas fa-clock"></i><input class="fi ic" type="text" id="noOldStatus" placeholder="PENDING"></div></div>
             <div class="fg"><label class="fl" for="noNewStatus">New Status</label><div class="fwrap"><i class="fic fas fa-check"></i><input class="fi ic" type="text" id="noNewStatus" placeholder="CONFIRMED"></div></div>
           </div>
-          <button class="mbtn sub spurple sm" onclick="notifyOrderStatus()"><i class="fas fa-paper-plane fa-xs"></i> Send</button>
+          <button class="mbtn sub spurple sm" id="btnNotifOrd"><i class="fas fa-paper-plane fa-xs"></i> Send</button>
         </div>
       </div>
 
@@ -565,7 +558,7 @@
             <div class="fg"><label class="fl" for="ndAddress">Address</label><div class="fwrap"><i class="fic fas fa-location-dot"></i><input class="fi ic" type="text" id="ndAddress" placeholder="456 Oak Ave"></div></div>
             <div class="fg"><label class="fl" for="ndCity">City</label><div class="fwrap"><i class="fic fas fa-city"></i><input class="fi ic" type="text" id="ndCity" placeholder="Accra"></div></div>
           </div>
-          <button class="mbtn sub spurple sm" onclick="notifyDeliveryReq()"><i class="fas fa-paper-plane fa-xs"></i> Send</button>
+          <button class="mbtn sub spurple sm" id="btnNotifDel"><i class="fas fa-paper-plane fa-xs"></i> Send</button>
         </div>
       </div>
 
@@ -582,13 +575,13 @@
             <div class="fg"><label class="fl" for="dsStatus">New Status</label><div class="fwrap"><i class="fic fas fa-truck"></i><input class="fi ic" type="text" id="dsStatus" placeholder="SHIPPED"></div></div>
             <div class="fg"><label class="fl" for="dsTracking">Tracking No.</label><div class="fwrap"><i class="fic fas fa-barcode"></i><input class="fi ic" type="text" id="dsTracking" placeholder="TRACK501ABC"></div></div>
           </div>
-          <button class="mbtn sub spurple sm" onclick="notifyDeliveryStatus()"><i class="fas fa-paper-plane fa-xs"></i> Send</button>
+          <button class="mbtn sub spurple sm" id="btnNotifDs"><i class="fas fa-paper-plane fa-xs"></i> Send</button>
         </div>
       </div>
 
     </div>
     <div class="mfoot">
-      <button class="mbtn cancel" onclick="closeModal('modalNotif')">Close</button>
+      <button class="mbtn cancel" data-close="modalNotif">Close</button>
     </div>
   </div>
 </div>
@@ -604,9 +597,10 @@
   const $=id=>document.getElementById(id);
 
   function loadSess(){
-    try{const r=localStorage.getItem(SK);if(!r)return null;
-    const d=JSON.parse(r);if(Date.now()-(d.savedAt||0)>TTL){localStorage.removeItem(SK);return null;}return d;}
-    catch{return null;}
+    try{
+      const r=localStorage.getItem(SK);if(!r)return null;
+      const d=JSON.parse(r);if(Date.now()-(d.savedAt||0)>TTL){localStorage.removeItem(SK);return null;}return d;
+    }catch{return null;}
   }
   const sess=loadSess();
   if(!sess){location.href='adminLogin.html';return;}
@@ -626,59 +620,82 @@
   $('sName').textContent=nm;
   $('sShop').textContent=adm.shopName||'Beauty Empire';
 
-  // ── MODAL HELPERS ──────────────────────────────────────────
-  window.openModal=id=>{
+  // ── MODAL HELPERS (event-delegation, no inline onclick) ───
+  function openModal(id){
     const m=$(id);if(!m)return;
     m.classList.add('active');
     document.body.style.overflow='hidden';
     setTimeout(()=>{const f=m.querySelector('.fi');if(f)f.focus();},240);
-  };
-  window.closeModal=id=>{
+  }
+  function closeModal(id){
     const m=$(id);if(!m)return;
     m.classList.remove('active');
     document.body.style.overflow='';
-  };
-  document.querySelectorAll('.modal-overlay').forEach(o=>
-    o.addEventListener('click',e=>{if(e.target===o){o.classList.remove('active');document.body.style.overflow='';}}));
+  }
+
+  // FIX: single delegated listener for open/close buttons — works on mobile
+  document.addEventListener('click', e => {
+    // open modal via data-modal
+    const openTrigger = e.target.closest('[data-modal]');
+    if(openTrigger){ openModal(openTrigger.dataset.modal); return; }
+    // close modal via data-close
+    const closeTrigger = e.target.closest('[data-close]');
+    if(closeTrigger){ closeModal(closeTrigger.dataset.close); return; }
+    // close by clicking overlay background
+    if(e.target.classList.contains('modal-overlay')){ closeModal(e.target.id); return; }
+  });
+
   document.addEventListener('keydown',e=>{
     if(e.key==='Escape')
       document.querySelectorAll('.modal-overlay.active').forEach(m=>{m.classList.remove('active');document.body.style.overflow='';});
   });
 
   // ── FILE UPLOAD HELPERS ────────────────────────────────────
-  window.handleFileChange=function(inputId,thumbId,clearId,labelId,hintId){
-    const file=$(inputId).files[0];
-    if(!file)return;
-    const thumb=$(thumbId),clr=$(clearId),lbl=$(labelId),hnt=$(hintId);
-    lbl.textContent=file.name.length>28?file.name.substring(0,26)+'…':file.name;
-    hnt.textContent=(file.size/1024<1024?(file.size/1024).toFixed(0)+' KB':((file.size/1024/1024).toFixed(1))+' MB');
-    clr.classList.add('show');
-    const reader=new FileReader();
-    reader.onload=ev=>{thumb.src=ev.target.result;thumb.classList.add('show');};
-    reader.readAsDataURL(file);
-  };
-  window.clearFile=function(inputId,thumbId,clearId,labelId,hintId){
+  // FIX: bind file input changes via addEventListener, not inline onchange
+  function bindFileInput(inputId,thumbId,clearId,labelId,hintId){
+    const inp=$(inputId);
+    if(!inp)return;
+    inp.addEventListener('change',()=>{
+      const file=inp.files[0];
+      if(!file)return;
+      $(labelId).textContent=file.name.length>28?file.name.substring(0,26)+'…':file.name;
+      $(hintId).textContent=(file.size/1024<1024?(file.size/1024).toFixed(0)+' KB':((file.size/1024/1024).toFixed(1))+' MB');
+      $(clearId).classList.add('show');
+      const reader=new FileReader();
+      reader.onload=ev=>{$(thumbId).src=ev.target.result;$(thumbId).classList.add('show');};
+      reader.readAsDataURL(file);
+    });
+  }
+  bindFileInput('cpImg','cpImgThumb','cpImgClear','cpImgLabel','cpImgHint');
+  bindFileInput('gpImg','gpImgThumb','gpImgClear','gpImgLabel','gpImgHint');
+
+  function clearFile(inputId,thumbId,clearId,labelId,hintId){
     const inp=$(inputId);
     inp.value='';
     $(thumbId).src='';$(thumbId).classList.remove('show');
     $(clearId).classList.remove('show');
     $(labelId).textContent='Click to upload image';
     $(hintId).textContent='JPG, PNG, WEBP · max 10 MB';
-  };
+  }
+
+  // FIX: delegate clear button clicks via data-clear attribute
+  document.addEventListener('click',e=>{
+    const btn=e.target.closest('[data-clear]');
+    if(!btn)return;
+    e.preventDefault();e.stopPropagation();
+    const ids=btn.dataset.clear.split(',');
+    clearFile(...ids);
+  });
 
   // ── API HELPERS ────────────────────────────────────────────
-  // JSON API for regular param-based calls
   async function api(url,opts={}){
     const r=await fetch(url,{...opts,headers:{...hdr(),...(opts.headers||{})}});
     const d=await r.json();if(!r.ok)throw new Error(d.message||'Request failed');return d;
   }
-
-  // Multipart FormData upload — do NOT set Content-Type (browser sets boundary)
   async function apiForm(url,formData){
     const r=await fetch(url,{method:'POST',headers:hdr(),body:formData});
     const d=await r.json();if(!r.ok)throw new Error(d.message||'Request failed');return d;
   }
-
   function ld(id,on,html){
     const b=$(id);if(!b)return;
     b.disabled=on;
@@ -695,7 +712,7 @@
   }
 
   // ── BROADCAST ─────────────────────────────────────────────
-  window.broadcastMsg=async()=>{
+  $('btnBcast').addEventListener('click', async()=>{
     const m=$('bcastMsg').value.trim();
     if(!m){fm('bcastErr','bcastOk','err','Message cannot be empty.');return;}
     ld('btnBcast',true);
@@ -706,10 +723,10 @@
       $('bcastMsg').value='';
     }catch(e){fm('bcastErr','bcastOk','err',e.message||'Failed to send.');}
     finally{ld('btnBcast',false,'<i class="fas fa-paper-plane fa-xs"></i> Send Broadcast');}
-  };
+  });
 
   // ── SALE ──────────────────────────────────────────────────
-  window.postSale=async()=>{
+  $('btnSale').addEventListener('click', async()=>{
     const sn=$('saleName').value.trim(),sd=$('saleDiscount').value.trim(),se=$('saleEnd').value.trim();
     if(!sn||!sd||!se){fm('saleErr','saleOk','err','All fields are required.');return;}
     ld('btnSale',true);
@@ -719,56 +736,43 @@
       toast('fas fa-fire','Sale announced!');
     }catch(e){fm('saleErr','saleOk','err',e.message||'Failed.');}
     finally{ld('btnSale',false,'<i class="fas fa-fire fa-xs"></i> Post Sale');}
-  };
+  });
 
   // ── ANNOUNCE CLOTHING ─────────────────────────────────────
-  // Uses multipart/form-data — productId is auto-generated by backend.
-  window.announceClothing=async()=>{
+  $('btnCp').addEventListener('click', async()=>{
     const n=$('cpName').value.trim(),p=$('cpPrice').value.trim(),c=$('cpCat').value.trim();
     if(!n||!p||!c){fm('cpErr','cpOk','err','Name, price and category are required.');return;}
     ld('btnCp',true);
-
     const fd=new FormData();
-    fd.append('name',n);
-    fd.append('price',p);
-    fd.append('category',c);
+    fd.append('name',n);fd.append('price',p);fd.append('category',c);
     if($('cpSubCat').value.trim()) fd.append('subCategory',$('cpSubCat').value.trim());
     if($('cpSizes').value.trim())  fd.append('sizes',$('cpSizes').value.trim());
     if($('cpColors').value.trim()) fd.append('colors',$('cpColors').value.trim());
     if($('cpMaterial').value.trim()) fd.append('material',$('cpMaterial').value.trim());
     if($('cpStyle').value.trim())  fd.append('style',$('cpStyle').value.trim());
     if($('cpDesc').value.trim())   fd.append('description',$('cpDesc').value.trim());
-    const imgFile=$('cpImg').files[0];
-    if(imgFile) fd.append('image',imgFile);
-
+    const imgFile=$('cpImg').files[0];if(imgFile) fd.append('image',imgFile);
     try{
       const res=await apiForm(API+'/api/admin/telegram/channel/announce-product',fd);
       fm('cpErr','cpOk','ok',res.message||'Clothing announced!');
       toast('fas fa-shirt','Announced!');
-      // reset form
       ['cpName','cpPrice','cpCat','cpSubCat','cpSizes','cpColors','cpMaterial','cpStyle','cpDesc'].forEach(id=>$(id).value='');
       clearFile('cpImg','cpImgThumb','cpImgClear','cpImgLabel','cpImgHint');
     }catch(e){fm('cpErr','cpOk','err',e.message||'Failed.');}
     finally{ld('btnCp',false,'<i class="fas fa-shirt fa-xs"></i> Announce');}
-  };
+  });
 
   // ── ANNOUNCE GENERAL PRODUCT ──────────────────────────────
-  // Uses multipart/form-data — productId is auto-generated by backend.
-  window.announceGeneral=async()=>{
+  $('btnGp').addEventListener('click', async()=>{
     const n=$('gpName').value.trim(),p=$('gpPrice').value.trim(),c=$('gpCat').value.trim();
     if(!n||!p||!c){fm('gpErr','gpOk','err','Name, price and category are required.');return;}
     ld('btnGp',true);
-
     const fd=new FormData();
-    fd.append('name',n);
-    fd.append('price',p);
-    fd.append('category',c);
+    fd.append('name',n);fd.append('price',p);fd.append('category',c);
     if($('gpSubCat').value.trim()) fd.append('subCategory',$('gpSubCat').value.trim());
     if($('gpTags').value.trim())   fd.append('tags',$('gpTags').value.trim());
     if($('gpDesc').value.trim())   fd.append('description',$('gpDesc').value.trim());
-    const imgFile=$('gpImg').files[0];
-    if(imgFile) fd.append('image',imgFile);
-
+    const imgFile=$('gpImg').files[0];if(imgFile) fd.append('image',imgFile);
     try{
       const res=await apiForm(API+'/api/admin/telegram/channel/announce-general-product',fd);
       fm('gpErr','gpOk','ok',res.message||'Product announced!');
@@ -777,56 +781,65 @@
       clearFile('gpImg','gpImgThumb','gpImgClear','gpImgLabel','gpImgHint');
     }catch(e){fm('gpErr','gpOk','err',e.message||'Failed.');}
     finally{ld('btnGp',false,'<i class="fas fa-box fa-xs"></i> Announce');}
-  };
+  });
 
   // ── NOTIFICATIONS ─────────────────────────────────────────
-  window.notifyOrderStatus=async()=>{
+  $('btnNotifOrd').addEventListener('click', async()=>{
     const cn=$('noCustomer').value.trim(),oi=$('noOrderId').value,os=$('noOldStatus').value.trim(),ns=$('noNewStatus').value.trim();
     if(!cn||!oi||!os||!ns){fm('notifOrdErr','notifOrdOk','err','All fields required.');return;}
     try{
       await api(API+`/api/admin/telegram/notify/order-status?customerName=${encodeURIComponent(cn)}&orderId=${oi}&oldStatus=${encodeURIComponent(os)}&newStatus=${encodeURIComponent(ns)}`,{method:'POST'});
-      fm('notifOrdErr','notifOrdOk','ok','Sent!');
-      toast('fas fa-bell','Order notif sent!');
+      fm('notifOrdErr','notifOrdOk','ok','Sent!');toast('fas fa-bell','Order notif sent!');
     }catch(e){fm('notifOrdErr','notifOrdOk','err',e.message||'Failed.');}
-  };
+  });
 
-  window.notifyDeliveryReq=async()=>{
+  $('btnNotifDel').addEventListener('click', async()=>{
     const cn=$('ndCustomer').value.trim(),di=$('ndDelivId').value,addr=$('ndAddress').value.trim(),city=$('ndCity').value.trim();
     if(!cn||!di||!addr){fm('notifDelErr','notifDelOk','err','Customer, ID and address required.');return;}
     try{
       await api(API+`/api/admin/telegram/notify/delivery-request?customerName=${encodeURIComponent(cn)}&deliveryId=${di}&address=${encodeURIComponent(addr)}&city=${encodeURIComponent(city)}`,{method:'POST'});
-      fm('notifDelErr','notifDelOk','ok','Sent!');
-      toast('fas fa-bell','Delivery notif sent!');
+      fm('notifDelErr','notifDelOk','ok','Sent!');toast('fas fa-bell','Delivery notif sent!');
     }catch(e){fm('notifDelErr','notifDelOk','err',e.message||'Failed.');}
-  };
+  });
 
-  window.notifyDeliveryStatus=async()=>{
+  $('btnNotifDs').addEventListener('click', async()=>{
     const cn=$('dsCustomer').value.trim(),di=$('dsDelivId').value,st=$('dsStatus').value.trim(),tr=$('dsTracking').value.trim();
     if(!cn||!di||!st){fm('notifDsErr','notifDsOk','err','Customer, ID and status required.');return;}
     try{
       await api(API+`/api/admin/telegram/notify/delivery-status?customerName=${encodeURIComponent(cn)}&deliveryId=${di}&newStatus=${encodeURIComponent(st)}&trackingNumber=${encodeURIComponent(tr)}`,{method:'POST'});
-      fm('notifDsErr','notifDsOk','ok','Sent!');
-      toast('fas fa-bell','Status sent!');
+      fm('notifDsErr','notifDsOk','ok','Sent!');toast('fas fa-bell','Status sent!');
     }catch(e){fm('notifDsErr','notifDsOk','err',e.message||'Failed.');}
-  };
+  });
 
   // ── SIDEBAR / LOGOUT ──────────────────────────────────────
   const ham=$('ham'),sb=$('sidebar'),ov=$('sOverlay');
+
+  function closeSidebar(){
+    sb.classList.remove('open');ov.classList.remove('active');
+    ham.classList.remove('open');document.body.style.overflow='';
+  }
+
   ham.addEventListener('click',()=>{
     const o=sb.classList.toggle('open');
     ov.classList.toggle('active',o);
     ham.classList.toggle('open',o);
     document.body.style.overflow=o?'hidden':'';
   });
-  ov.addEventListener('click',()=>{
-    sb.classList.remove('open');ov.classList.remove('active');
-    ham.classList.remove('open');document.body.style.overflow='';
+  ov.addEventListener('click', closeSidebar);
+
+  // FIX: close sidebar when nav link tapped on mobile
+  sb.querySelectorAll('.snav a').forEach(link=>{
+    link.addEventListener('click',()=>{ if(window.innerWidth<=860) closeSidebar(); });
   });
-  window.doLogout=()=>{
+
+  // FIX: logout via addEventListener, not window.doLogout / inline onclick
+  function doLogout(){
     localStorage.removeItem(SK);
     toast('fas fa-sign-out-alt','Signed out…');
     setTimeout(()=>location.href='adminLogin.html',900);
-  };
+  }
+  $('sidebarLogoutBtn').addEventListener('click', doLogout);
+
 })();
 </script>
 </body>

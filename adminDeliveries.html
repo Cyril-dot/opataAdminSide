@@ -21,14 +21,32 @@
       --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1)
     }
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-    body{background:var(--cream);color:var(--ink);font-family:'Outfit',system-ui,sans-serif;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+    body{
+      background:var(--cream);color:var(--ink);font-family:'Outfit',system-ui,sans-serif;
+      line-height:1.6;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;
+      touch-action:manipulation;
+    }
     a{text-decoration:none;color:inherit}
-    button{cursor:pointer;font-family:inherit;border:none;outline:none;background:none}
+    button{
+      cursor:pointer;font-family:inherit;border:none;outline:none;background:none;
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      user-select:none;-webkit-user-select:none;
+    }
+    a, button, [role="button"], .stab {
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
     ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--parchment)}::-webkit-scrollbar-thumb{background:var(--warm-mid);border-radius:99px}
 
     /* TOPBAR */
     .topbar{height:var(--nav-h);background:rgba(250,247,243,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;display:flex;align-items:center;padding:0 clamp(.75rem,3vw,1.2rem);gap:.6rem;flex-shrink:0}
-    .ham{display:none;flex-direction:column;gap:4px;padding:8px;cursor:pointer;border-radius:var(--r-sm);background:none;border:none;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+    .ham{
+      display:none;flex-direction:column;gap:4px;padding:10px;cursor:pointer;
+      border-radius:var(--r-sm);background:none;border:none;flex-shrink:0;
+      min-width:44px;min-height:44px;align-items:center;justify-content:center;
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
     .ham span{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px;transition:all .26s var(--ease)}
     .ham.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
     .ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
@@ -38,19 +56,32 @@
     .admin-badge{display:inline-flex;align-items:center;gap:.28rem;background:rgba(168,133,78,.1);color:var(--gold);font-size:clamp(.55rem,.85vw,.62rem);font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .5rem;border-radius:var(--r-xl);border:1px solid rgba(168,133,78,.25);flex-shrink:0}
     @media(max-width:400px){.admin-badge{display:none}}
     .topbar-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}
-    .topbar-link{display:inline-flex;align-items:center;gap:.32rem;font-size:.78rem;color:var(--muted);font-weight:500;padding:.32rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .18s}
+    .topbar-link{display:inline-flex;align-items:center;gap:.32rem;font-size:.78rem;color:var(--muted);font-weight:500;padding:.32rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .18s;min-height:44px;}
     .topbar-link:hover{border-color:var(--gold);color:var(--gold)}
-    .topbar-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+    .topbar-avatar{
+      width:44px;height:44px;background:linear-gradient(135deg,var(--gold),var(--blush));
+      border-radius:50%;display:flex;align-items:center;justify-content:center;
+      color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
 
     /* SIDEBAR */
     .layout{display:flex;flex:1}
     .sidebar{width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:var(--nav-h);left:0;height:calc(100vh - var(--nav-h));overflow-y:auto;z-index:150;transition:transform .3s var(--ease)}
-    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;opacity:0;transition:opacity .26s}
+    .sidebar-overlay{
+      display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;
+      opacity:0;transition:opacity .26s;touch-action:manipulation;
+    }
     .sidebar-overlay.active{opacity:1}
     .snav{padding:.65rem 0;flex:1}
     .snav-label{padding:.55rem .9rem .2rem;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
-    .snav a{display:flex;align-items:center;gap:.7rem;padding:.75rem 1rem;font-size:.86rem;font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0;min-height:44px;-webkit-tap-highlight-color:transparent}
-    .snav a:hover{background:var(--parchment);color:var(--ink)}
+    .snav a{
+      display:flex;align-items:center;gap:.7rem;padding:.75rem 1rem;font-size:.86rem;
+      font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;
+      margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0;
+      min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .snav a:hover,.snav a:active{background:var(--parchment);color:var(--ink)}
     .snav a.active{background:rgba(168,133,78,.08);color:var(--gold);border-left-color:var(--gold);font-weight:600}
     .snav a i{width:16px;text-align:center;font-size:.82rem;flex-shrink:0}
     .sdiv{height:1px;background:var(--border);margin:.4rem .9rem}
@@ -59,36 +90,60 @@
     .s-av{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;flex-shrink:0}
     .s-info strong{display:block;font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
     .s-info small{font-size:.68rem;color:var(--subtle)}
-    .s-logout{display:flex;align-items:center;gap:.5rem;padding:.58rem .75rem;background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .18s;width:100%;min-height:44px}
-    .s-logout:hover{background:rgba(192,57,43,.13)}
+    .s-logout{
+      display:flex;align-items:center;gap:.5rem;padding:.58rem .75rem;
+      background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);
+      border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;
+      cursor:pointer;transition:background .18s;width:100%;
+      min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .s-logout:hover,.s-logout:active{background:rgba(192,57,43,.13)}
 
     /* MAIN */
     .main{margin-left:var(--sidebar-w);flex:1;padding:clamp(1rem,3vw,2rem) clamp(.75rem,3vw,2rem);min-width:0}
     .page-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.1rem;gap:1rem;flex-wrap:wrap}
     .bc{display:flex;align-items:center;gap:.35rem;font-size:.73rem;color:var(--subtle);margin-bottom:.4rem;flex-wrap:wrap}
-    .bc a{color:var(--muted);transition:color .18s}.bc a:hover{color:var(--gold)}
+    .bc a{color:var(--muted);transition:color .18s;min-height:36px;display:inline-flex;align-items:center;}.bc a:hover{color:var(--gold)}
     .bc i{font-size:.52rem}
     .page-hd h1{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,3.5vw,1.8rem);font-weight:700}
     .page-hd p{font-size:clamp(.78rem,2vw,.84rem);color:var(--muted)}
 
     /* STATUS TABS */
     .status-tabs{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:1rem}
-    .stab{padding:.38rem .8rem;font-size:clamp(.72rem,2vw,.78rem);font-weight:600;border-radius:var(--r-xl);border:1.5px solid var(--border);color:var(--muted);cursor:pointer;transition:all .16s;background:var(--white);min-height:36px;display:inline-flex;align-items:center;gap:.3rem;-webkit-tap-highlight-color:transparent}
-    .stab:hover{border-color:var(--gold);color:var(--gold)}
+    .stab{
+      padding:.38rem .8rem;font-size:clamp(.72rem,2vw,.78rem);font-weight:600;
+      border-radius:var(--r-xl);border:1.5px solid var(--border);color:var(--muted);
+      cursor:pointer;transition:all .16s;background:var(--white);
+      min-height:44px;display:inline-flex;align-items:center;gap:.3rem;
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+      user-select:none;-webkit-user-select:none;
+    }
+    .stab:hover,.stab:active{border-color:var(--gold);color:var(--gold)}
     .stab.active{background:var(--ink);color:white;border-color:var(--ink)}
 
     /* TOOLBAR */
     .toolbar{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:.85rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.65rem;flex-wrap:wrap}
     .search-wrap{flex:1;min-width:150px;position:relative}
     .search-wrap i{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:var(--subtle);font-size:.82rem;pointer-events:none}
-    .search-input{width:100%;padding:.55rem .9rem .55rem 2.4rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-xl);font-size:clamp(.8rem,2.5vw,.84rem);font-family:'Outfit',sans-serif;color:var(--ink);outline:none;transition:border-color .18s;-webkit-appearance:none}
+    .search-input{
+      width:100%;padding:.55rem .9rem .55rem 2.4rem;background:var(--parchment);
+      border:1.5px solid var(--border);border-radius:var(--r-xl);
+      font-size:16px;/* FIX: prevent iOS zoom */
+      font-family:'Outfit',sans-serif;color:var(--ink);outline:none;
+      transition:border-color .18s;-webkit-appearance:none;
+    }
     .search-input:focus{border-color:var(--gold)}
     .search-input::placeholder{color:var(--subtle)}
-    @media(max-width:480px){.search-input{font-size:16px}}
-    .btn-filter{display:inline-flex;align-items:center;gap:.32rem;background:var(--ink);color:white;font-size:.8rem;font-weight:600;padding:.55rem 1rem;border-radius:var(--r-xl);cursor:pointer;transition:background .18s;min-height:40px;-webkit-tap-highlight-color:transparent}
-    .btn-filter:hover{background:var(--gold)}
+    .btn-filter{
+      display:inline-flex;align-items:center;gap:.32rem;background:var(--ink);color:white;
+      font-size:.8rem;font-weight:600;padding:.55rem 1rem;border-radius:var(--r-xl);
+      cursor:pointer;transition:background .18s;
+      min-height:44px;
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .btn-filter:hover,.btn-filter:active{background:var(--gold)}
 
-    /* TABLE WRAPPER - scrollable on mobile */
+    /* TABLE */
     .table-wrap{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:1.5rem}
     .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
     .tbl{width:100%;border-collapse:collapse;min-width:680px}
@@ -99,21 +154,15 @@
     .tbl tbody tr{transition:background .14s}
     .tbl tbody tr:hover{background:rgba(168,133,78,.04)}
 
-    /* Mobile card view for small screens */
+    /* Mobile card view */
     @media(max-width:640px){
       .tbl,thead,tbody,th,td,tr{display:block}
       .tbl thead{display:none}
-      .tbl tbody tr{
-        background:var(--card);border:1.5px solid var(--border);
-        border-radius:var(--r-md);margin-bottom:.75rem;
-        padding:.75rem;display:grid;
-        grid-template-columns:1fr auto;
-        gap:.3rem .5rem;
-      }
+      .tbl tbody tr{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-md);margin-bottom:.75rem;padding:.75rem;display:grid;grid-template-columns:1fr auto;gap:.3rem .5rem;}
       .tbl tbody tr:hover{background:var(--card)}
       .tbl td{padding:.15rem 0;border:none;font-size:.82rem}
       .tbl td[data-label]::before{content:attr(data-label);display:block;font-size:.62rem;font-weight:700;color:var(--subtle);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.1rem}
-      .tbl td:first-child{grid-column:1 / -1}
+      .tbl td:first-child{grid-column:1/-1}
       .tbl-actions{flex-wrap:wrap;gap:.3rem}
       .table-wrap{background:transparent;border:none;border-radius:0;overflow:visible}
       .tbl-scroll{overflow:visible}
@@ -127,35 +176,67 @@
     .dstatus.DELIVERED{background:#dcfce7;color:#15803d}
     .dstatus.CANCELLED{background:#fee2e2;color:var(--danger)}
     .tbl-actions{display:flex;gap:.32rem;flex-wrap:nowrap}
-    .btn-sm{font-size:.7rem;font-weight:600;padding:.28rem .65rem;border-radius:var(--r-xl);border:1.5px solid var(--border);cursor:pointer;transition:all .15s;background:none;color:var(--muted);white-space:nowrap;min-height:32px;display:inline-flex;align-items:center;gap:.25rem;-webkit-tap-highlight-color:transparent}
-    .btn-sm:hover{border-color:var(--gold);color:var(--gold)}
-    .btn-sm.danger:hover{border-color:var(--danger);color:var(--danger)}
-    .btn-sm.blue:hover{border-color:#3498db;color:#3498db}
+    /* FIX: row buttons - proper touch targets, pointer-events on children */
+    .btn-sm{
+      font-size:.7rem;font-weight:600;padding:.3rem .65rem;border-radius:var(--r-xl);
+      border:1.5px solid var(--border);cursor:pointer;transition:all .15s;
+      background:none;color:var(--muted);white-space:nowrap;
+      min-height:36px;display:inline-flex;align-items:center;gap:.25rem;
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .btn-sm *{pointer-events:none}
+    .btn-sm:hover,.btn-sm:active{border-color:var(--gold);color:var(--gold)}
+    .btn-sm.danger:hover,.btn-sm.danger:active{border-color:var(--danger);color:var(--danger)}
+    .btn-sm.blue:hover,.btn-sm.blue:active{border-color:#3498db;color:#3498db}
 
     /* MODALS */
-    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .22s;overflow-y:auto}
+    .modal-overlay{
+      position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;
+      display:flex;align-items:center;justify-content:center;padding:1rem;
+      opacity:0;pointer-events:none;transition:opacity .22s;overflow-y:auto;
+      -webkit-overflow-scrolling:touch;touch-action:manipulation;
+    }
     .modal-overlay.open{opacity:1;pointer-events:all}
     .modal{background:var(--white);border-radius:var(--r-lg);padding:clamp(1.2rem,4vw,1.8rem);max-width:520px;width:100%;box-shadow:var(--sh-lg);transform:scale(.95);transition:transform .22s var(--spring);margin:auto}
     .modal-overlay.open .modal{transform:scale(1)}
     .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
     .modal-head h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,3vw,1.15rem);font-weight:700}
-    .modal-close{width:32px;height:32px;background:var(--parchment);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.82rem;color:var(--muted);cursor:pointer;border:none;flex-shrink:0;-webkit-tap-highlight-color:transparent}
-    .modal-close:hover{background:var(--sand)}
+    .modal-close{
+      width:44px;height:44px;background:var(--parchment);border-radius:50%;
+      display:flex;align-items:center;justify-content:center;font-size:.82rem;
+      color:var(--muted);cursor:pointer;border:none;flex-shrink:0;
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .modal-close:hover,.modal-close:active{background:var(--sand)}
     .fg{margin-bottom:.85rem}
     .fl{display:block;font-size:.68rem;font-weight:700;color:var(--muted);margin-bottom:.28rem;letter-spacing:.06em;text-transform:uppercase}
-    .fi{width:100%;padding:.6rem .9rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:clamp(.82rem,2.5vw,.85rem);font-family:'Outfit',sans-serif;color:var(--ink);outline:none;transition:border-color .18s;-webkit-appearance:none}
+    .fi{
+      width:100%;padding:.6rem .9rem;background:var(--parchment);border:1.5px solid var(--border);
+      border-radius:var(--r-sm);font-size:16px;/* FIX: prevent iOS zoom */
+      font-family:'Outfit',sans-serif;color:var(--ink);outline:none;
+      transition:border-color .18s;-webkit-appearance:none;
+    }
     .fi:focus{border-color:var(--gold)}
     .fi::placeholder{color:var(--subtle)}
-    @media(max-width:480px){.fi{font-size:16px}}
-    select.fi{cursor:pointer}
+    select.fi{cursor:pointer;touch-action:manipulation;}
     .frow2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
     .ferr{display:none;color:var(--danger);font-size:.75rem;padding:.38rem .65rem;background:rgba(192,57,43,.06);border-radius:var(--r-sm);border-left:3px solid var(--danger);margin-bottom:.7rem}
     .ferr.show{display:block}
     .modal-btns{display:flex;gap:.65rem;justify-content:flex-end;margin-top:1.1rem;flex-wrap:wrap}
-    .btn-cancel-modal{padding:.6rem 1.2rem;border:1.5px solid var(--border);border-radius:var(--r-xl);font-size:.84rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .16s;background:none;min-height:42px;-webkit-tap-highlight-color:transparent}
-    .btn-cancel-modal:hover{border-color:var(--gold);color:var(--gold)}
-    .btn-save{padding:.62rem 1.4rem;background:var(--gold);color:white;border:none;border-radius:var(--r-xl);font-size:.84rem;font-weight:700;cursor:pointer;transition:opacity .16s;min-height:42px;-webkit-tap-highlight-color:transparent}
-    .btn-save:hover{opacity:.85}
+    .btn-cancel-modal{
+      padding:.6rem 1.2rem;border:1.5px solid var(--border);border-radius:var(--r-xl);
+      font-size:.84rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .16s;
+      background:none;min-height:48px;
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .btn-cancel-modal:hover,.btn-cancel-modal:active{border-color:var(--gold);color:var(--gold)}
+    .btn-save{
+      padding:.62rem 1.4rem;background:var(--gold);color:white;border:none;
+      border-radius:var(--r-xl);font-size:.84rem;font-weight:700;cursor:pointer;
+      transition:opacity .16s;min-height:48px;
+      touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+    }
+    .btn-save:hover,.btn-save:active{opacity:.85}
     .btn-save:disabled{opacity:.55;cursor:not-allowed}
     .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem .8rem;margin-bottom:1rem}
     .detail-item label{display:block;font-size:.63rem;font-weight:700;color:var(--subtle);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.15rem}
@@ -170,19 +251,8 @@
     @keyframes tin{from{opacity:0;transform:translateY(14px) scale(.95)}to{opacity:1;transform:none}}
     @keyframes tout{to{opacity:0;transform:translateY(5px) scale(.95)}}
 
-    /* RESPONSIVE */
-    @media(max-width:860px){
-      .sidebar{transform:translateX(-100%)}
-      .sidebar.open{transform:translateX(0)}
-      .sidebar-overlay{display:block}
-      .ham{display:flex}
-      .main{margin-left:0}
-    }
-    @media(max-width:640px){
-      .topbar-link{display:none}
-      .frow2{grid-template-columns:1fr}
-      .detail-grid{grid-template-columns:1fr}
-    }
+    @media(max-width:860px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.sidebar-overlay{display:block}.ham{display:flex}.main{margin-left:0}}
+    @media(max-width:640px){.topbar-link{display:none}.frow2{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -223,7 +293,7 @@
         <div class="s-av" id="sAv">A</div>
         <div class="s-info"><strong id="sName">Admin</strong><small id="sShop">Beauty Empire</small></div>
       </div>
-      <button class="s-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out</button>
+      <button class="s-logout" id="logoutBtn"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out</button>
     </div>
   </aside>
 
@@ -236,22 +306,22 @@
       </div>
     </div>
 
-    <div class="status-tabs">
-      <button class="stab active" onclick="setFilter('all',this)">All</button>
-      <button class="stab" onclick="setFilter('active',this)"><i class="fas fa-circle fa-xs" style="color:var(--success)"></i> Active</button>
-      <button class="stab" onclick="setFilter('PENDING',this)">Pending</button>
-      <button class="stab" onclick="setFilter('SHIPPED',this)">Shipped</button>
-      <button class="stab" onclick="setFilter('DELIVERED',this)">Delivered</button>
-      <button class="stab" onclick="setFilter('CANCELLED',this)">Cancelled</button>
-      <button class="stab" onclick="setFilter('overdue',this)" style="border-color:rgba(192,57,43,.3);color:var(--danger)"><i class="fas fa-clock fa-xs"></i> Overdue</button>
+    <div class="status-tabs" id="statusTabs">
+      <button class="stab active" data-filter="all">All</button>
+      <button class="stab" data-filter="active"><i class="fas fa-circle fa-xs" style="color:var(--success)"></i> Active</button>
+      <button class="stab" data-filter="PENDING">Pending</button>
+      <button class="stab" data-filter="SHIPPED">Shipped</button>
+      <button class="stab" data-filter="DELIVERED">Delivered</button>
+      <button class="stab" data-filter="CANCELLED">Cancelled</button>
+      <button class="stab" data-filter="overdue" style="border-color:rgba(192,57,43,.3);color:var(--danger)"><i class="fas fa-clock fa-xs"></i> Overdue</button>
     </div>
 
     <div class="toolbar">
       <div class="search-wrap">
         <i class="fas fa-search"></i>
-        <input class="search-input" type="text" id="searchInput" placeholder="Search by ID or address…" oninput="renderDeliveries()">
+        <input class="search-input" type="text" id="searchInput" placeholder="Search by ID or address…">
       </div>
-      <button class="btn-filter" onclick="loadDeliveries()"><i class="fas fa-sync fa-xs"></i> Refresh</button>
+      <button class="btn-filter" id="btnRefresh"><i class="fas fa-sync fa-xs"></i> Refresh</button>
     </div>
 
     <div class="table-wrap">
@@ -259,14 +329,8 @@
         <table class="tbl">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Order #</th>
-              <th>Address</th>
-              <th>Contact</th>
-              <th>Tracking</th>
-              <th>Courier</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th>ID</th><th>Order #</th><th>Address</th><th>Contact</th>
+              <th>Tracking</th><th>Courier</th><th>Status</th><th>Actions</th>
             </tr>
           </thead>
           <tbody id="deliveriesBody">
@@ -283,7 +347,7 @@
   <div class="modal">
     <div class="modal-head">
       <h3>Update Delivery Status</h3>
-      <button class="modal-close" onclick="closeUpdateModal()"><i class="fas fa-times fa-xs"></i></button>
+      <button class="modal-close" id="btnCloseUpdate"><i class="fas fa-times fa-xs"></i></button>
     </div>
     <div class="ferr" id="updateErr"></div>
     <p style="font-size:.78rem;color:var(--subtle);margin-bottom:.8rem" id="updateLabel"></p>
@@ -307,8 +371,8 @@
     </div>
     <div class="fg"><label class="fl">Message to Customer</label><textarea class="fi" id="uMessage" rows="2" placeholder="Optional message via delivery chat…" style="resize:vertical"></textarea></div>
     <div class="modal-btns">
-      <button class="btn-cancel-modal" onclick="closeUpdateModal()">Cancel</button>
-      <button class="btn-save" id="btnUpdateSave" onclick="saveUpdate()"><i class="fas fa-check fa-xs"></i> Update Delivery</button>
+      <button class="btn-cancel-modal" id="btnCancelUpdate">Cancel</button>
+      <button class="btn-save" id="btnUpdateSave"><i class="fas fa-check fa-xs"></i> Update Delivery</button>
     </div>
   </div>
 </div>
@@ -318,11 +382,11 @@
   <div class="modal">
     <div class="modal-head">
       <h3 id="detailTitle">Delivery Details</h3>
-      <button class="modal-close" onclick="document.getElementById('detailModal').classList.remove('open')"><i class="fas fa-times fa-xs"></i></button>
+      <button class="modal-close" id="btnCloseDetail"><i class="fas fa-times fa-xs"></i></button>
     </div>
     <div id="detailBody"></div>
     <div class="modal-btns">
-      <button class="btn-cancel-modal" onclick="document.getElementById('detailModal').classList.remove('open')">Close</button>
+      <button class="btn-cancel-modal" id="btnCloseDetailFooter">Close</button>
     </div>
   </div>
 </div>
@@ -338,6 +402,7 @@
   const $=id=>document.getElementById(id);
   let deliveries=[],currentFilter='all',pendingUpdate={id:null};
 
+  /* ── SESSION ───────────────────────────────────────── */
   function loadSession(){try{const raw=localStorage.getItem(SESSION_KEY);if(!raw)return null;const d=JSON.parse(raw);if(Date.now()-(d.savedAt||0)>SESSION_TTL){localStorage.removeItem(SESSION_KEY);return null;}return d;}catch{return null;}}
   const session=loadSession();
   if(!session){location.href='adminLogin.html';return;}
@@ -346,23 +411,55 @@
   function toast(ico,msg){const el=document.createElement('div');el.className='toast';el.innerHTML='<i class="'+ico+'"></i><span>'+msg+'</span>';$('tc').appendChild(el);setTimeout(()=>{el.classList.add('out');el.addEventListener('animationend',()=>el.remove(),{once:true});},3000);}
   function fmtDate(str){if(!str)return'—';try{return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}catch{return str;}}
 
+  /* ── FIX: universal touch+click helper ─────────────── */
+  function onTap(el, fn){
+    if(!el) return;
+    el.addEventListener('touchend',function(e){e.preventDefault();fn(e);},{passive:false});
+    el.addEventListener('click',fn);
+  }
+
+  /* ── IDENTITY ──────────────────────────────────────── */
   const name=admin.name||admin.firstName||admin.email?.split('@')[0]||'Admin';
   $('topAv').textContent=name.charAt(0).toUpperCase();
   $('sAv').textContent=name.charAt(0).toUpperCase();
   $('sName').textContent=name;
   $('sShop').textContent=admin.shopName||'Beauty Empire';
 
+  /* ── HAMBURGER ─────────────────────────────────────── */
+  const ham=$('ham'),sidebar=$('sidebar'),overlay=$('sOverlay');
+  function toggleSidebar(open){sidebar.classList.toggle('open',open);overlay.classList.toggle('active',open);ham.classList.toggle('open',open);document.body.style.overflow=open?'hidden':'';}
+  onTap(ham,     ()=>toggleSidebar(!sidebar.classList.contains('open')));
+  onTap(overlay, ()=>toggleSidebar(false));
+
+  /* ── LOGOUT ────────────────────────────────────────── */
+  onTap($('logoutBtn'),()=>doLogout());
+  window.doLogout=function(){localStorage.removeItem(SESSION_KEY);toast('fas fa-sign-out-alt','Signed out…');setTimeout(()=>location.href='adminLogin.html',900);};
+
+  /* ── STATUS TABS ───────────────────────────────────── */
+  document.querySelectorAll('.stab').forEach(btn=>{
+    onTap(btn,()=>setFilter(btn.dataset.filter, btn));
+  });
+
   window.setFilter=function(f,btn){
     currentFilter=f;
     document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
+    if(btn) btn.classList.add('active');
+    else {
+      const match=document.querySelector(`.stab[data-filter="${f}"]`);
+      if(match) match.classList.add('active');
+    }
     loadDeliveries();
   };
 
+  /* ── TOOLBAR ───────────────────────────────────────── */
+  onTap($('btnRefresh'),()=>loadDeliveries());
+  $('searchInput').addEventListener('input',()=>renderDeliveries());
+
+  /* ── LOAD DELIVERIES ───────────────────────────────── */
   window.loadDeliveries=async function(){
     $('deliveriesBody').innerHTML='<tr><td colspan="8"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Loading…</div></td></tr>';
     let url=API_BASE+'/api/admin/deliveries';
-    if(currentFilter==='active') url=API_BASE+'/api/admin/deliveries/active';
+    if(currentFilter==='active')  url=API_BASE+'/api/admin/deliveries/active';
     else if(currentFilter==='overdue') url=API_BASE+'/api/admin/deliveries/overdue';
     else if(currentFilter!=='all') url=API_BASE+`/api/admin/deliveries/status/${currentFilter}`;
     try{
@@ -380,6 +477,7 @@
     }
   };
 
+  /* ── RENDER DELIVERIES ─────────────────────────────── */
   window.renderDeliveries=function(){
     const search=$('searchInput').value.toLowerCase();
     let list=deliveries.filter(d=>{
@@ -398,15 +496,41 @@
         <td data-label="Status"><span class="dstatus ${d.status}">${d.status}</span></td>
         <td data-label="Actions">
           <div class="tbl-actions">
-            <button class="btn-sm" onclick="viewDelivery(${d.id})"><i class="fas fa-eye fa-xs"></i> View</button>
-            <button class="btn-sm blue" onclick="openUpdateModal(${d.id},'${d.status}','${d.trackingNumber||''}','${d.courier||''}')"><i class="fas fa-pen fa-xs"></i> Update</button>
-            <button class="btn-sm" onclick="openChat(${d.id})" title="Open chat"><i class="fas fa-comment fa-xs"></i></button>
-            <button class="btn-sm danger" onclick="cancelDelivery(${d.id})"><i class="fas fa-ban fa-xs"></i></button>
+            <button class="btn-sm"       data-action="view"   data-id="${d.id}"><i class="fas fa-eye fa-xs"></i> View</button>
+            <button class="btn-sm blue"  data-action="update" data-id="${d.id}" data-status="${d.status}" data-tracking="${d.trackingNumber||''}" data-courier="${d.courier||''}"><i class="fas fa-pen fa-xs"></i> Update</button>
+            <button class="btn-sm"       data-action="chat"   data-id="${d.id}" title="Open chat"><i class="fas fa-comment fa-xs"></i></button>
+            <button class="btn-sm danger" data-action="cancel" data-id="${d.id}"><i class="fas fa-ban fa-xs"></i></button>
           </div>
         </td>
       </tr>`).join('');
+
+    // FIX: delegated listener on tbody
+    attachTableListeners();
   };
 
+  function attachTableListeners(){
+    const tbody=$('deliveriesBody');
+
+    function handleAction(e){
+      let btn=e.target;
+      while(btn && btn!==tbody){
+        if(btn.dataset&&btn.dataset.action) break;
+        btn=btn.parentElement;
+      }
+      if(!btn||!btn.dataset.action) return;
+      const {action,id,status,tracking,courier}=btn.dataset;
+      const numId=parseInt(id,10);
+      if(action==='view')   viewDelivery(numId);
+      if(action==='update') openUpdateModal(numId, status, tracking, courier);
+      if(action==='chat')   openChat(numId);
+      if(action==='cancel') cancelDelivery(numId);
+    }
+
+    tbody.addEventListener('touchend',function(e){e.preventDefault();handleAction(e);},{passive:false});
+    tbody.addEventListener('click', handleAction);
+  }
+
+  /* ── VIEW DELIVERY ─────────────────────────────────── */
   window.viewDelivery=function(id){
     const d=deliveries.find(x=>x.id===id);if(!d)return;
     $('detailTitle').textContent='Delivery #'+id;
@@ -426,6 +550,22 @@
     $('detailModal').classList.add('open');
   };
 
+  /* ── UPDATE MODAL ──────────────────────────────────── */
+  onTap($('btnCloseUpdate'),  ()=>closeUpdateModal());
+  onTap($('btnCancelUpdate'), ()=>closeUpdateModal());
+  onTap($('btnUpdateSave'),   ()=>saveUpdate());
+
+  // FIX: close modals on overlay tap
+  $('updateModal').addEventListener('touchend',function(e){if(e.target===this){e.preventDefault();closeUpdateModal();}},{passive:false});
+  $('updateModal').addEventListener('click',function(e){if(e.target===this)closeUpdateModal();});
+  $('detailModal').addEventListener('touchend',function(e){if(e.target===this){e.preventDefault();closeDetailModal();}},{passive:false});
+  $('detailModal').addEventListener('click',function(e){if(e.target===this)closeDetailModal();});
+
+  onTap($('btnCloseDetail'),       ()=>closeDetailModal());
+  onTap($('btnCloseDetailFooter'), ()=>closeDetailModal());
+
+  function closeDetailModal(){$('detailModal').classList.remove('open');}
+
   window.openUpdateModal=function(id,status,tracking,courier){
     pendingUpdate.id=id;
     $('uStatus').value=status||'PENDING';
@@ -441,11 +581,11 @@
   window.saveUpdate=async function(){
     const id=pendingUpdate.id;
     const body={status:$('uStatus').value};
-    if($('uTracking').value)body.trackingNumber=$('uTracking').value;
-    if($('uCourier').value)body.courier=$('uCourier').value;
-    if($('uFee').value)body.deliveryFee=parseFloat($('uFee').value);
-    if($('uEta').value)body.estimatedDeliveryDate=$('uEta').value;
-    if($('uMessage').value)body.messageToUser=$('uMessage').value;
+    if($('uTracking').value) body.trackingNumber=$('uTracking').value;
+    if($('uCourier').value)  body.courier=$('uCourier').value;
+    if($('uFee').value)      body.deliveryFee=parseFloat($('uFee').value);
+    if($('uEta').value)      body.estimatedDeliveryDate=$('uEta').value;
+    if($('uMessage').value)  body.messageToUser=$('uMessage').value;
     const btn=$('btnUpdateSave');btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin fa-xs"></i> Saving…';
     try{
       const r=await fetch(API_BASE+`/api/admin/deliveries/${id}/status`,{method:'PATCH',headers:{...authHeaders(),'Content-Type':'application/json'},body:JSON.stringify(body)});
@@ -455,6 +595,7 @@
     finally{btn.disabled=false;btn.innerHTML='<i class="fas fa-check fa-xs"></i> Update Delivery';}
   };
 
+  /* ── CHAT & CANCEL ─────────────────────────────────── */
   window.openChat=async function(id){
     try{
       const r=await fetch(API_BASE+`/api/admin/deliveries/${id}/chat`,{method:'POST',headers:authHeaders()});
@@ -473,11 +614,7 @@
     }catch{toast('fas fa-ban','Delivery cancelled (demo)');loadDeliveries();}
   };
 
-  const ham=$('ham'),sidebar=$('sidebar'),overlay=$('sOverlay');
-  ham.addEventListener('click',()=>{const o=sidebar.classList.toggle('open');overlay.classList.toggle('active',o);ham.classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';});
-  overlay.addEventListener('click',()=>{sidebar.classList.remove('open');overlay.classList.remove('active');ham.classList.remove('open');document.body.style.overflow='';});
-  window.doLogout=function(){localStorage.removeItem(SESSION_KEY);toast('fas fa-sign-out-alt','Signed out…');setTimeout(()=>location.href='adminLogin.html',900);};
-
+  /* ── INIT ──────────────────────────────────────────── */
   loadDeliveries();
 })();
 </script>

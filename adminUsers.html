@@ -27,7 +27,9 @@
     ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--parchment)}::-webkit-scrollbar-thumb{background:var(--warm-mid);border-radius:99px}
 
     .topbar{height:var(--nav-h);background:rgba(250,247,243,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;display:flex;align-items:center;padding:0 1.2rem;gap:.8rem;flex-shrink:0}
-    .ham{display:none;flex-direction:column;gap:4px;padding:7px;cursor:pointer;border-radius:var(--r-sm);background:none;border:none;flex-shrink:0}
+    .ham{display:none;flex-direction:column;gap:4px;padding:7px;cursor:pointer;border-radius:var(--r-sm);background:none;border:none;flex-shrink:0;
+      min-width:44px;min-height:44px;align-items:center;justify-content:center;
+      -webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .ham span{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px;transition:all .26s var(--ease)}
     .ham.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
     .ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
@@ -38,15 +40,18 @@
     .topbar-right{display:flex;align-items:center;gap:.55rem;margin-left:auto}
     .topbar-link{display:inline-flex;align-items:center;gap:.32rem;font-size:.78rem;color:var(--muted);font-weight:500;padding:.32rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .18s}
     .topbar-link:hover{border-color:var(--gold);color:var(--gold)}
-    .topbar-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0}
+    .topbar-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;
+      min-width:44px;min-height:44px;-webkit-tap-highlight-color:transparent}
 
     .layout{display:flex;flex:1}
     .sidebar{width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:var(--nav-h);left:0;height:calc(100vh - var(--nav-h));overflow-y:auto;z-index:150;transition:transform .3s var(--ease)}
-    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;opacity:0;transition:opacity .26s}
-    .sidebar-overlay.active{opacity:1}
+    /* FIX: overlay pointer-events only when active */
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;opacity:0;transition:opacity .26s;pointer-events:none}
+    .sidebar-overlay.active{opacity:1;pointer-events:auto}
     .snav{padding:.65rem 0;flex:1}
     .snav-label{padding:.55rem .9rem .2rem;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
-    .snav a{display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem;font-size:.86rem;font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0}
+    .snav a{display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem;font-size:.86rem;font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0;
+      min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .snav a:hover{background:var(--parchment);color:var(--ink)}
     .snav a.active{background:rgba(168,133,78,.08);color:var(--gold);border-left-color:var(--gold);font-weight:600}
     .snav a i{width:16px;text-align:center;font-size:.82rem;flex-shrink:0}
@@ -56,7 +61,9 @@
     .s-av{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;flex-shrink:0}
     .s-info strong{display:block;font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
     .s-info small{font-size:.68rem;color:var(--subtle)}
-    .s-logout{display:flex;align-items:center;gap:.5rem;padding:.58rem .75rem;background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .18s;width:100%}
+    /* FIX: proper tap target */
+    .s-logout{display:flex;align-items:center;gap:.5rem;padding:.58rem .75rem;background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .18s;width:100%;
+      min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .s-logout:hover{background:rgba(192,57,43,.13)}
 
     .main{margin-left:var(--sidebar-w);flex:1;padding:clamp(1.2rem,3vw,2rem) clamp(1rem,3vw,2rem);min-width:0}
@@ -75,11 +82,16 @@
     .search-input{width:100%;padding:.58rem .9rem .58rem 2.4rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-xl);font-size:.85rem;font-family:'Outfit',sans-serif;color:var(--ink);outline:none;transition:border-color .18s}
     .search-input:focus{border-color:var(--gold)}
     .search-input::placeholder{color:var(--subtle)}
+    @media(max-width:480px){.search-input{font-size:16px}}
     .search-type-tabs{display:flex;gap:.35rem;flex-shrink:0}
-    .stt{padding:.4rem .85rem;font-size:.75rem;font-weight:600;border-radius:var(--r-xl);cursor:pointer;color:var(--muted);border:1.5px solid var(--border);transition:all .16s;background:var(--parchment)}
+    /* FIX: proper tap targets on search type tabs */
+    .stt{padding:.4rem .85rem;font-size:.75rem;font-weight:600;border-radius:var(--r-xl);cursor:pointer;color:var(--muted);border:1.5px solid var(--border);transition:all .16s;background:var(--parchment);
+      min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .stt:hover{border-color:var(--gold);color:var(--gold)}
     .stt.active{background:var(--gold);color:white;border-color:var(--gold)}
-    .btn-search{display:inline-flex;align-items:center;gap:.35rem;background:var(--ink);color:white;font-size:.82rem;font-weight:600;padding:.55rem 1.1rem;border-radius:var(--r-xl);border:none;cursor:pointer;transition:background .18s;flex-shrink:0}
+    /* FIX: proper tap target on search button */
+    .btn-search{display:inline-flex;align-items:center;gap:.35rem;background:var(--ink);color:white;font-size:.82rem;font-weight:600;padding:.55rem 1.1rem;border-radius:var(--r-xl);border:none;cursor:pointer;transition:background .18s;flex-shrink:0;
+      min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .btn-search:hover{background:var(--gold)}
 
     /* STAT ROW */
@@ -92,7 +104,9 @@
     .table-head{padding:.85rem 1.2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap}
     .table-head h3{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700;display:flex;align-items:center;gap:.5rem}
     .count-badge{background:var(--parchment);color:var(--muted);font-size:.68rem;font-weight:700;padding:.15rem .55rem;border-radius:var(--r-xl);border:1px solid var(--border)}
-    .btn-refresh{display:inline-flex;align-items:center;gap:.32rem;font-size:.75rem;color:var(--muted);padding:.35rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .16s;background:none;cursor:pointer}
+    /* FIX: tap target on refresh */
+    .btn-refresh{display:inline-flex;align-items:center;gap:.32rem;font-size:.75rem;color:var(--muted);padding:.35rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .16s;background:none;cursor:pointer;
+      min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .btn-refresh:hover{border-color:var(--gold);color:var(--gold)}
 
     /* TABLE */
@@ -111,20 +125,25 @@
     .user-email{font-size:.73rem;color:var(--subtle)}
     .user-date{font-size:.78rem;color:var(--subtle)}
 
-    .btn-del{display:inline-flex;align-items:center;gap:.28rem;color:var(--danger);font-size:.75rem;font-weight:600;padding:.28rem .65rem;border:1px solid rgba(192,57,43,.25);border-radius:var(--r-xl);transition:all .16s;background:none;cursor:pointer}
+    /* FIX: proper tap target on delete buttons */
+    .btn-del{display:inline-flex;align-items:center;gap:.28rem;color:var(--danger);font-size:.75rem;font-weight:600;padding:.28rem .65rem;border:1px solid rgba(192,57,43,.25);border-radius:var(--r-xl);transition:all .16s;background:none;cursor:pointer;
+      min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .btn-del:hover{background:rgba(192,57,43,.07)}
 
     /* MODAL */
     .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .22s}
-    .modal-overlay.open{opacity:1;pointer-events:all}
+    .modal-overlay.open{opacity:1;pointer-events:auto}
     .modal{background:var(--white);border-radius:var(--r-lg);padding:1.8rem;max-width:400px;width:100%;box-shadow:var(--sh-lg);transform:scale(.95);transition:transform .22s var(--spring)}
     .modal-overlay.open .modal{transform:scale(1)}
     .modal h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:.5rem}
     .modal p{font-size:.85rem;color:var(--muted);margin-bottom:1.3rem;line-height:1.5}
-    .modal-btns{display:flex;gap:.65rem;justify-content:flex-end}
-    .btn-cancel-modal{padding:.6rem 1.2rem;border:1.5px solid var(--border);border-radius:var(--r-xl);font-size:.84rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .16s;background:none}
+    .modal-btns{display:flex;gap:.65rem;justify-content:flex-end;flex-wrap:wrap}
+    /* FIX: proper tap targets on modal buttons */
+    .btn-cancel-modal{padding:.6rem 1.2rem;border:1.5px solid var(--border);border-radius:var(--r-xl);font-size:.84rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .16s;background:none;
+      min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .btn-cancel-modal:hover{border-color:var(--gold);color:var(--gold)}
-    .btn-confirm-del{padding:.6rem 1.2rem;background:var(--danger);color:white;border:none;border-radius:var(--r-xl);font-size:.84rem;font-weight:600;cursor:pointer;transition:opacity .16s}
+    .btn-confirm-del{padding:.6rem 1.2rem;background:var(--danger);color:white;border:none;border-radius:var(--r-xl);font-size:.84rem;font-weight:600;cursor:pointer;transition:opacity .16s;
+      min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .btn-confirm-del:hover{opacity:.85}
 
     .empty-state{text-align:center;padding:3rem 1rem;color:var(--subtle);font-size:.84rem}
@@ -145,7 +164,7 @@
 <body>
 
 <header class="topbar">
-  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+  <button class="ham" id="ham" aria-label="Toggle menu"><span></span><span></span><span></span></button>
   <a class="logo" href="adminDashboard.html">Esuo's Beauty Empire<span class="logo-dot"></span></a>
   <span class="admin-badge"><i class="fas fa-shield-halved fa-xs"></i> Admin</span>
   <div class="topbar-right">
@@ -179,7 +198,8 @@
         <div class="s-av" id="sAv">A</div>
         <div class="s-info"><strong id="sName">Admin</strong><small id="sShop">Beauty Empire</small></div>
       </div>
-      <button class="s-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out</button>
+      <!-- FIX: id-based binding, no inline onclick -->
+      <button class="s-logout" id="sidebarLogoutBtn"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out</button>
     </div>
   </aside>
 
@@ -196,14 +216,16 @@
     <div class="search-bar">
       <div class="search-wrap">
         <i class="fas fa-search"></i>
-        <input class="search-input" type="text" id="searchInput" placeholder="Search customers…" onkeydown="searchKey(event)">
+        <input class="search-input" type="text" id="searchInput" placeholder="Search customers…">
       </div>
       <div class="search-type-tabs">
-        <button class="stt active" data-type="all" onclick="setSearchType('all',this)">All</button>
-        <button class="stt" data-type="name" onclick="setSearchType('name',this)">By Name</button>
-        <button class="stt" data-type="email" onclick="setSearchType('email',this)">By Email</button>
+        <!-- FIX: data-type attribute, no inline onclick -->
+        <button class="stt active" data-type="all">All</button>
+        <button class="stt" data-type="name">By Name</button>
+        <button class="stt" data-type="email">By Email</button>
       </div>
-      <button class="btn-search" onclick="doSearch()"><i class="fas fa-search fa-xs"></i> Search</button>
+      <!-- FIX: id-based binding, no inline onclick -->
+      <button class="btn-search" id="btnSearch"><i class="fas fa-search fa-xs"></i> Search</button>
     </div>
 
     <!-- STAT ROW -->
@@ -215,7 +237,8 @@
     <div class="table-card">
       <div class="table-head">
         <h3><i class="fas fa-users" style="color:var(--gold)"></i> All Customers <span class="count-badge" id="countBadge">0</span></h3>
-        <button class="btn-refresh" onclick="loadUsers()"><i class="fas fa-sync fa-xs"></i> Refresh</button>
+        <!-- FIX: id-based binding -->
+        <button class="btn-refresh" id="btnRefresh"><i class="fas fa-sync fa-xs"></i> Refresh</button>
       </div>
       <div class="table-wrap">
         <table>
@@ -242,7 +265,8 @@
     <h3><i class="fas fa-trash" style="color:var(--danger);margin-right:.4rem"></i>Remove Customer</h3>
     <p id="delModalMsg">Are you sure you want to permanently remove this customer? This action cannot be undone.</p>
     <div class="modal-btns">
-      <button class="btn-cancel-modal" onclick="closeDelModal()">Cancel</button>
+      <!-- FIX: id-based binding -->
+      <button class="btn-cancel-modal" id="btnCancelDel">Cancel</button>
       <button class="btn-confirm-del" id="btnConfirmDel">Remove</button>
     </div>
   </div>
@@ -254,38 +278,61 @@
 (function(){
   'use strict';
 
-  // ── BASE URL ───────────────────────────────────────────────
   const BASE_URL = 'https://opatawebbackend.onrender.com';
+  const SESSION_KEY = 'esuos_admin_session';
+  const SESSION_TTL = 7*24*60*60*1000;
+  const $ = id => document.getElementById(id);
 
-  const SESSION_KEY='esuos_admin_session';
-  const SESSION_TTL=7*24*60*60*1000;
-  const $=id=>document.getElementById(id);
-  let searchType='all', pendingDeleteId=null, allUsers=[];
+  let searchType = 'all', pendingDeleteId = null, allUsers = [];
 
-  function loadSession(){try{const raw=localStorage.getItem(SESSION_KEY);if(!raw)return null;const d=JSON.parse(raw);if(Date.now()-(d.savedAt||0)>SESSION_TTL){localStorage.removeItem(SESSION_KEY);return null;}return d;}catch{return null;}}
-  const session=loadSession();
-  if(!session){location.href='adminLogin.html';return;}
-  const token=session.token;const admin=session.admin||{};
-  function authHeaders(){return token?{Authorization:'Bearer '+token}:{};}
-  function toast(ico,msg){const el=document.createElement('div');el.className='toast';el.innerHTML='<i class="'+ico+'"></i><span>'+msg+'</span>';$('tc').appendChild(el);setTimeout(()=>{el.classList.add('out');el.addEventListener('animationend',()=>el.remove(),{once:true});},3000);}
-  function fmtDate(str){if(!str)return'—';try{return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}catch{return str;}}
+  function loadSession(){
+    try{
+      const raw = localStorage.getItem(SESSION_KEY);
+      if(!raw) return null;
+      const d = JSON.parse(raw);
+      if(Date.now() - (d.savedAt||0) > SESSION_TTL){ localStorage.removeItem(SESSION_KEY); return null; }
+      return d;
+    }catch{ return null; }
+  }
+  const session = loadSession();
+  if(!session){ location.href = 'adminLogin.html'; return; }
+  const token = session.token;
+  const admin = session.admin || {};
 
-  const name=admin.name||admin.firstName||admin.email?.split('@')[0]||'Admin';
-  $('topAv').textContent=name.charAt(0).toUpperCase();
-  $('sAv').textContent=name.charAt(0).toUpperCase();
-  $('sName').textContent=name;
-  $('sShop').textContent=admin.shopName||'Beauty Empire';
+  function authHeaders(){ return token ? {Authorization:'Bearer '+token} : {}; }
 
+  function toast(ico, msg){
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.innerHTML = '<i class="'+ico+'"></i><span>'+msg+'</span>';
+    $('tc').appendChild(el);
+    setTimeout(()=>{ el.classList.add('out'); el.addEventListener('animationend',()=>el.remove(),{once:true}); }, 3000);
+  }
+
+  function fmtDate(str){
+    if(!str) return '—';
+    try{ return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); }
+    catch{ return str; }
+  }
+
+  const name = admin.name || admin.firstName || admin.email?.split('@')[0] || 'Admin';
+  $('topAv').textContent = name.charAt(0).toUpperCase();
+  $('sAv').textContent   = name.charAt(0).toUpperCase();
+  $('sName').textContent = name;
+  $('sShop').textContent = admin.shopName || 'Beauty Empire';
+
+  // ── RENDER ─────────────────────────────────────────────────
   function renderUsers(users){
-    allUsers=users;
-    const count=users.length;
-    $('countBadge').textContent=count;
-    $('totalCount').textContent=count;
+    allUsers = users;
+    const count = users.length;
+    $('countBadge').textContent = count;
+    $('totalCount').textContent = count;
     if(!count){
-      $('usersTbody').innerHTML='<tr><td colspan="4"><div class="empty-state"><i class="fas fa-users"></i>No customers found</div></td></tr>';
+      $('usersTbody').innerHTML = '<tr><td colspan="4"><div class="empty-state"><i class="fas fa-users"></i>No customers found</div></td></tr>';
       return;
     }
-    $('usersTbody').innerHTML=users.map(u=>`
+    // FIX: no inline onclick in table rows — use data attributes + event delegation
+    $('usersTbody').innerHTML = users.map(u => `
       <tr>
         <td>
           <div class="user-cell">
@@ -299,87 +346,150 @@
         <td>${u.email||'—'}</td>
         <td class="user-date">${fmtDate(u.createdAt)}</td>
         <td>
-          <button class="btn-del" onclick="openDelModal('${u.id}','${u.firstName||''} ${u.lastName||''}')">
+          <button class="btn-del"
+            data-del-id="${u.id}"
+            data-del-name="${(u.firstName||'')+' '+(u.lastName||'')}">
             <i class="fas fa-trash fa-xs"></i> Remove
           </button>
         </td>
       </tr>`).join('');
   }
 
-  window.loadUsers=async function(){
-    $('usersTbody').innerHTML='<tr><td colspan="4"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Loading…</div></td></tr>';
-    try{
-      const r=await fetch(BASE_URL + '/api/admin/users',{headers:authHeaders()});
-      const d=await r.json();
-      if(!r.ok) throw new Error();
-      const data=d.data||{};
-      renderUsers(data.users||data||[]);
-    }catch{
-      renderUsers([
-        {id:'user-uuid-001',firstName:'John',lastName:'Doe',email:'john.doe@example.com',createdAt:'2024-01-15T10:00:00Z'},
-        {id:'user-uuid-002',firstName:'Jane',lastName:'Smith',email:'jane.smith@example.com',createdAt:'2024-02-20T11:30:00Z'},
-        {id:'user-uuid-003',firstName:'Ama',lastName:'Asante',email:'ama@example.com',createdAt:'2024-03-05T09:00:00Z'},
-      ]);
-    }
-  };
-
-  window.setSearchType=function(type,btn){
-    searchType=type;
-    document.querySelectorAll('.stt').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    const ph={'all':'Search customers…','name':'Search by name…','email':'Search by email…'};
-    $('searchInput').placeholder=ph[type]||'Search…';
-  };
-
-  window.searchKey=function(e){if(e.key==='Enter')doSearch();};
-
-  window.doSearch=async function(){
-    const q=$('searchInput').value.trim();
-    if(!q||searchType==='all'){loadUsers();return;}
-    $('usersTbody').innerHTML='<tr><td colspan="4"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Searching…</div></td></tr>';
-    try{
-      const url=searchType==='email'
-        ? BASE_URL + '/api/admin/users/search/email?email='+encodeURIComponent(q)
-        : BASE_URL + '/api/admin/users/search/name?name='+encodeURIComponent(q);
-      const r=await fetch(url,{headers:authHeaders()});
-      const d=await r.json();
-      if(!r.ok) throw new Error();
-      renderUsers(d.data||[]);
-    }catch{
-      toast('fas fa-exclamation-circle','Search failed. Showing all users.');
-      loadUsers();
-    }
-  };
-
-  // Delete modal
-  window.openDelModal=function(id,uname){
-    pendingDeleteId=id;
-    $('delModalMsg').textContent='Are you sure you want to permanently remove '+uname.trim()+'? This action cannot be undone.';
-    $('delModal').classList.add('open');
-    $('btnConfirmDel').onclick=confirmDelete;
-  };
-  window.closeDelModal=function(){$('delModal').classList.remove('open');pendingDeleteId=null;};
-  async function confirmDelete(){
-    if(!pendingDeleteId)return;
-    const id=pendingDeleteId;closeDelModal();
-    try{
-      const r=await fetch(BASE_URL + '/api/admin/users/'+id,{method:'DELETE',headers:authHeaders()});
-      const d=await r.json();
-      if(!r.ok) throw new Error(d.message||'Failed');
-      toast('fas fa-check-circle','Customer removed successfully');
-      loadUsers();
-    }catch{
-      toast('fas fa-check-circle','Customer removed (demo)');
-      allUsers=allUsers.filter(u=>u.id!==id);renderUsers(allUsers);
-    }
+  // ── LOAD / SEARCH ──────────────────────────────────────────
+  function loadUsers(){
+    $('usersTbody').innerHTML = '<tr><td colspan="4"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Loading…</div></td></tr>';
+    fetch(BASE_URL + '/api/admin/users', {headers: authHeaders()})
+      .then(r => r.json().then(d => ({ok:r.ok, d})))
+      .then(({ok, d}) => {
+        if(!ok) throw new Error();
+        const data = d.data || {};
+        renderUsers(data.users || data || []);
+      })
+      .catch(() => {
+        renderUsers([
+          {id:'user-uuid-001',firstName:'John',lastName:'Doe',email:'john.doe@example.com',createdAt:'2024-01-15T10:00:00Z'},
+          {id:'user-uuid-002',firstName:'Jane',lastName:'Smith',email:'jane.smith@example.com',createdAt:'2024-02-20T11:30:00Z'},
+          {id:'user-uuid-003',firstName:'Ama',lastName:'Asante',email:'ama@example.com',createdAt:'2024-03-05T09:00:00Z'},
+        ]);
+      });
   }
 
-  // Hamburger
-  const ham=$('ham'),sidebar=$('sidebar'),overlay=$('sOverlay');
-  ham.addEventListener('click',()=>{const o=sidebar.classList.toggle('open');overlay.classList.toggle('active',o);ham.classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';});
-  overlay.addEventListener('click',()=>{sidebar.classList.remove('open');overlay.classList.remove('active');ham.classList.remove('open');document.body.style.overflow='';});
+  function doSearch(){
+    const q = $('searchInput').value.trim();
+    if(!q || searchType === 'all'){ loadUsers(); return; }
+    $('usersTbody').innerHTML = '<tr><td colspan="4"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Searching…</div></td></tr>';
+    const url = searchType === 'email'
+      ? BASE_URL + '/api/admin/users/search/email?email=' + encodeURIComponent(q)
+      : BASE_URL + '/api/admin/users/search/name?name='  + encodeURIComponent(q);
+    fetch(url, {headers: authHeaders()})
+      .then(r => r.json().then(d => ({ok:r.ok, d})))
+      .then(({ok, d}) => {
+        if(!ok) throw new Error();
+        renderUsers(d.data || []);
+      })
+      .catch(() => {
+        toast('fas fa-exclamation-circle', 'Search failed. Showing all users.');
+        loadUsers();
+      });
+  }
 
-  window.doLogout=function(){localStorage.removeItem(SESSION_KEY);toast('fas fa-sign-out-alt','Signed out…');setTimeout(()=>location.href='adminLogin.html',900);};
+  // ── DELETE MODAL ───────────────────────────────────────────
+  function openDelModal(id, uname){
+    pendingDeleteId = id;
+    $('delModalMsg').textContent = 'Are you sure you want to permanently remove ' + uname.trim() + '? This action cannot be undone.';
+    $('delModal').classList.add('open');
+  }
+  function closeDelModal(){
+    $('delModal').classList.remove('open');
+    pendingDeleteId = null;
+  }
+  function confirmDelete(){
+    if(!pendingDeleteId) return;
+    const id = pendingDeleteId;
+    closeDelModal();
+    fetch(BASE_URL + '/api/admin/users/' + id, {method:'DELETE', headers: authHeaders()})
+      .then(r => r.json().then(d => ({ok:r.ok, d})))
+      .then(({ok, d}) => {
+        if(!ok) throw new Error(d.message || 'Failed');
+        toast('fas fa-check-circle', 'Customer removed successfully');
+        loadUsers();
+      })
+      .catch(() => {
+        toast('fas fa-check-circle', 'Customer removed (demo)');
+        allUsers = allUsers.filter(u => u.id !== id);
+        renderUsers(allUsers);
+      });
+  }
+
+  // ── EVENT BINDINGS (all via addEventListener) ──────────────
+
+  // Search button
+  $('btnSearch').addEventListener('click', doSearch);
+
+  // Search input — Enter key
+  $('searchInput').addEventListener('keydown', e => { if(e.key === 'Enter') doSearch(); });
+
+  // Search type tabs — delegated
+  document.querySelectorAll('.stt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      searchType = btn.dataset.type;
+      document.querySelectorAll('.stt').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const ph = {all:'Search customers…', name:'Search by name…', email:'Search by email…'};
+      $('searchInput').placeholder = ph[searchType] || 'Search…';
+    });
+  });
+
+  // Refresh button
+  $('btnRefresh').addEventListener('click', loadUsers);
+
+  // FIX: delete buttons — event delegation on tbody so dynamically rendered rows work
+  $('usersTbody').addEventListener('click', e => {
+    const btn = e.target.closest('[data-del-id]');
+    if(!btn) return;
+    openDelModal(btn.dataset.delId, btn.dataset.delName);
+  });
+
+  // Modal buttons
+  $('btnCancelDel').addEventListener('click', closeDelModal);
+  $('btnConfirmDel').addEventListener('click', confirmDelete);
+
+  // Close modal on overlay click
+  $('delModal').addEventListener('click', e => {
+    if(e.target === $('delModal')) closeDelModal();
+  });
+
+  // Sidebar logout
+  $('sidebarLogoutBtn').addEventListener('click', () => {
+    localStorage.removeItem(SESSION_KEY);
+    toast('fas fa-sign-out-alt', 'Signed out…');
+    setTimeout(() => location.href = 'adminLogin.html', 900);
+  });
+
+  // Hamburger
+  const ham     = $('ham');
+  const sidebar = $('sidebar');
+  const overlay = $('sOverlay');
+
+  function closeSidebar(){
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
+    ham.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  ham.addEventListener('click', () => {
+    const o = sidebar.classList.toggle('open');
+    overlay.classList.toggle('active', o);
+    ham.classList.toggle('open', o);
+    document.body.style.overflow = o ? 'hidden' : '';
+  });
+  overlay.addEventListener('click', closeSidebar);
+
+  // Close sidebar when nav link tapped on mobile
+  sidebar.querySelectorAll('.snav a').forEach(link => {
+    link.addEventListener('click', () => { if(window.innerWidth <= 860) closeSidebar(); });
+  });
 
   loadUsers();
 })();
