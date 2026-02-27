@@ -117,7 +117,7 @@
     /* MODALS */
     .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;display:flex;align-items:flex-start;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .22s;overflow-y:auto}
     .modal-overlay.open{opacity:1;pointer-events:all}
-    .modal{background:var(--white);border-radius:var(--r-lg);padding:clamp(1.2rem,4vw,1.8rem);max-width:540px;width:100%;box-shadow:var(--sh-lg);transform:scale(.95);transition:transform .22s var(--spring);margin:auto}
+    .modal{background:var(--white);border-radius:var(--r-lg);padding:clamp(1.2rem,4vw,1.8rem);max-width:580px;width:100%;box-shadow:var(--sh-lg);transform:scale(.95);transition:transform .22s var(--spring);margin:auto}
     .modal-overlay.open .modal{transform:scale(1)}
     .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
     .modal-head h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,3vw,1.15rem);font-weight:700}
@@ -141,6 +141,13 @@
     .btn-save{padding:.6rem 1.3rem;background:var(--gold);color:white;border:none;border-radius:var(--r-xl);font-size:.84rem;font-weight:700;cursor:pointer;transition:opacity .16s;min-height:40px;-webkit-tap-highlight-color:transparent}
     .btn-save:hover{opacity:.85}
     .btn-save:disabled{opacity:.55;cursor:not-allowed}
+
+    /* MULTI-SELECT CHECKBOXES */
+    .multi-check-grid{display:flex;flex-wrap:wrap;gap:.3rem;padding:.55rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-sm);max-height:140px;overflow-y:auto}
+    .mc-item{display:inline-flex;align-items:center;gap:.28rem;font-size:.76rem;font-weight:500;color:var(--muted);padding:.22rem .55rem;border-radius:var(--r-xl);border:1.5px solid var(--border);background:var(--white);cursor:pointer;transition:all .14s;white-space:nowrap;user-select:none}
+    .mc-item:hover{border-color:var(--gold-light);color:var(--gold)}
+    .mc-item input[type=checkbox]{display:none}
+    .mc-item.checked{background:rgba(168,133,78,.1);border-color:var(--gold);color:var(--gold);font-weight:600}
 
     /* IMAGE UPLOAD AREA */
     .upload-area{border:2px dashed var(--border);border-radius:var(--r-md);padding:1.1rem;text-align:center;cursor:pointer;transition:border-color .18s,background .18s;position:relative;background:var(--parchment)}
@@ -272,20 +279,134 @@
 
     <!-- CLOTHING FIELDS -->
     <div id="clothingFields">
-      <div class="frow2">
-        <div class="fg"><label class="fl">Sizes (comma-sep)</label><input class="fi" type="text" id="mSizes" placeholder="XS,S,M,L,XL"></div>
-        <div class="fg"><label class="fl">Colors (comma-sep)</label><input class="fi" type="text" id="mColors" placeholder="BLACK,WHITE,RED"></div>
+      <!-- SIZES -->
+      <div class="fg">
+        <label class="fl">Sizes</label>
+        <div class="multi-check-grid" id="mSizesGrid">
+          <label class="mc-item" data-val="XS"><input type="checkbox" value="XS"> XS</label>
+          <label class="mc-item" data-val="S"><input type="checkbox" value="S"> S</label>
+          <label class="mc-item" data-val="M"><input type="checkbox" value="M"> M</label>
+          <label class="mc-item" data-val="L"><input type="checkbox" value="L"> L</label>
+          <label class="mc-item" data-val="XL"><input type="checkbox" value="XL"> XL</label>
+          <label class="mc-item" data-val="XXL"><input type="checkbox" value="XXL"> XXL</label>
+          <label class="mc-item" data-val="XXXL"><input type="checkbox" value="XXXL"> XXXL</label>
+          <label class="mc-item" data-val="ONE_SIZE"><input type="checkbox" value="ONE_SIZE"> One Size</label>
+        </div>
       </div>
+
+      <!-- COLORS -->
+      <div class="fg">
+        <label class="fl">Colors</label>
+        <div class="multi-check-grid" id="mColorsGrid">
+          <label class="mc-item" data-val="BLACK"><input type="checkbox" value="BLACK"> Black</label>
+          <label class="mc-item" data-val="WHITE"><input type="checkbox" value="WHITE"> White</label>
+          <label class="mc-item" data-val="GREY"><input type="checkbox" value="GREY"> Grey</label>
+          <label class="mc-item" data-val="BEIGE"><input type="checkbox" value="BEIGE"> Beige</label>
+          <label class="mc-item" data-val="CREAM"><input type="checkbox" value="CREAM"> Cream</label>
+          <label class="mc-item" data-val="BROWN"><input type="checkbox" value="BROWN"> Brown</label>
+          <label class="mc-item" data-val="RED"><input type="checkbox" value="RED"> Red</label>
+          <label class="mc-item" data-val="CORAL"><input type="checkbox" value="CORAL"> Coral</label>
+          <label class="mc-item" data-val="ORANGE"><input type="checkbox" value="ORANGE"> Orange</label>
+          <label class="mc-item" data-val="YELLOW"><input type="checkbox" value="YELLOW"> Yellow</label>
+          <label class="mc-item" data-val="GOLD"><input type="checkbox" value="GOLD"> Gold</label>
+          <label class="mc-item" data-val="BLUE"><input type="checkbox" value="BLUE"> Blue</label>
+          <label class="mc-item" data-val="NAVY"><input type="checkbox" value="NAVY"> Navy</label>
+          <label class="mc-item" data-val="ROYAL_BLUE"><input type="checkbox" value="ROYAL_BLUE"> Royal Blue</label>
+          <label class="mc-item" data-val="SKY_BLUE"><input type="checkbox" value="SKY_BLUE"> Sky Blue</label>
+          <label class="mc-item" data-val="TEAL"><input type="checkbox" value="TEAL"> Teal</label>
+          <label class="mc-item" data-val="TURQUOISE"><input type="checkbox" value="TURQUOISE"> Turquoise</label>
+          <label class="mc-item" data-val="GREEN"><input type="checkbox" value="GREEN"> Green</label>
+          <label class="mc-item" data-val="OLIVE"><input type="checkbox" value="OLIVE"> Olive</label>
+          <label class="mc-item" data-val="MINT"><input type="checkbox" value="MINT"> Mint</label>
+          <label class="mc-item" data-val="FOREST_GREEN"><input type="checkbox" value="FOREST_GREEN"> Forest Green</label>
+          <label class="mc-item" data-val="PINK"><input type="checkbox" value="PINK"> Pink</label>
+          <label class="mc-item" data-val="HOT_PINK"><input type="checkbox" value="HOT_PINK"> Hot Pink</label>
+          <label class="mc-item" data-val="LAVENDER"><input type="checkbox" value="LAVENDER"> Lavender</label>
+          <label class="mc-item" data-val="PURPLE"><input type="checkbox" value="PURPLE"> Purple</label>
+          <label class="mc-item" data-val="BURGUNDY"><input type="checkbox" value="BURGUNDY"> Burgundy</label>
+          <label class="mc-item" data-val="MAROON"><input type="checkbox" value="MAROON"> Maroon</label>
+          <label class="mc-item" data-val="MULTICOLOR"><input type="checkbox" value="MULTICOLOR"> Multicolor</label>
+          <label class="mc-item" data-val="PRINTED"><input type="checkbox" value="PRINTED"> Printed</label>
+          <label class="mc-item" data-val="STRIPED"><input type="checkbox" value="STRIPED"> Striped</label>
+          <label class="mc-item" data-val="CHECKERED"><input type="checkbox" value="CHECKERED"> Checkered</label>
+          <label class="mc-item" data-val="FLORAL"><input type="checkbox" value="FLORAL"> Floral</label>
+        </div>
+      </div>
+
       <div class="frow2">
         <div class="fg"><label class="fl">Material</label><input class="fi" type="text" id="mMaterial" placeholder="e.g. Cotton, Satin"></div>
         <div class="fg"><label class="fl">Style</label><input class="fi" type="text" id="mStyle" placeholder="e.g. Casual, Formal"></div>
       </div>
-      <div class="fg"><label class="fl">Sub-Category</label>
+
+      <!-- SUB-CATEGORY -->
+      <div class="fg">
+        <label class="fl">Sub-Category</label>
         <select class="fi" id="mSubCategory">
           <option value="">— Select —</option>
-          <option>TOPS</option><option>BOTTOMS</option><option>DRESSES</option>
-          <option>OUTERWEAR</option><option>FOOTWEAR</option><option>ACCESSORIES</option>
-          <option>SWIMWEAR</option><option>ACTIVEWEAR</option><option>UNDERWEAR</option><option>OTHER</option>
+          <optgroup label="Tops">
+            <option value="T_SHIRT">T-Shirt</option>
+            <option value="BLOUSE">Blouse</option>
+            <option value="SHIRT">Shirt</option>
+            <option value="CROP_TOP">Crop Top</option>
+            <option value="TANK_TOP">Tank Top</option>
+            <option value="POLO_SHIRT">Polo Shirt</option>
+            <option value="SWEATER">Sweater</option>
+            <option value="HOODIE">Hoodie</option>
+            <option value="CARDIGAN">Cardigan</option>
+          </optgroup>
+          <optgroup label="Bottoms">
+            <option value="JEANS">Jeans</option>
+            <option value="TROUSERS">Trousers</option>
+            <option value="SHORTS">Shorts</option>
+            <option value="SKIRT">Skirt</option>
+            <option value="LEGGINGS">Leggings</option>
+            <option value="JOGGERS">Joggers</option>
+            <option value="CULOTTES">Culottes</option>
+          </optgroup>
+          <optgroup label="Dresses &amp; Jumpsuits">
+            <option value="DRESS">Dress</option>
+            <option value="MAXI_DRESS">Maxi Dress</option>
+            <option value="MIDI_DRESS">Midi Dress</option>
+            <option value="MINI_DRESS">Mini Dress</option>
+            <option value="JUMPSUIT">Jumpsuit</option>
+            <option value="ROMPER">Romper</option>
+          </optgroup>
+          <optgroup label="Outerwear">
+            <option value="JACKET">Jacket</option>
+            <option value="COAT">Coat</option>
+            <option value="BLAZER">Blazer</option>
+            <option value="WINDBREAKER">Windbreaker</option>
+            <option value="PUFFER_JACKET">Puffer Jacket</option>
+            <option value="TRENCH_COAT">Trench Coat</option>
+          </optgroup>
+          <optgroup label="Traditional / Cultural Wear">
+            <option value="KAFTAN">Kaftan</option>
+            <option value="DASHIKI">Dashiki</option>
+            <option value="ANKARA_DRESS">Ankara Dress</option>
+            <option value="ANKARA_SET">Ankara Set</option>
+            <option value="AGBADA">Agbada</option>
+            <option value="BOUBOU">Boubou</option>
+          </optgroup>
+          <optgroup label="Activewear">
+            <option value="SPORTS_BRA">Sports Bra</option>
+            <option value="YOGA_PANTS">Yoga Pants</option>
+            <option value="TRACKSUIT">Tracksuit</option>
+            <option value="GYM_SHORTS">Gym Shorts</option>
+          </optgroup>
+          <optgroup label="Accessories">
+            <option value="BELT">Belt</option>
+            <option value="SCARF">Scarf</option>
+            <option value="HAT">Hat</option>
+            <option value="CAP">Cap</option>
+            <option value="SOCKS">Socks</option>
+            <option value="GLOVES">Gloves</option>
+          </optgroup>
+          <optgroup label="Underwear &amp; Loungewear">
+            <option value="UNDERWEAR">Underwear</option>
+            <option value="PYJAMAS">Pyjamas</option>
+            <option value="LINGERIE">Lingerie</option>
+            <option value="ROBE">Robe</option>
+          </optgroup>
         </select>
       </div>
     </div>
@@ -301,7 +422,7 @@
 
     <div class="fg"><label class="fl">Description</label><textarea class="fi" id="mDesc" rows="2" placeholder="Product description…" style="resize:vertical"></textarea></div>
 
-    <!-- ── IMAGE UPLOAD (replaces URL field) ── -->
+    <!-- IMAGE UPLOAD -->
     <div class="fg">
       <label class="fl">Product Images</label>
       <div class="upload-area" id="uploadArea">
@@ -343,9 +464,7 @@
 (function(){
   'use strict';
 
-  // ── BASE URL ──────────────────────────────────────────────
   const BASE_URL = 'https://opatawebbackend.onrender.com';
-
   const SESSION_KEY = 'esuos_admin_session';
   const SESSION_TTL = 7 * 24 * 60 * 60 * 1000;
   const $ = id => document.getElementById(id);
@@ -353,7 +472,7 @@
   let currentType = 'clothing';
   let products    = [];
   let pendingStock = { id: null, type: null };
-  let selectedFiles = [];   // tracks chosen image Files
+  let selectedFiles = [];
 
   /* ── SESSION ─────────────────────────────────────────────── */
   function loadSession(){
@@ -386,6 +505,28 @@
   $('sName').textContent = name;
   $('sShop').textContent = admin.shopName || 'Beauty Empire';
 
+  /* ── MULTI-SELECT CHIP TOGGLE ────────────────────────────── */
+  document.querySelectorAll('.multi-check-grid').forEach(grid => {
+    grid.querySelectorAll('.mc-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const cb = item.querySelector('input[type=checkbox]');
+        cb.checked = !cb.checked;
+        item.classList.toggle('checked', cb.checked);
+      });
+    });
+  });
+
+  function getCheckedValues(gridId){
+    return Array.from($(`${gridId}`).querySelectorAll('input[type=checkbox]:checked')).map(cb => cb.value);
+  }
+
+  function clearChecks(gridId){
+    $(`${gridId}`).querySelectorAll('.mc-item').forEach(item => {
+      item.querySelector('input').checked = false;
+      item.classList.remove('checked');
+    });
+  }
+
   /* ── TYPE TABS ───────────────────────────────────────────── */
   window.switchType = function(t){
     currentType = t;
@@ -401,13 +542,11 @@
   /* ── IMAGE FILE HANDLING ─────────────────────────────────── */
   window.handleFileSelect = function(input){
     const newFiles = Array.from(input.files);
-    // merge, avoid duplicates by name+size
     newFiles.forEach(f => {
       if(!selectedFiles.find(x => x.name === f.name && x.size === f.size)){
         selectedFiles.push(f);
       }
     });
-    // reset the input so same file can be re-added after removal
     input.value = '';
     renderPreviews();
   };
@@ -433,7 +572,6 @@
     renderPreviews();
   };
 
-  // drag-and-drop helpers
   const uploadArea = $('uploadArea');
   uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('drag'); });
   uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag'));
@@ -480,10 +618,10 @@
     const filter = $('filterAvail').value;
     const search = $('searchInput').value.trim();
     let url;
-    if(search)              url = BASE_URL + `/api/admin/products/${currentType}/search/keyword?keyword=${encodeURIComponent(search)}`;
+    if(search)                       url = BASE_URL + `/api/admin/products/${currentType}/search/keyword?keyword=${encodeURIComponent(search)}`;
     else if(filter === 'available')  url = BASE_URL + `/api/admin/products/${currentType}/available`;
     else if(filter === 'discounted') url = BASE_URL + `/api/admin/products/${currentType}/discounted`;
-    else                    url = BASE_URL + `/api/admin/products/${currentType}`;
+    else                             url = BASE_URL + `/api/admin/products/${currentType}`;
     try{
       const r = await fetch(url, { headers: authHeaders() });
       const d = await r.json();
@@ -567,6 +705,8 @@
     $('mOk').classList.remove('show');
     selectedFiles = [];
     renderPreviews();
+    clearChecks('mSizesGrid');
+    clearChecks('mColorsGrid');
     $('addModal').classList.add('open');
   };
   window.closeAddModal = function(){
@@ -589,7 +729,6 @@
       return;
     }
 
-    // Build product JSON matching backend DTO
     const body = {
       name:        n,
       price:       parseFloat(pr),
@@ -602,15 +741,15 @@
     };
 
     if(currentType === 'clothing'){
-      const s   = $('mSizes').value.trim();
-      const c   = $('mColors').value.trim();
-      const m   = $('mMaterial').value.trim();
-      const sty = $('mStyle').value.trim();
-      const sub = $('mSubCategory').value;
-      if(s)   body.availableSizes  = s.split(',').map(x => x.trim().toUpperCase()).filter(Boolean);
-      if(c)   body.availableColors = c.split(',').map(x => x.trim().toUpperCase()).filter(Boolean);
-      if(m)   body.material   = m;
-      if(sty) body.style      = sty;
+      const sizes  = getCheckedValues('mSizesGrid');
+      const colors = getCheckedValues('mColorsGrid');
+      const m      = $('mMaterial').value.trim();
+      const sty    = $('mStyle').value.trim();
+      const sub    = $('mSubCategory').value;
+      if(sizes.length)  body.availableSizes  = sizes;
+      if(colors.length) body.availableColors = colors;
+      if(m)   body.material    = m;
+      if(sty) body.style       = sty;
       if(sub) body.subCategory = sub;
     } else {
       const t   = $('mTags').value.trim();
@@ -626,20 +765,13 @@
     btn.innerHTML = '<i class="fas fa-spinner fa-spin fa-xs"></i> Uploading…';
 
     try{
-      // Build multipart/form-data
-      // Part 1: product JSON blob  → field name "product"
-      // Part 2+: image files       → field name "images"
       const formData = new FormData();
       formData.append('product', new Blob([JSON.stringify(body)], { type: 'application/json' }));
-
-      selectedFiles.forEach(f => {
-        formData.append('images', f, f.name);
-      });
+      selectedFiles.forEach(f => { formData.append('images', f, f.name); });
 
       const r = await fetch(BASE_URL + `/api/admin/products/${currentType}`, {
         method: 'POST',
         headers: { ...(token ? { Authorization: 'Bearer ' + token } : {}) },
-        // ⚠️  Do NOT set Content-Type — browser sets it automatically with boundary
         body: formData
       });
       const d = await r.json();
@@ -650,7 +782,6 @@
       toast('fas fa-plus-circle', 'Product "' + n + '" added!');
       setTimeout(() => { closeAddModal(); loadProducts(); }, 1000);
     }catch(err){
-      // Show the real error if available, else demo fallback
       const msg = err.message && err.message !== 'Failed to fetch' ? err.message : null;
       if(msg){
         $('mErr').textContent = msg;
