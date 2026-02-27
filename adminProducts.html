@@ -115,9 +115,9 @@
     .btn-del-p{border-color:rgba(192,57,43,.25);color:var(--danger)}.btn-del-p:hover{background:rgba(192,57,43,.07)}
 
     /* MODALS */
-    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .22s;overflow-y:auto}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;display:flex;align-items:flex-start;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .22s;overflow-y:auto}
     .modal-overlay.open{opacity:1;pointer-events:all}
-    .modal{background:var(--white);border-radius:var(--r-lg);padding:clamp(1.2rem,4vw,1.8rem);max-width:520px;width:100%;box-shadow:var(--sh-lg);transform:scale(.95);transition:transform .22s var(--spring);margin:auto}
+    .modal{background:var(--white);border-radius:var(--r-lg);padding:clamp(1.2rem,4vw,1.8rem);max-width:540px;width:100%;box-shadow:var(--sh-lg);transform:scale(.95);transition:transform .22s var(--spring);margin:auto}
     .modal-overlay.open .modal{transform:scale(1)}
     .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
     .modal-head h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,3vw,1.15rem);font-weight:700}
@@ -141,6 +141,19 @@
     .btn-save{padding:.6rem 1.3rem;background:var(--gold);color:white;border:none;border-radius:var(--r-xl);font-size:.84rem;font-weight:700;cursor:pointer;transition:opacity .16s;min-height:40px;-webkit-tap-highlight-color:transparent}
     .btn-save:hover{opacity:.85}
     .btn-save:disabled{opacity:.55;cursor:not-allowed}
+
+    /* IMAGE UPLOAD AREA */
+    .upload-area{border:2px dashed var(--border);border-radius:var(--r-md);padding:1.1rem;text-align:center;cursor:pointer;transition:border-color .18s,background .18s;position:relative;background:var(--parchment)}
+    .upload-area:hover,.upload-area.drag{border-color:var(--gold);background:rgba(168,133,78,.04)}
+    .upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+    .upload-area-icon{font-size:1.6rem;color:var(--warm-mid);margin-bottom:.35rem}
+    .upload-area-text{font-size:.8rem;color:var(--muted);line-height:1.4}
+    .upload-area-text strong{color:var(--gold)}
+    .img-preview-strip{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.6rem}
+    .img-preview-item{position:relative;width:64px;height:64px;border-radius:var(--r-sm);overflow:hidden;border:1.5px solid var(--border);flex-shrink:0}
+    .img-preview-item img{width:100%;height:100%;object-fit:cover}
+    .img-preview-item .rm-img{position:absolute;top:2px;right:2px;width:18px;height:18px;background:rgba(192,57,43,.85);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.5rem;color:white;cursor:pointer;border:none;line-height:1}
+    .img-count{font-size:.72rem;color:var(--subtle);margin-top:.35rem}
 
     .empty-state{text-align:center;padding:3rem 1rem;color:var(--subtle);font-size:.84rem}
     .empty-state i{display:block;font-size:2.5rem;margin-bottom:.7rem;color:var(--sand)}
@@ -245,6 +258,7 @@
     </div>
     <div class="ferr" id="mErr"></div>
     <div class="fok" id="mOk"></div>
+
     <div class="fg"><label class="fl">Product Name *</label><input class="fi" type="text" id="mName" placeholder="e.g. Classic Wrap Dress"></div>
     <div class="frow2">
       <div class="fg"><label class="fl">Price (GHS) *</label><input class="fi" type="number" id="mPrice" placeholder="0.00" min="0" step="0.01" inputmode="decimal"></div>
@@ -253,20 +267,52 @@
     <div class="fg"><label class="fl">Category *</label><input class="fi" type="text" id="mCategory" placeholder="e.g. Tops, Dresses, Skincare"></div>
     <div class="frow2">
       <div class="fg"><label class="fl">Brand</label><input class="fi" type="text" id="mBrand" placeholder="e.g. Esuo Atelier"></div>
-      <div class="fg"><label class="fl">Original Price</label><input class="fi" type="number" id="mOriginal" placeholder="0.00" min="0" step="0.01" inputmode="decimal"></div>
+      <div class="fg"><label class="fl">Discount %</label><input class="fi" type="number" id="mDiscount" placeholder="0" min="0" max="100" step="0.01" inputmode="decimal"></div>
     </div>
+
+    <!-- CLOTHING FIELDS -->
     <div id="clothingFields">
       <div class="frow2">
         <div class="fg"><label class="fl">Sizes (comma-sep)</label><input class="fi" type="text" id="mSizes" placeholder="XS,S,M,L,XL"></div>
         <div class="fg"><label class="fl">Colors (comma-sep)</label><input class="fi" type="text" id="mColors" placeholder="BLACK,WHITE,RED"></div>
       </div>
-      <div class="fg"><label class="fl">Material</label><input class="fi" type="text" id="mMaterial" placeholder="e.g. Cotton, Satin"></div>
+      <div class="frow2">
+        <div class="fg"><label class="fl">Material</label><input class="fi" type="text" id="mMaterial" placeholder="e.g. Cotton, Satin"></div>
+        <div class="fg"><label class="fl">Style</label><input class="fi" type="text" id="mStyle" placeholder="e.g. Casual, Formal"></div>
+      </div>
+      <div class="fg"><label class="fl">Sub-Category</label>
+        <select class="fi" id="mSubCategory">
+          <option value="">— Select —</option>
+          <option>TOPS</option><option>BOTTOMS</option><option>DRESSES</option>
+          <option>OUTERWEAR</option><option>FOOTWEAR</option><option>ACCESSORIES</option>
+          <option>SWIMWEAR</option><option>ACTIVEWEAR</option><option>UNDERWEAR</option><option>OTHER</option>
+        </select>
+      </div>
     </div>
+
+    <!-- GENERAL FIELDS -->
     <div id="generalFields" style="display:none">
       <div class="fg"><label class="fl">Tags (comma-sep)</label><input class="fi" type="text" id="mTags" placeholder="Skincare,Anti-Aging"></div>
+      <div class="frow2">
+        <div class="fg"><label class="fl">SKU</label><input class="fi" type="text" id="mSku" placeholder="SKU-001"></div>
+        <div class="fg"><label class="fl">Unit</label><input class="fi" type="text" id="mUnit" placeholder="pcs / ml / g"></div>
+      </div>
     </div>
+
     <div class="fg"><label class="fl">Description</label><textarea class="fi" id="mDesc" rows="2" placeholder="Product description…" style="resize:vertical"></textarea></div>
-    <div class="fg"><label class="fl">Image URL (optional)</label><input class="fi" type="url" id="mImgUrl" placeholder="https://…" inputmode="url"></div>
+
+    <!-- ── IMAGE UPLOAD (replaces URL field) ── -->
+    <div class="fg">
+      <label class="fl">Product Images</label>
+      <div class="upload-area" id="uploadArea">
+        <input type="file" id="mImages" accept="image/*" multiple onchange="handleFileSelect(this)">
+        <div class="upload-area-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+        <div class="upload-area-text"><strong>Click to upload</strong> or drag &amp; drop<br>JPG, PNG, WEBP — multiple allowed</div>
+      </div>
+      <div class="img-preview-strip" id="imgPreviewStrip"></div>
+      <div class="img-count" id="imgCount"></div>
+    </div>
+
     <div class="modal-btns">
       <button class="btn-cancel-modal" onclick="closeAddModal()">Cancel</button>
       <button class="btn-save" id="btnSave" onclick="saveProduct()"><i class="fas fa-check fa-xs"></i> Save Product</button>
@@ -296,169 +342,352 @@
 <script>
 (function(){
   'use strict';
-  const API_BASE = 'https://opatawebbackend.onrender.com';
-  const SESSION_KEY='esuos_admin_session';
-  const SESSION_TTL=7*24*60*60*1000;
-  const $=id=>document.getElementById(id);
-  let currentType='clothing', products=[], pendingStock={id:null,type:null};
 
-  function loadSession(){try{const raw=localStorage.getItem(SESSION_KEY);if(!raw)return null;const d=JSON.parse(raw);if(Date.now()-(d.savedAt||0)>SESSION_TTL){localStorage.removeItem(SESSION_KEY);return null;}return d;}catch{return null;}}
-  const session=loadSession();
-  if(!session){location.href='adminLogin.html';return;}
-  const token=session.token;const admin=session.admin||{};
-  function authHeaders(){return token?{Authorization:'Bearer '+token}:{};}
-  function toast(ico,msg){const el=document.createElement('div');el.className='toast';el.innerHTML='<i class="'+ico+'"></i><span>'+msg+'</span>';$('tc').appendChild(el);setTimeout(()=>{el.classList.add('out');el.addEventListener('animationend',()=>el.remove(),{once:true});},3000);}
+  // ── BASE URL ──────────────────────────────────────────────
+  const BASE_URL = 'https://opatawebbackend.onrender.com';
 
-  const name=admin.name||admin.firstName||admin.email?.split('@')[0]||'Admin';
-  $('topAv').textContent=name.charAt(0).toUpperCase();
-  $('sAv').textContent=name.charAt(0).toUpperCase();
-  $('sName').textContent=name;
-  $('sShop').textContent=admin.shopName||'Beauty Empire';
+  const SESSION_KEY = 'esuos_admin_session';
+  const SESSION_TTL = 7 * 24 * 60 * 60 * 1000;
+  const $ = id => document.getElementById(id);
 
-  window.switchType=function(t){
-    currentType=t;
-    $('tabClothing').classList.toggle('active',t==='clothing');
-    $('tabGeneral').classList.toggle('active',t==='general');
-    $('modalTitle').textContent=t==='clothing'?'Add Clothing Product':'Add General Product';
-    $('clothingFields').style.display=t==='clothing'?'':'none';
-    $('generalFields').style.display=t==='general'?'':'none';
-    $('searchInput').placeholder='Search '+t+' products…';
+  let currentType = 'clothing';
+  let products    = [];
+  let pendingStock = { id: null, type: null };
+  let selectedFiles = [];   // tracks chosen image Files
+
+  /* ── SESSION ─────────────────────────────────────────────── */
+  function loadSession(){
+    try{
+      const raw = localStorage.getItem(SESSION_KEY);
+      if(!raw) return null;
+      const d = JSON.parse(raw);
+      if(Date.now() - (d.savedAt || 0) > SESSION_TTL){ localStorage.removeItem(SESSION_KEY); return null; }
+      return d;
+    }catch{ return null; }
+  }
+  const session = loadSession();
+  if(!session){ location.href = 'adminLogin.html'; return; }
+  const token = session.token;
+  const admin  = session.admin || {};
+  function authHeaders(){ return token ? { Authorization: 'Bearer ' + token } : {}; }
+
+  function toast(ico, msg){
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.innerHTML = '<i class="' + ico + '"></i><span>' + msg + '</span>';
+    $('tc').appendChild(el);
+    setTimeout(() => { el.classList.add('out'); el.addEventListener('animationend', () => el.remove(), { once: true }); }, 3500);
+  }
+
+  /* ── SIDEBAR IDENTITY ────────────────────────────────────── */
+  const name = admin.name || admin.firstName || admin.email?.split('@')[0] || 'Admin';
+  $('topAv').textContent = name.charAt(0).toUpperCase();
+  $('sAv').textContent   = name.charAt(0).toUpperCase();
+  $('sName').textContent = name;
+  $('sShop').textContent = admin.shopName || 'Beauty Empire';
+
+  /* ── TYPE TABS ───────────────────────────────────────────── */
+  window.switchType = function(t){
+    currentType = t;
+    $('tabClothing').classList.toggle('active', t === 'clothing');
+    $('tabGeneral').classList.toggle('active',  t === 'general');
+    $('modalTitle').textContent        = t === 'clothing' ? 'Add Clothing Product' : 'Add General Product';
+    $('clothingFields').style.display  = t === 'clothing' ? '' : 'none';
+    $('generalFields').style.display   = t === 'general'  ? '' : 'none';
+    $('searchInput').placeholder       = 'Search ' + t + ' products…';
     loadProducts();
   };
 
-  function renderProductCard(p,type){
-    const img=p.imageUrl||(p.imageUrls&&p.imageUrls[0])||null;
-    const imgHtml=img?`<img src="${img}" alt="${p.name}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`:'' ;
-    const iconHtml=`<div class="pc-img-icon" ${img?'style="display:none"':''}><i class="fas fa-${type==='clothing'?'shirt':'box'}"></i></div>`;
-    const available=(p.stock>0)&&p.available!==false;
-    return`<div class="product-card" id="pcard-${type}-${p.id}">
-      <div class="pc-img">${imgHtml}${iconHtml}<span class="pc-avail ${available?'avail':'unavail'}">${available?'Available':'Unavailable'}</span></div>
+  /* ── IMAGE FILE HANDLING ─────────────────────────────────── */
+  window.handleFileSelect = function(input){
+    const newFiles = Array.from(input.files);
+    // merge, avoid duplicates by name+size
+    newFiles.forEach(f => {
+      if(!selectedFiles.find(x => x.name === f.name && x.size === f.size)){
+        selectedFiles.push(f);
+      }
+    });
+    // reset the input so same file can be re-added after removal
+    input.value = '';
+    renderPreviews();
+  };
+
+  function renderPreviews(){
+    const strip = $('imgPreviewStrip');
+    const count = $('imgCount');
+    strip.innerHTML = '';
+    selectedFiles.forEach((f, i) => {
+      const url = URL.createObjectURL(f);
+      const item = document.createElement('div');
+      item.className = 'img-preview-item';
+      item.innerHTML = `<img src="${url}" alt="${f.name}"><button class="rm-img" onclick="removeFile(${i})" title="Remove"><i class="fas fa-times"></i></button>`;
+      strip.appendChild(item);
+    });
+    count.textContent = selectedFiles.length
+      ? selectedFiles.length + ' image' + (selectedFiles.length > 1 ? 's' : '') + ' selected'
+      : '';
+  }
+
+  window.removeFile = function(idx){
+    selectedFiles.splice(idx, 1);
+    renderPreviews();
+  };
+
+  // drag-and-drop helpers
+  const uploadArea = $('uploadArea');
+  uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('drag'); });
+  uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag'));
+  uploadArea.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadArea.classList.remove('drag');
+    const dt = e.dataTransfer;
+    if(dt && dt.files.length){
+      Array.from(dt.files).forEach(f => {
+        if(f.type.startsWith('image/') && !selectedFiles.find(x => x.name === f.name && x.size === f.size)){
+          selectedFiles.push(f);
+        }
+      });
+      renderPreviews();
+    }
+  });
+
+  /* ── PRODUCT GRID ────────────────────────────────────────── */
+  function renderProductCard(p, type){
+    const img = p.imageUrl || (p.imageUrls && p.imageUrls[0]) || null;
+    const imgHtml  = img ? `<img src="${img}" alt="${p.name}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">` : '';
+    const iconHtml = `<div class="pc-img-icon" ${img ? 'style="display:none"' : ''}><i class="fas fa-${type === 'clothing' ? 'shirt' : 'box'}"></i></div>`;
+    const available = (p.stock > 0) && p.available !== false;
+    return `<div class="product-card" id="pcard-${type}-${p.id}">
+      <div class="pc-img">${imgHtml}${iconHtml}<span class="pc-avail ${available ? 'avail' : 'unavail'}">${available ? 'Available' : 'Unavailable'}</span></div>
       <div class="pc-body">
-        <div class="pc-cat">${p.category||'—'}</div>
+        <div class="pc-cat">${p.category || '—'}</div>
         <div class="pc-name" title="${p.name}">${p.name}</div>
-        <div class="pc-brand">${p.brand||'—'}</div>
-        <div class="pc-price">GHS ${Number(p.price||0).toLocaleString()}</div>
-        <div class="pc-stock"><i class="fas fa-cubes fa-xs" style="color:var(--gold)"></i> Stock: ${p.stock??'—'}</div>
+        <div class="pc-brand">${p.brand || '—'}</div>
+        <div class="pc-price">GHS ${Number(p.price || 0).toLocaleString()}</div>
+        <div class="pc-stock"><i class="fas fa-cubes fa-xs" style="color:var(--gold)"></i> Stock: ${p.stock ?? '—'}</div>
         <div class="pc-actions">
-          <button class="btn-toggle" onclick="toggleAvail(${p.id},'${type}')"><i class="fas fa-eye${available?'-slash':''} fa-xs"></i> ${available?'Hide':'Show'}</button>
-          <button class="btn-stock-edit" onclick="openStockModal(${p.id},'${type}','${p.name.replace(/'/g,"\\'")}',${p.stock||0})"><i class="fas fa-box fa-xs"></i> Stock</button>
-          <button class="btn-del-p" onclick="deleteProduct(${p.id},'${type}','${p.name.replace(/'/g,"\\'")}')"><i class="fas fa-trash fa-xs"></i></button>
+          <button class="btn-toggle" onclick="toggleAvail(${p.id},'${type}')"><i class="fas fa-eye${available ? '-slash' : ''} fa-xs"></i> ${available ? 'Hide' : 'Show'}</button>
+          <button class="btn-stock-edit" onclick="openStockModal(${p.id},'${type}','${p.name.replace(/'/g, "\\'")}',${p.stock || 0})"><i class="fas fa-box fa-xs"></i> Stock</button>
+          <button class="btn-del-p" onclick="deleteProduct(${p.id},'${type}','${p.name.replace(/'/g, "\\'")}')"><i class="fas fa-trash fa-xs"></i></button>
         </div>
       </div>
     </div>`;
   }
 
-  window.loadProducts=async function(){
-    const grid=$('productsGrid');
-    grid.innerHTML='<div style="grid-column:1/-1"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Loading…</div></div>';
-    const filter=$('filterAvail').value;
-    const search=$('searchInput').value.trim();
+  window.loadProducts = async function(){
+    const grid = $('productsGrid');
+    grid.innerHTML = '<div style="grid-column:1/-1"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Loading…</div></div>';
+    const filter = $('filterAvail').value;
+    const search = $('searchInput').value.trim();
     let url;
-    if(search) url=API_BASE+`/api/admin/products/${currentType}/search/keyword?keyword=${encodeURIComponent(search)}`;
-    else if(filter==='available') url=API_BASE+`/api/admin/products/${currentType}/available`;
-    else if(filter==='discounted') url=API_BASE+`/api/admin/products/${currentType}/discounted`;
-    else url=API_BASE+`/api/admin/products/${currentType}`;
+    if(search)              url = BASE_URL + `/api/admin/products/${currentType}/search/keyword?keyword=${encodeURIComponent(search)}`;
+    else if(filter === 'available')  url = BASE_URL + `/api/admin/products/${currentType}/available`;
+    else if(filter === 'discounted') url = BASE_URL + `/api/admin/products/${currentType}/discounted`;
+    else                    url = BASE_URL + `/api/admin/products/${currentType}`;
     try{
-      const r=await fetch(url,{headers:authHeaders()});
-      const d=await r.json();if(!r.ok)throw new Error();
-      products=d.data||[];renderGrid();
+      const r = await fetch(url, { headers: authHeaders() });
+      const d = await r.json();
+      if(!r.ok) throw new Error();
+      products = d.data || [];
+      renderGrid();
     }catch{
-      products=currentType==='clothing'?[
-        {id:1,name:'Satin Wrap Midi Dress',category:"Women's Dresses",brand:'Esuo Atelier',price:280,stock:12,available:true,imageUrl:null},
-        {id:2,name:'Classic Linen Blazer',category:'Outerwear',brand:'Studio EBE',price:420,stock:5,available:true,imageUrl:null},
-        {id:3,name:'Silk Cami Top',category:'Tops',brand:'Esuo Atelier',price:150,stock:0,available:false,imageUrl:null},
-      ]:[
-        {id:101,name:'Hydrating Face Cream',category:'Skincare',brand:'BeautyCo',price:45,stock:30,available:true,imageUrl:null},
-        {id:102,name:'Rose Gold Highlighter',category:'Makeup',brand:'GlowUp',price:65,stock:8,available:true,imageUrl:null},
+      products = currentType === 'clothing' ? [
+        { id:1, name:'Satin Wrap Midi Dress', category:"Women's Dresses", brand:'Esuo Atelier', price:280, stock:12, available:true,  imageUrl:null },
+        { id:2, name:'Classic Linen Blazer',  category:'Outerwear',       brand:'Studio EBE',   price:420, stock:5,  available:true,  imageUrl:null },
+        { id:3, name:'Silk Cami Top',          category:'Tops',            brand:'Esuo Atelier', price:150, stock:0,  available:false, imageUrl:null },
+      ] : [
+        { id:101, name:'Hydrating Face Cream', category:'Skincare', brand:'BeautyCo', price:45, stock:30, available:true, imageUrl:null },
+        { id:102, name:'Rose Gold Highlighter',category:'Makeup',   brand:'GlowUp',   price:65, stock:8,  available:true, imageUrl:null },
       ];
       renderGrid();
     }
   };
 
   function renderGrid(){
-    if(!products.length){$('productsGrid').innerHTML='<div style="grid-column:1/-1"><div class="empty-state"><i class="fas fa-box-open"></i>No products found</div></div>';return;}
-    $('productsGrid').innerHTML=products.map(p=>renderProductCard(p,currentType)).join('');
+    if(!products.length){
+      $('productsGrid').innerHTML = '<div style="grid-column:1/-1"><div class="empty-state"><i class="fas fa-box-open"></i>No products found</div></div>';
+      return;
+    }
+    $('productsGrid').innerHTML = products.map(p => renderProductCard(p, currentType)).join('');
   }
 
-  window.doSearch=function(){loadProducts();};
+  window.doSearch = function(){ loadProducts(); };
 
-  window.toggleAvail=async function(id,type){
+  window.toggleAvail = async function(id, type){
     try{
-      const r=await fetch(API_BASE+`/api/admin/products/${type}/${id}/toggle-availability`,{method:'PATCH',headers:authHeaders()});
-      const d=await r.json();if(!r.ok)throw new Error();
-      toast('fas fa-check-circle','Availability updated');loadProducts();
-    }catch{toast('fas fa-check-circle','Availability toggled (demo)');loadProducts();}
+      const r = await fetch(BASE_URL + `/api/admin/products/${type}/${id}/toggle-availability`, { method:'PATCH', headers: authHeaders() });
+      const d = await r.json();
+      if(!r.ok) throw new Error();
+      toast('fas fa-check-circle', 'Availability updated');
+      loadProducts();
+    }catch{ toast('fas fa-check-circle', 'Availability toggled (demo)'); loadProducts(); }
   };
 
-  window.deleteProduct=async function(id,type,pname){
-    if(!confirm('Delete "'+pname+'"? This cannot be undone.'))return;
+  window.deleteProduct = async function(id, type, pname){
+    if(!confirm('Delete "' + pname + '"? This cannot be undone.')) return;
     try{
-      const r=await fetch(API_BASE+`/api/admin/products/${type}/${id}`,{method:'DELETE',headers:authHeaders()});
-      const d=await r.json();if(!r.ok)throw new Error();
-      toast('fas fa-trash','Product deleted');loadProducts();
-    }catch{toast('fas fa-trash','Product deleted (demo)');products=products.filter(p=>p.id!==id);renderGrid();}
+      const r = await fetch(BASE_URL + `/api/admin/products/${type}/${id}`, { method:'DELETE', headers: authHeaders() });
+      const d = await r.json();
+      if(!r.ok) throw new Error();
+      toast('fas fa-trash', 'Product deleted');
+      loadProducts();
+    }catch{ toast('fas fa-trash', 'Product deleted (demo)'); products = products.filter(p => p.id !== id); renderGrid(); }
   };
 
-  window.openStockModal=function(id,type,pname,current){
-    pendingStock={id,type};
-    $('stockProdName').textContent='Product: '+pname;
-    $('stockInput').value=current;
+  /* ── STOCK MODAL ─────────────────────────────────────────── */
+  window.openStockModal = function(id, type, pname, current){
+    pendingStock = { id, type };
+    $('stockProdName').textContent = 'Product: ' + pname;
+    $('stockInput').value = current;
     $('stockErr').classList.remove('show');
     $('stockModal').classList.add('open');
   };
-  window.closeStockModal=function(){$('stockModal').classList.remove('open');};
-  window.saveStock=async function(){
-    const qty=parseInt($('stockInput').value);
-    if(isNaN(qty)||qty<0){$('stockErr').textContent='Please enter a valid quantity.';$('stockErr').classList.add('show');return;}
+  window.closeStockModal = function(){ $('stockModal').classList.remove('open'); };
+  window.saveStock = async function(){
+    const qty = parseInt($('stockInput').value);
+    if(isNaN(qty) || qty < 0){ $('stockErr').textContent = 'Please enter a valid quantity.'; $('stockErr').classList.add('show'); return; }
     $('stockErr').classList.remove('show');
-    const btn=$('btnStockSave');btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin fa-xs"></i> Saving…';
+    const btn = $('btnStockSave');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin fa-xs"></i> Saving…';
     try{
-      const r=await fetch(API_BASE+`/api/admin/products/${pendingStock.type}/${pendingStock.id}/stock?stock=${qty}`,{method:'PATCH',headers:authHeaders()});
-      const d=await r.json();if(!r.ok)throw new Error();
-      toast('fas fa-box','Stock updated to '+qty);closeStockModal();loadProducts();
-    }catch{toast('fas fa-box','Stock updated (demo)');closeStockModal();loadProducts();}
-    finally{btn.disabled=false;btn.innerHTML='<i class="fas fa-check fa-xs"></i> Update Stock';}
+      const r = await fetch(BASE_URL + `/api/admin/products/${pendingStock.type}/${pendingStock.id}/stock?stock=${qty}`, { method:'PATCH', headers: authHeaders() });
+      const d = await r.json();
+      if(!r.ok) throw new Error();
+      toast('fas fa-box', 'Stock updated to ' + qty);
+      closeStockModal();
+      loadProducts();
+    }catch{ toast('fas fa-box', 'Stock updated (demo)'); closeStockModal(); loadProducts(); }
+    finally{ btn.disabled = false; btn.innerHTML = '<i class="fas fa-check fa-xs"></i> Update Stock'; }
   };
 
-  window.openAddModal=function(){$('mErr').classList.remove('show');$('mOk').classList.remove('show');$('addModal').classList.add('open');};
-  window.closeAddModal=function(){$('addModal').classList.remove('open');};
-
-  window.saveProduct=async function(){
-    $('mErr').classList.remove('show');$('mOk').classList.remove('show');
-    const n=$('mName').value.trim(),pr=$('mPrice').value,st=$('mStock').value,cat=$('mCategory').value.trim();
-    if(!n||!pr||!st||!cat){$('mErr').textContent='Please fill in all required fields.';$('mErr').classList.add('show');return;}
-    const btn=$('btnSave');btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin fa-xs"></i> Saving…';
-    const body={name:n,price:parseFloat(pr),stock:parseInt(st),category:cat,brand:$('mBrand').value.trim()||undefined,description:$('mDesc').value.trim()||undefined};
-    if($('mOriginal').value)body.originalPrice=parseFloat($('mOriginal').value);
-    if(currentType==='clothing'){
-      const s=$('mSizes').value.trim(),c=$('mColors').value.trim(),m=$('mMaterial').value.trim();
-      if(s)body.sizes=s.split(',').map(x=>x.trim().toUpperCase());
-      if(c)body.colors=c.split(',').map(x=>x.trim().toUpperCase());
-      if(m)body.material=m;
-    }else{
-      const t=$('mTags').value.trim();
-      if(t)body.tags=t.split(',').map(x=>x.trim());
-    }
-    try{
-      const formData=new FormData();
-      formData.append('product',new Blob([JSON.stringify(body)],{type:'application/json'}));
-      const r=await fetch(API_BASE+`/api/admin/products/${currentType}`,{method:'POST',headers:{...(token?{Authorization:'Bearer '+token}:{})},body:formData});
-      const d=await r.json();if(!r.ok)throw new Error(d.message||'Failed');
-      $('mOk').textContent='✓ Product added successfully!';$('mOk').classList.add('show');
-      toast('fas fa-plus-circle','Product added!');
-      setTimeout(()=>{closeAddModal();loadProducts();},1000);
-    }catch{
-      $('mOk').textContent='✓ Product added (demo mode)!';$('mOk').classList.add('show');
-      toast('fas fa-plus-circle','Product added (demo)!');
-      setTimeout(()=>{closeAddModal();loadProducts();},1000);
-    }
-    finally{btn.disabled=false;btn.innerHTML='<i class="fas fa-check fa-xs"></i> Save Product';}
+  /* ── ADD PRODUCT MODAL ───────────────────────────────────── */
+  window.openAddModal = function(){
+    $('mErr').classList.remove('show');
+    $('mOk').classList.remove('show');
+    selectedFiles = [];
+    renderPreviews();
+    $('addModal').classList.add('open');
+  };
+  window.closeAddModal = function(){
+    $('addModal').classList.remove('open');
+    selectedFiles = [];
+    renderPreviews();
   };
 
-  const ham=$('ham'),sidebar=$('sidebar'),overlay=$('sOverlay');
-  ham.addEventListener('click',()=>{const o=sidebar.classList.toggle('open');overlay.classList.toggle('active',o);ham.classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';});
-  overlay.addEventListener('click',()=>{sidebar.classList.remove('open');overlay.classList.remove('active');ham.classList.remove('open');document.body.style.overflow='';});
-  window.doLogout=function(){localStorage.removeItem(SESSION_KEY);toast('fas fa-sign-out-alt','Signed out…');setTimeout(()=>location.href='adminLogin.html',900);};
+  window.saveProduct = async function(){
+    $('mErr').classList.remove('show');
+    $('mOk').classList.remove('show');
+
+    const n   = $('mName').value.trim();
+    const pr  = $('mPrice').value;
+    const st  = $('mStock').value;
+    const cat = $('mCategory').value.trim();
+    if(!n || !pr || !st || !cat){
+      $('mErr').textContent = 'Please fill in all required fields (Name, Price, Stock, Category).';
+      $('mErr').classList.add('show');
+      return;
+    }
+
+    // Build product JSON matching backend DTO
+    const body = {
+      name:        n,
+      price:       parseFloat(pr),
+      stock:       parseInt(st),
+      category:    cat,
+      brand:       $('mBrand').value.trim()    || undefined,
+      description: $('mDesc').value.trim()     || undefined,
+      discountPercentage: $('mDiscount').value ? parseFloat($('mDiscount').value) : undefined,
+      isAvailable: true,
+    };
+
+    if(currentType === 'clothing'){
+      const s   = $('mSizes').value.trim();
+      const c   = $('mColors').value.trim();
+      const m   = $('mMaterial').value.trim();
+      const sty = $('mStyle').value.trim();
+      const sub = $('mSubCategory').value;
+      if(s)   body.availableSizes  = s.split(',').map(x => x.trim().toUpperCase()).filter(Boolean);
+      if(c)   body.availableColors = c.split(',').map(x => x.trim().toUpperCase()).filter(Boolean);
+      if(m)   body.material   = m;
+      if(sty) body.style      = sty;
+      if(sub) body.subCategory = sub;
+    } else {
+      const t   = $('mTags').value.trim();
+      const sku = $('mSku').value.trim();
+      const unt = $('mUnit').value.trim();
+      if(t)   body.tags = t.split(',').map(x => x.trim()).filter(Boolean);
+      if(sku) body.sku  = sku;
+      if(unt) body.unit = unt;
+    }
+
+    const btn = $('btnSave');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin fa-xs"></i> Uploading…';
+
+    try{
+      // Build multipart/form-data
+      // Part 1: product JSON blob  → field name "product"
+      // Part 2+: image files       → field name "images"
+      const formData = new FormData();
+      formData.append('product', new Blob([JSON.stringify(body)], { type: 'application/json' }));
+
+      selectedFiles.forEach(f => {
+        formData.append('images', f, f.name);
+      });
+
+      const r = await fetch(BASE_URL + `/api/admin/products/${currentType}`, {
+        method: 'POST',
+        headers: { ...(token ? { Authorization: 'Bearer ' + token } : {}) },
+        // ⚠️  Do NOT set Content-Type — browser sets it automatically with boundary
+        body: formData
+      });
+      const d = await r.json();
+      if(!r.ok) throw new Error(d.message || 'Server error');
+
+      $('mOk').textContent = '✓ Product added successfully!';
+      $('mOk').classList.add('show');
+      toast('fas fa-plus-circle', 'Product "' + n + '" added!');
+      setTimeout(() => { closeAddModal(); loadProducts(); }, 1000);
+    }catch(err){
+      // Show the real error if available, else demo fallback
+      const msg = err.message && err.message !== 'Failed to fetch' ? err.message : null;
+      if(msg){
+        $('mErr').textContent = msg;
+        $('mErr').classList.add('show');
+      } else {
+        $('mOk').textContent = '✓ Product added (demo mode)!';
+        $('mOk').classList.add('show');
+        toast('fas fa-plus-circle', 'Product added (demo)!');
+        setTimeout(() => { closeAddModal(); loadProducts(); }, 1000);
+      }
+    }
+    finally{
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-check fa-xs"></i> Save Product';
+    }
+  };
+
+  /* ── HAMBURGER ───────────────────────────────────────────── */
+  const ham = $('ham'), sidebar = $('sidebar'), overlay = $('sOverlay');
+  ham.addEventListener('click', () => {
+    const o = sidebar.classList.toggle('open');
+    overlay.classList.toggle('active', o);
+    ham.classList.toggle('open', o);
+    document.body.style.overflow = o ? 'hidden' : '';
+  });
+  overlay.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
+    ham.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+
+  window.doLogout = function(){
+    localStorage.removeItem(SESSION_KEY);
+    toast('fas fa-sign-out-alt', 'Signed out…');
+    setTimeout(() => location.href = 'adminLogin.html', 900);
+  };
 
   loadProducts();
 })();
