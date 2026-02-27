@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login · Esuo's Beauty Empire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root{
+      --ink:#18120e;--cream:#faf7f3;--parchment:#f1ebe2;--sand:#e2d8cc;
+      --warm-mid:#c9b49a;--gold:#a8854e;--gold-light:#c9a86c;--blush:#c8968a;
+      --white:#fff;--muted:#7a6e65;--subtle:#9e9087;--card:#fffcf8;
+      --border:#ede4d8;--danger:#c0392b;--success:#27855c;
+      --r-sm:8px;--r-md:14px;--r-lg:24px;--r-xl:60px;
+      --sh-xs:0 1px 4px rgba(24,18,14,.06);--sh-sm:0 4px 16px rgba(24,18,14,.08);
+      --sh-md:0 10px 40px rgba(24,18,14,.12);--sh-lg:0 24px 64px rgba(24,18,14,.16);
+      --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1)
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      background:var(--cream);
+      color:var(--ink);
+      font-family:'Outfit',system-ui,sans-serif;
+      line-height:1.6;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+    img{display:block;max-width:100%;object-fit:cover}
+    a{text-decoration:none;color:inherit}
+    button{cursor:pointer;font-family:inherit;border:none;outline:none;background:none}
+    ::-webkit-scrollbar{width:5px}
+    ::-webkit-scrollbar-track{background:var(--parchment)}
+    ::-webkit-scrollbar-thumb{background:var(--warm-mid);border-radius:99px}
+
+    /* ── HEADER ── */
+    .site-header{
+      padding:1rem clamp(.75rem,4vw,3rem);
+      border-bottom:1px solid var(--border);
+      background:rgba(250,247,243,.97);
+      backdrop-filter:blur(20px);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:sticky;top:0;z-index:10;
+      gap:.5rem;
+    }
+    .logo{
+      font-family:'Playfair Display',serif;font-weight:700;
+      font-size:clamp(.8rem,3.5vw,1.25rem);
+      letter-spacing:.04em;color:var(--ink);
+      display:flex;align-items:center;gap:.28rem;
+      flex-shrink:0;min-width:0;
+    }
+    .logo-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;margin-bottom:3px;flex-shrink:0}
+    .logo-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .admin-badge{
+      display:inline-flex;align-items:center;gap:.3rem;
+      background:rgba(168,133,78,.1);color:var(--gold);
+      font-size:clamp(.58rem,.9vw,.68rem);font-weight:700;
+      letter-spacing:.1em;text-transform:uppercase;
+      padding:.2rem .55rem;border-radius:var(--r-xl);
+      border:1px solid rgba(168,133,78,.25);
+      white-space:nowrap;flex-shrink:0;
+    }
+    @media(max-width:360px){.admin-badge .badge-label{display:none}}
+    .back-link{
+      display:inline-flex;align-items:center;gap:.38rem;
+      font-size:clamp(.72rem,2.2vw,.8rem);color:var(--muted);font-weight:500;
+      transition:color .18s;white-space:nowrap;flex-shrink:0;
+    }
+    .back-link:hover{color:var(--gold)}
+    @media(max-width:420px){.back-link .back-text{display:none}}
+
+    /* ── PAGE WRAPPER ── */
+    .page{
+      flex:1;display:flex;align-items:center;justify-content:center;
+      padding:clamp(1rem,4vw,2.5rem) clamp(.75rem,4vw,3rem);
+    }
+
+    /* ── AUTH CARD ── */
+    .auth-wrap{width:100%;max-width:480px}
+
+    .auth-top{text-align:center;margin-bottom:clamp(1.2rem,4vw,2rem)}
+    .auth-icon{
+      width:clamp(48px,10vw,60px);height:clamp(48px,10vw,60px);
+      background:linear-gradient(135deg,var(--gold),var(--gold-light));
+      border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;
+      color:white;font-size:clamp(1.1rem,3vw,1.4rem);
+      margin:0 auto .9rem;
+    }
+    .auth-eyebrow{font-size:.65rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:.35rem}
+    .auth-title{
+      font-family:'Playfair Display',serif;
+      font-size:clamp(1.3rem,5vw,2rem);
+      font-weight:700;line-height:1.2;margin-bottom:.4rem;
+    }
+    .auth-sub{font-size:clamp(.78rem,2.5vw,.86rem);color:var(--muted)}
+
+    /* ── TABS ── */
+    .auth-tabs{
+      display:flex;background:var(--parchment);
+      border-radius:var(--r-xl);padding:.25rem;gap:.2rem;
+      margin-bottom:1.4rem;border:1.5px solid var(--border);
+    }
+    .auth-tab{
+      flex:1;text-align:center;
+      padding:clamp(.42rem,2vw,.52rem) .5rem;
+      font-size:clamp(.78rem,2.5vw,.84rem);
+      font-weight:600;border-radius:var(--r-xl);cursor:pointer;
+      color:var(--muted);transition:all .18s;user-select:none;
+    }
+    .auth-tab.active{background:var(--white);color:var(--ink);box-shadow:var(--sh-xs)}
+
+    /* ── CARD ── */
+    .card{
+      background:var(--card);border:1.5px solid var(--border);
+      border-radius:var(--r-lg);
+      padding:clamp(1.1rem,5vw,2rem);
+      box-shadow:var(--sh-sm);
+    }
+
+    /* ── FORM ── */
+    .fg{margin-bottom:.9rem}
+    .fl{display:block;font-size:.73rem;font-weight:700;color:var(--muted);margin-bottom:.32rem;letter-spacing:.06em;text-transform:uppercase}
+    .fi-wrap{position:relative}
+    .fi-icon{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:var(--subtle);font-size:.82rem;pointer-events:none}
+    .fi{
+      width:100%;
+      padding:clamp(.6rem,2vw,.65rem) .9rem clamp(.6rem,2vw,.65rem) 2.4rem;
+      background:var(--parchment);
+      border:1.5px solid var(--border);
+      border-radius:var(--r-sm);
+      font-size:clamp(.84rem,2.5vw,.87rem);
+      font-family:'Outfit',sans-serif;
+      color:var(--ink);
+      outline:none;
+      transition:border-color .18s,box-shadow .18s;
+      -webkit-appearance:none;
+      appearance:none;
+    }
+    .fi:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(168,133,78,.1)}
+    .fi::placeholder{color:var(--subtle)}
+    /* Prevent iOS zoom on focus */
+    @media(max-width:480px){.fi{font-size:16px}}
+    .pw-toggle{
+      position:absolute;right:.85rem;top:50%;transform:translateY(-50%);
+      color:var(--subtle);cursor:pointer;font-size:.82rem;
+      transition:color .16s;background:none;border:none;padding:.3rem;line-height:1;
+      min-width:36px;min-height:36px;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .pw-toggle:hover{color:var(--gold)}
+
+    /* ── ALERTS ── */
+    .ferr{
+      display:none;align-items:center;gap:.45rem;
+      color:var(--danger);font-size:clamp(.74rem,2.5vw,.78rem);
+      padding:.5rem .75rem;
+      background:rgba(192,57,43,.06);
+      border-radius:var(--r-sm);
+      border-left:3px solid var(--danger);
+      margin-bottom:.85rem;
+    }
+    .ferr.show{display:flex}
+    .fok{
+      display:none;align-items:center;gap:.45rem;
+      color:var(--success);font-size:clamp(.74rem,2.5vw,.78rem);
+      padding:.5rem .75rem;
+      background:rgba(39,133,92,.06);
+      border-radius:var(--r-sm);
+      border-left:3px solid var(--success);
+      margin-bottom:.85rem;
+    }
+    .fok.show{display:flex}
+
+    /* ── SUBMIT BUTTON ── */
+    .btn-submit{
+      width:100%;display:flex;align-items:center;justify-content:center;gap:.45rem;
+      background:var(--ink);color:white;
+      font-size:clamp(.85rem,2.5vw,.9rem);font-weight:700;font-family:'Outfit',sans-serif;
+      padding:clamp(.75rem,3vw,.8rem);border-radius:var(--r-xl);
+      cursor:pointer;border:none;
+      transition:background .18s,transform .14s var(--spring);
+      letter-spacing:.02em;
+      min-height:48px;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .btn-submit:hover{background:var(--gold);transform:translateY(-2px)}
+    .btn-submit:active{transform:translateY(0)}
+    .btn-submit:disabled{opacity:.55;cursor:not-allowed;transform:none}
+
+    /* ── SWITCH LINK ── */
+    .switch-note{
+      text-align:center;
+      font-size:clamp(.76rem,2.5vw,.8rem);
+      color:var(--muted);margin-top:.9rem;
+    }
+    .switch-note a{color:var(--gold);font-weight:600;cursor:pointer;transition:opacity .16s;padding:.2rem 0}
+    .switch-note a:hover{opacity:.75}
+
+    /* ── TOAST ── */
+    .tcontainer{
+      position:fixed;bottom:clamp(.75rem,3vw,1rem);
+      right:clamp(.75rem,3vw,1rem);
+      z-index:9999;display:flex;flex-direction:column;gap:.45rem;
+      max-width:calc(100vw - 1.5rem);
+    }
+    .toast{
+      display:flex;align-items:center;gap:.6rem;
+      background:var(--ink);color:white;
+      font-size:clamp(.78rem,2.5vw,.83rem);
+      padding:.65rem 1rem;border-radius:var(--r-md);
+      box-shadow:var(--sh-lg);
+      animation:tin .26s var(--spring) forwards;
+      max-width:320px;pointer-events:none;
+      word-break:break-word;
+    }
+    .toast i{color:var(--gold-light);flex-shrink:0}
+    .toast.out{animation:tout .2s ease forwards}
+    @keyframes tin{from{opacity:0;transform:translateY(14px) scale(.95)}to{opacity:1;transform:none}}
+    @keyframes tout{to{opacity:0;transform:translateY(5px) scale(.95)}}
+
+    /* ── FOOTER ── */
+    .site-footer{
+      padding:1rem;text-align:center;
+      font-size:clamp(.68rem,2vw,.73rem);
+      color:var(--subtle);border-top:1px solid var(--border);
+    }
+    .site-footer a{color:var(--gold);font-weight:500}
+
+    /* ── SECURITY NOTE ── */
+    .security-note{
+      display:flex;align-items:center;justify-content:center;gap:.38rem;
+      font-size:clamp(.68rem,2vw,.72rem);
+      color:var(--subtle);margin-top:1rem;
+    }
+    .security-note i{color:var(--gold);font-size:.75rem}
+
+    @media(max-width:480px){
+      .auth-top{margin-bottom:1.2rem}
+      .card{border-radius:var(--r-md)}
+      .auth-wrap{max-width:100%}
+    }
+    @media(hover:none){
+      .btn-submit:hover{background:var(--ink);transform:none}
+      .btn-submit:active{background:var(--gold)}
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <a class="logo" href="index.html">
+    <span class="logo-text">Esuo's Beauty Empire</span><span class="logo-dot"></span>
+  </a>
+  <span class="admin-badge">
+    <i class="fas fa-shield-halved fa-xs"></i>
+    <span class="badge-label">Admin Portal</span>
+  </span>
+  <a class="back-link" href="index.html">
+    <i class="fas fa-arrow-left fa-xs"></i>
+    <span class="back-text">Back to Store</span>
+  </a>
+</header>
+
+<!-- PAGE -->
+<div class="page">
+  <div class="auth-wrap">
+
+    <!-- TOP -->
+    <div class="auth-top">
+      <div class="auth-icon"><i class="fas fa-shield-halved"></i></div>
+      <div class="auth-eyebrow">Admin Access</div>
+      <h1 class="auth-title" id="authTitle">Welcome back</h1>
+      <p class="auth-sub" id="authSub">Sign in to manage your beauty empire</p>
+    </div>
+
+    <!-- TABS -->
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="tabLogin" onclick="switchTab('login')">
+        <i class="fas fa-sign-in-alt fa-xs"></i> Login
+      </div>
+      <div class="auth-tab" id="tabSignup" onclick="switchTab('signup')">
+        <i class="fas fa-user-plus fa-xs"></i> Register
+      </div>
+    </div>
+
+    <!-- CARD -->
+    <div class="card">
+
+      <!-- ── LOGIN FORM ── -->
+      <div id="loginForm">
+        <div class="ferr" id="lErr"><i class="fas fa-circle-exclamation fa-xs"></i><span id="lErrMsg"></span></div>
+        <div class="fok"  id="lOk" ><i class="fas fa-check-circle fa-xs"></i><span id="lOkMsg"></span></div>
+
+        <div class="fg">
+          <label class="fl">Email Address</label>
+          <div class="fi-wrap">
+            <i class="fi-icon fas fa-envelope"></i>
+            <input class="fi" type="email" id="lEmail" placeholder="admin@example.com" autocomplete="email" inputmode="email">
+          </div>
+        </div>
+
+        <div class="fg">
+          <label class="fl">Password</label>
+          <div class="fi-wrap">
+            <i class="fi-icon fas fa-lock"></i>
+            <input class="fi" type="password" id="lPw" placeholder="Your password" autocomplete="current-password">
+            <button type="button" class="pw-toggle" onclick="togglePw('lPw',this)" aria-label="Toggle password visibility">
+              <i class="fas fa-eye fa-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="button" class="btn-submit" id="lSubmit" onclick="doLogin()">
+          <i class="fas fa-sign-in-alt fa-xs"></i> Sign In to Dashboard
+        </button>
+
+        <div class="switch-note">
+          Don't have an admin account? <a onclick="switchTab('signup')">Register here</a>
+        </div>
+      </div>
+
+      <!-- ── SIGNUP FORM ── -->
+      <div id="signupForm" style="display:none">
+        <div class="ferr" id="sErr"><i class="fas fa-circle-exclamation fa-xs"></i><span id="sErrMsg"></span></div>
+        <div class="fok"  id="sOk" ><i class="fas fa-check-circle fa-xs"></i><span id="sOkMsg"></span></div>
+
+        <!-- Full Name -->
+        <div class="fg">
+          <label class="fl">Full Name</label>
+          <div class="fi-wrap">
+            <i class="fi-icon fas fa-user"></i>
+            <input class="fi" type="text" id="sName" placeholder="Jane Doe" autocomplete="name">
+          </div>
+        </div>
+
+        <!-- Shop Name -->
+        <div class="fg">
+          <label class="fl">Shop Name</label>
+          <div class="fi-wrap">
+            <i class="fi-icon fas fa-store"></i>
+            <input class="fi" type="text" id="sShop" placeholder="My Beauty Shop">
+          </div>
+        </div>
+
+        <!-- Shop Address — NEW: required by AdminRegistrationRequest -->
+        <div class="fg">
+          <label class="fl">Shop Address</label>
+          <div class="fi-wrap">
+            <i class="fi-icon fas fa-map-marker-alt"></i>
+            <input class="fi" type="text" id="sAddress" placeholder="123 Main St, City" autocomplete="street-address">
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="fg">
+          <label class="fl">Email Address</label>
+          <div class="fi-wrap">
+            <i class="fi-icon fas fa-envelope"></i>
+            <input class="fi" type="email" id="sEmail" placeholder="admin@example.com" autocomplete="email" inputmode="email">
+          </div>
+        </div>
+
+        <!-- Phone — NEW: required by AdminRegistrationRequest -->
+        <div class="fg">
+          <label class="fl">Phone Number</label>
+          <div class="fi-wrap">
+            <i class="fi-icon fas fa-phone"></i>
+            <input class="fi" type="tel" id="sPhone" placeholder="+1 234 567 8900" autocomplete="tel" inputmode="tel">
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="fg">
+          <label class="fl">Password</label>
+          <div class="fi-wrap">
+            <i class="fi-icon fas fa-lock"></i>
+            <input class="fi" type="password" id="sPw" placeholder="Min 8 characters" autocomplete="new-password">
+            <button type="button" class="pw-toggle" onclick="togglePw('sPw',this)" aria-label="Toggle password visibility">
+              <i class="fas fa-eye fa-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="button" class="btn-submit" id="sSubmit" onclick="doSignup()">
+          <i class="fas fa-user-plus fa-xs"></i> Create Admin Account
+        </button>
+
+        <div class="switch-note">
+          Already have an account? <a onclick="switchTab('login')">Login here</a>
+        </div>
+      </div>
+
+      <!-- SECURITY NOTE -->
+      <div class="security-note">
+        <i class="fas fa-shield-alt"></i> Secure admin portal — credentials are encrypted
+      </div>
+
+    </div><!-- /.card -->
+  </div><!-- /.auth-wrap -->
+</div><!-- /.page -->
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  &copy; 2025 Esuo's Beauty Empire &nbsp;·&nbsp; <a href="index.html">Back to Store</a>
+</footer>
+
+<div class="tcontainer" id="tc"></div>
+
+<script>
+(function(){
+  'use strict';
+
+  // ── CONFIG ────────────────────────────────────────────────
+  const API_BASE = 'https://opatawebbackend.onrender.com';
+
+  // ── SESSION ────────────────────────────────────────────────
+  const SESSION_KEY = 'esuos_admin_session';
+  const SESSION_TTL = 7 * 24 * 60 * 60 * 1000;
+
+  function saveSession(tok, admin) {
+    try {
+      localStorage.setItem(SESSION_KEY, JSON.stringify({
+        token: tok,
+        admin,
+        savedAt: Date.now()
+      }));
+    } catch {}
+  }
+
+  function loadSession() {
+    try {
+      const raw = localStorage.getItem(SESSION_KEY);
+      if (!raw) return null;
+      const data = JSON.parse(raw);
+      if (Date.now() - (data.savedAt || 0) > SESSION_TTL) {
+        localStorage.removeItem(SESSION_KEY);
+        return null;
+      }
+      return data;
+    } catch { return null; }
+  }
+
+  // ── REDIRECT IF ALREADY LOGGED IN ─────────────────────────
+  if (loadSession()) {
+    location.href = 'adminDashboard.html';
+    return;
+  }
+
+  // ── HELPERS ────────────────────────────────────────────────
+  const $ = id => document.getElementById(id);
+
+  function toast(ico, msg) {
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.innerHTML = '<i class="' + ico + '"></i><span>' + msg + '</span>';
+    $('tc').appendChild(el);
+    setTimeout(() => {
+      el.classList.add('out');
+      el.addEventListener('animationend', () => el.remove(), { once: true });
+    }, 3000);
+  }
+
+  function showErr(prefix, msg) {
+    $(prefix + 'Err').classList.add('show');
+    $(prefix + 'ErrMsg').textContent = msg;
+    $(prefix + 'Ok').classList.remove('show');
+  }
+
+  function showOk(prefix, msg) {
+    $(prefix + 'Ok').classList.add('show');
+    $(prefix + 'OkMsg').textContent = msg;
+    $(prefix + 'Err').classList.remove('show');
+  }
+
+  function clearAlerts(prefix) {
+    $(prefix + 'Err').classList.remove('show');
+    $(prefix + 'Ok').classList.remove('show');
+  }
+
+  function setLoading(btnId, loading, defaultHtml) {
+    const btn = $(btnId);
+    btn.disabled = loading;
+    btn.innerHTML = loading
+      ? '<i class="fas fa-spinner fa-spin fa-xs"></i> Please wait…'
+      : defaultHtml;
+  }
+
+  // ── TABS ──────────────────────────────────────────────────
+  window.switchTab = function(tab) {
+    const isLogin = tab === 'login';
+    $('loginForm').style.display  = isLogin ? '' : 'none';
+    $('signupForm').style.display = isLogin ? 'none' : '';
+    $('tabLogin').classList.toggle('active', isLogin);
+    $('tabSignup').classList.toggle('active', !isLogin);
+    $('authTitle').textContent = isLogin ? 'Welcome back' : 'Create admin account';
+    $('authSub').textContent   = isLogin
+      ? 'Sign in to manage your beauty empire'
+      : 'Register your shop to get started';
+    clearAlerts('l');
+    clearAlerts('s');
+  };
+
+  // ── PASSWORD TOGGLE ────────────────────────────────────────
+  window.togglePw = function(inputId, btn) {
+    const input = $(inputId);
+    const show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    btn.innerHTML = show
+      ? '<i class="fas fa-eye-slash fa-xs"></i>'
+      : '<i class="fas fa-eye fa-xs"></i>';
+  };
+
+  // ── LOGIN ─────────────────────────────────────────────────
+  window.doLogin = async function() {
+    clearAlerts('l');
+    const email = $('lEmail').value.trim();
+    const pw    = $('lPw').value;
+
+    if (!email) { showErr('l', 'Please enter your email address.'); return; }
+    if (!pw)    { showErr('l', 'Please enter your password.'); return; }
+
+    setLoading('lSubmit', true, '');
+
+    try {
+      const r = await fetch(API_BASE + '/api/auth/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password: pw })
+      });
+
+      const d = await r.json();
+
+      if (!r.ok) {
+        showErr('l', d.message || 'Invalid email or password. Please try again.');
+        return;
+      }
+
+      const token        = d.data?.accessToken;
+      const refreshToken = d.data?.refreshToken;
+
+      let adminName = email.split('@')[0];
+      try {
+        const payload = JSON.parse(
+          atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))
+        );
+        adminName = payload.name || payload.firstName || payload.sub || adminName;
+      } catch {}
+
+      saveSession(token, { name: adminName, email, accessToken: token, refreshToken });
+
+      showOk('l', 'Login successful! Redirecting to dashboard…');
+      toast('fas fa-check-circle', 'Welcome back, ' + adminName + '!');
+      setTimeout(() => location.href = 'adminDashboard.html', 1000);
+
+    } catch (err) {
+      showErr('l', 'Network error. Please check your connection and try again.');
+    } finally {
+      setLoading('lSubmit', false, '<i class="fas fa-sign-in-alt fa-xs"></i> Sign In to Dashboard');
+    }
+  };
+
+  // ── SIGNUP ────────────────────────────────────────────────
+  window.doSignup = async function() {
+    clearAlerts('s');
+    const name    = $('sName').value.trim();
+    const shop    = $('sShop').value.trim();
+    const address = $('sAddress').value.trim();   // NEW
+    const email   = $('sEmail').value.trim();
+    const phone   = $('sPhone').value.trim();     // NEW
+    const pw      = $('sPw').value;
+
+    // Validate all required fields
+    if (!name)         { showErr('s', 'Please enter your full name.'); return; }
+    if (!shop)         { showErr('s', 'Please enter your shop name.'); return; }
+    if (!address)      { showErr('s', 'Please enter your shop address.'); return; }
+    if (!email)        { showErr('s', 'Please enter your email address.'); return; }
+    if (!phone)        { showErr('s', 'Please enter your phone number.'); return; }
+    if (!pw)           { showErr('s', 'Please enter a password.'); return; }
+    if (pw.length < 8) { showErr('s', 'Password must be at least 8 characters.'); return; }
+
+    setLoading('sSubmit', true, '');
+
+    try {
+      const r = await fetch(API_BASE + '/api/auth/admin/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        // Matches all fields in AdminRegistrationRequest DTO
+        body: JSON.stringify({
+          name,
+          shopName:    shop,
+          shopAddress: address,
+          email,
+          phone,
+          password:    pw
+        })
+      });
+
+      const d = await r.json();
+
+      if (!r.ok) {
+        showErr('s', d.message || 'Registration failed. Please try again.');
+        return;
+      }
+
+      const token        = d.data?.accessToken;
+      const refreshToken = d.data?.refreshToken;
+
+      saveSession(token, { name, email, shopName: shop, accessToken: token, refreshToken });
+
+      showOk('s', 'Account created! Redirecting to dashboard…');
+      toast('fas fa-star', 'Welcome, ' + name + '! Your shop is ready 🎉');
+      setTimeout(() => location.href = 'adminDashboard.html', 1000);
+
+    } catch (err) {
+      showErr('s', 'Network error. Please check your connection and try again.');
+    } finally {
+      setLoading('sSubmit', false, '<i class="fas fa-user-plus fa-xs"></i> Create Admin Account');
+    }
+  };
+
+  // ── ENTER KEY ─────────────────────────────────────────────
+  document.addEventListener('keydown', function(e) {
+    if (e.key !== 'Enter') return;
+    if (document.activeElement && document.activeElement.tagName === 'BUTTON') return;
+    e.preventDefault();
+    const loginVisible = $('loginForm').style.display !== 'none';
+    if (loginVisible) doLogin();
+    else doSignup();
+  });
+
+  // ── CHECK URL TAB PARAM ───────────────────────────────────
+  const params = new URLSearchParams(location.search);
+  if (params.get('tab') === 'signup') switchTab('signup');
+
+})();
+</script>
+</body>
+</html>

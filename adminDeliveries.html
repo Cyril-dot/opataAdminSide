@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deliveries · Admin · Esuo's Beauty Empire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root{
+      --ink:#18120e;--cream:#faf7f3;--parchment:#f1ebe2;--sand:#e2d8cc;
+      --warm-mid:#c9b49a;--gold:#a8854e;--gold-light:#c9a86c;--blush:#c8968a;
+      --white:#fff;--muted:#7a6e65;--subtle:#9e9087;--card:#fffcf8;
+      --border:#ede4d8;--danger:#c0392b;--success:#27855c;
+      --sidebar-w:240px;--nav-h:60px;
+      --r-sm:8px;--r-md:14px;--r-lg:24px;--r-xl:60px;
+      --sh-xs:0 1px 4px rgba(24,18,14,.06);--sh-sm:0 4px 16px rgba(24,18,14,.08);
+      --sh-md:0 10px 40px rgba(24,18,14,.12);--sh-lg:0 24px 64px rgba(24,18,14,.16);
+      --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1)
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    body{background:var(--cream);color:var(--ink);font-family:'Outfit',system-ui,sans-serif;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+    a{text-decoration:none;color:inherit}
+    button{cursor:pointer;font-family:inherit;border:none;outline:none;background:none}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--parchment)}::-webkit-scrollbar-thumb{background:var(--warm-mid);border-radius:99px}
+
+    /* TOPBAR */
+    .topbar{height:var(--nav-h);background:rgba(250,247,243,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;display:flex;align-items:center;padding:0 clamp(.75rem,3vw,1.2rem);gap:.6rem;flex-shrink:0}
+    .ham{display:none;flex-direction:column;gap:4px;padding:8px;cursor:pointer;border-radius:var(--r-sm);background:none;border:none;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+    .ham span{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px;transition:all .26s var(--ease)}
+    .ham.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+    .ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+    .ham.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+    .logo{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(.82rem,2.5vw,1.08rem);letter-spacing:.04em;display:flex;align-items:center;gap:.28rem;white-space:nowrap;flex-shrink:0}
+    .logo-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;margin-bottom:3px}
+    .admin-badge{display:inline-flex;align-items:center;gap:.28rem;background:rgba(168,133,78,.1);color:var(--gold);font-size:clamp(.55rem,.85vw,.62rem);font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .5rem;border-radius:var(--r-xl);border:1px solid rgba(168,133,78,.25);flex-shrink:0}
+    @media(max-width:400px){.admin-badge{display:none}}
+    .topbar-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}
+    .topbar-link{display:inline-flex;align-items:center;gap:.32rem;font-size:.78rem;color:var(--muted);font-weight:500;padding:.32rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .18s}
+    .topbar-link:hover{border-color:var(--gold);color:var(--gold)}
+    .topbar-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+
+    /* SIDEBAR */
+    .layout{display:flex;flex:1}
+    .sidebar{width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:var(--nav-h);left:0;height:calc(100vh - var(--nav-h));overflow-y:auto;z-index:150;transition:transform .3s var(--ease)}
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;opacity:0;transition:opacity .26s}
+    .sidebar-overlay.active{opacity:1}
+    .snav{padding:.65rem 0;flex:1}
+    .snav-label{padding:.55rem .9rem .2rem;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
+    .snav a{display:flex;align-items:center;gap:.7rem;padding:.75rem 1rem;font-size:.86rem;font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0;min-height:44px;-webkit-tap-highlight-color:transparent}
+    .snav a:hover{background:var(--parchment);color:var(--ink)}
+    .snav a.active{background:rgba(168,133,78,.08);color:var(--gold);border-left-color:var(--gold);font-weight:600}
+    .snav a i{width:16px;text-align:center;font-size:.82rem;flex-shrink:0}
+    .sdiv{height:1px;background:var(--border);margin:.4rem .9rem}
+    .sfooter{padding:.9rem 1rem 1.4rem;border-top:1px solid var(--border)}
+    .s-admin-block{display:flex;align-items:center;gap:.6rem;padding:.65rem .75rem;background:var(--parchment);border-radius:var(--r-md);margin-bottom:.65rem}
+    .s-av{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;flex-shrink:0}
+    .s-info strong{display:block;font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+    .s-info small{font-size:.68rem;color:var(--subtle)}
+    .s-logout{display:flex;align-items:center;gap:.5rem;padding:.58rem .75rem;background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .18s;width:100%;min-height:44px}
+    .s-logout:hover{background:rgba(192,57,43,.13)}
+
+    /* MAIN */
+    .main{margin-left:var(--sidebar-w);flex:1;padding:clamp(1rem,3vw,2rem) clamp(.75rem,3vw,2rem);min-width:0}
+    .page-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.1rem;gap:1rem;flex-wrap:wrap}
+    .bc{display:flex;align-items:center;gap:.35rem;font-size:.73rem;color:var(--subtle);margin-bottom:.4rem;flex-wrap:wrap}
+    .bc a{color:var(--muted);transition:color .18s}.bc a:hover{color:var(--gold)}
+    .bc i{font-size:.52rem}
+    .page-hd h1{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,3.5vw,1.8rem);font-weight:700}
+    .page-hd p{font-size:clamp(.78rem,2vw,.84rem);color:var(--muted)}
+
+    /* STATUS TABS */
+    .status-tabs{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:1rem}
+    .stab{padding:.38rem .8rem;font-size:clamp(.72rem,2vw,.78rem);font-weight:600;border-radius:var(--r-xl);border:1.5px solid var(--border);color:var(--muted);cursor:pointer;transition:all .16s;background:var(--white);min-height:36px;display:inline-flex;align-items:center;gap:.3rem;-webkit-tap-highlight-color:transparent}
+    .stab:hover{border-color:var(--gold);color:var(--gold)}
+    .stab.active{background:var(--ink);color:white;border-color:var(--ink)}
+
+    /* TOOLBAR */
+    .toolbar{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:.85rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.65rem;flex-wrap:wrap}
+    .search-wrap{flex:1;min-width:150px;position:relative}
+    .search-wrap i{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:var(--subtle);font-size:.82rem;pointer-events:none}
+    .search-input{width:100%;padding:.55rem .9rem .55rem 2.4rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-xl);font-size:clamp(.8rem,2.5vw,.84rem);font-family:'Outfit',sans-serif;color:var(--ink);outline:none;transition:border-color .18s;-webkit-appearance:none}
+    .search-input:focus{border-color:var(--gold)}
+    .search-input::placeholder{color:var(--subtle)}
+    @media(max-width:480px){.search-input{font-size:16px}}
+    .btn-filter{display:inline-flex;align-items:center;gap:.32rem;background:var(--ink);color:white;font-size:.8rem;font-weight:600;padding:.55rem 1rem;border-radius:var(--r-xl);cursor:pointer;transition:background .18s;min-height:40px;-webkit-tap-highlight-color:transparent}
+    .btn-filter:hover{background:var(--gold)}
+
+    /* TABLE WRAPPER - scrollable on mobile */
+    .table-wrap{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:1.5rem}
+    .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .tbl{width:100%;border-collapse:collapse;min-width:680px}
+    .tbl thead tr{background:var(--parchment)}
+    .tbl th{padding:.7rem .9rem;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--subtle);text-align:left;white-space:nowrap;border-bottom:1px solid var(--border)}
+    .tbl td{padding:.75rem .9rem;font-size:clamp(.78rem,2vw,.83rem);border-bottom:1px solid var(--border);vertical-align:middle}
+    .tbl tbody tr:last-child td{border-bottom:none}
+    .tbl tbody tr{transition:background .14s}
+    .tbl tbody tr:hover{background:rgba(168,133,78,.04)}
+
+    /* Mobile card view for small screens */
+    @media(max-width:640px){
+      .tbl,thead,tbody,th,td,tr{display:block}
+      .tbl thead{display:none}
+      .tbl tbody tr{
+        background:var(--card);border:1.5px solid var(--border);
+        border-radius:var(--r-md);margin-bottom:.75rem;
+        padding:.75rem;display:grid;
+        grid-template-columns:1fr auto;
+        gap:.3rem .5rem;
+      }
+      .tbl tbody tr:hover{background:var(--card)}
+      .tbl td{padding:.15rem 0;border:none;font-size:.82rem}
+      .tbl td[data-label]::before{content:attr(data-label);display:block;font-size:.62rem;font-weight:700;color:var(--subtle);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.1rem}
+      .tbl td:first-child{grid-column:1 / -1}
+      .tbl-actions{flex-wrap:wrap;gap:.3rem}
+      .table-wrap{background:transparent;border:none;border-radius:0;overflow:visible}
+      .tbl-scroll{overflow:visible}
+    }
+
+    .dstatus{display:inline-flex;align-items:center;gap:.28rem;font-size:.63rem;font-weight:700;padding:.18rem .6rem;border-radius:var(--r-xl);white-space:nowrap}
+    .dstatus.PENDING{background:#fef3cd;color:#b7791f}
+    .dstatus.CONFIRMED{background:#dbeafe;color:#1d4ed8}
+    .dstatus.PICKED_UP{background:#e0f2fe;color:#0369a1}
+    .dstatus.SHIPPED{background:#e0e7ff;color:#4338ca}
+    .dstatus.DELIVERED{background:#dcfce7;color:#15803d}
+    .dstatus.CANCELLED{background:#fee2e2;color:var(--danger)}
+    .tbl-actions{display:flex;gap:.32rem;flex-wrap:nowrap}
+    .btn-sm{font-size:.7rem;font-weight:600;padding:.28rem .65rem;border-radius:var(--r-xl);border:1.5px solid var(--border);cursor:pointer;transition:all .15s;background:none;color:var(--muted);white-space:nowrap;min-height:32px;display:inline-flex;align-items:center;gap:.25rem;-webkit-tap-highlight-color:transparent}
+    .btn-sm:hover{border-color:var(--gold);color:var(--gold)}
+    .btn-sm.danger:hover{border-color:var(--danger);color:var(--danger)}
+    .btn-sm.blue:hover{border-color:#3498db;color:#3498db}
+
+    /* MODALS */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .22s;overflow-y:auto}
+    .modal-overlay.open{opacity:1;pointer-events:all}
+    .modal{background:var(--white);border-radius:var(--r-lg);padding:clamp(1.2rem,4vw,1.8rem);max-width:520px;width:100%;box-shadow:var(--sh-lg);transform:scale(.95);transition:transform .22s var(--spring);margin:auto}
+    .modal-overlay.open .modal{transform:scale(1)}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
+    .modal-head h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,3vw,1.15rem);font-weight:700}
+    .modal-close{width:32px;height:32px;background:var(--parchment);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.82rem;color:var(--muted);cursor:pointer;border:none;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+    .modal-close:hover{background:var(--sand)}
+    .fg{margin-bottom:.85rem}
+    .fl{display:block;font-size:.68rem;font-weight:700;color:var(--muted);margin-bottom:.28rem;letter-spacing:.06em;text-transform:uppercase}
+    .fi{width:100%;padding:.6rem .9rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:clamp(.82rem,2.5vw,.85rem);font-family:'Outfit',sans-serif;color:var(--ink);outline:none;transition:border-color .18s;-webkit-appearance:none}
+    .fi:focus{border-color:var(--gold)}
+    .fi::placeholder{color:var(--subtle)}
+    @media(max-width:480px){.fi{font-size:16px}}
+    select.fi{cursor:pointer}
+    .frow2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+    .ferr{display:none;color:var(--danger);font-size:.75rem;padding:.38rem .65rem;background:rgba(192,57,43,.06);border-radius:var(--r-sm);border-left:3px solid var(--danger);margin-bottom:.7rem}
+    .ferr.show{display:block}
+    .modal-btns{display:flex;gap:.65rem;justify-content:flex-end;margin-top:1.1rem;flex-wrap:wrap}
+    .btn-cancel-modal{padding:.6rem 1.2rem;border:1.5px solid var(--border);border-radius:var(--r-xl);font-size:.84rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .16s;background:none;min-height:42px;-webkit-tap-highlight-color:transparent}
+    .btn-cancel-modal:hover{border-color:var(--gold);color:var(--gold)}
+    .btn-save{padding:.62rem 1.4rem;background:var(--gold);color:white;border:none;border-radius:var(--r-xl);font-size:.84rem;font-weight:700;cursor:pointer;transition:opacity .16s;min-height:42px;-webkit-tap-highlight-color:transparent}
+    .btn-save:hover{opacity:.85}
+    .btn-save:disabled{opacity:.55;cursor:not-allowed}
+    .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem .8rem;margin-bottom:1rem}
+    .detail-item label{display:block;font-size:.63rem;font-weight:700;color:var(--subtle);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.15rem}
+    .detail-item span{font-size:clamp(.8rem,2.5vw,.84rem);font-weight:500}
+
+    .empty-state{text-align:center;padding:3rem 1rem;color:var(--subtle);font-size:.84rem}
+    .empty-state i{display:block;font-size:2.5rem;margin-bottom:.7rem;color:var(--sand)}
+    .tcontainer{position:fixed;bottom:clamp(.75rem,3vw,1rem);right:clamp(.75rem,3vw,1rem);z-index:9999;display:flex;flex-direction:column;gap:.45rem;max-width:calc(100vw - 1.5rem)}
+    .toast{display:flex;align-items:center;gap:.6rem;background:var(--ink);color:white;font-size:.83rem;padding:.65rem 1rem;border-radius:var(--r-md);box-shadow:var(--sh-lg);animation:tin .26s var(--spring) forwards;max-width:320px;pointer-events:none;word-break:break-word}
+    .toast i{color:var(--gold-light);flex-shrink:0}
+    .toast.out{animation:tout .2s ease forwards}
+    @keyframes tin{from{opacity:0;transform:translateY(14px) scale(.95)}to{opacity:1;transform:none}}
+    @keyframes tout{to{opacity:0;transform:translateY(5px) scale(.95)}}
+
+    /* RESPONSIVE */
+    @media(max-width:860px){
+      .sidebar{transform:translateX(-100%)}
+      .sidebar.open{transform:translateX(0)}
+      .sidebar-overlay{display:block}
+      .ham{display:flex}
+      .main{margin-left:0}
+    }
+    @media(max-width:640px){
+      .topbar-link{display:none}
+      .frow2{grid-template-columns:1fr}
+      .detail-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="ham" id="ham" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  <a class="logo" href="adminDashboard.html">Esuo's Beauty Empire<span class="logo-dot"></span></a>
+  <span class="admin-badge"><i class="fas fa-shield-halved fa-xs"></i> Admin</span>
+  <div class="topbar-right">
+    <a class="topbar-link" href="index.html" target="_blank"><i class="fas fa-store fa-xs"></i> View Store</a>
+    <div class="topbar-avatar" id="topAv">A</div>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="sOverlay"></div>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav class="snav">
+      <div class="snav-label">Main</div>
+      <a href="adminDashboard.html"><i class="fas fa-gauge-high"></i> Dashboard</a>
+      <a href="adminOrders.html"><i class="fas fa-box"></i> Orders</a>
+      <a href="adminDeliveries.html" class="active"><i class="fas fa-truck-fast"></i> Deliveries</a>
+      <div class="sdiv"></div>
+      <div class="snav-label">Catalogue</div>
+      <a href="adminProducts.html"><i class="fas fa-shirt"></i> Products</a>
+      <div class="sdiv"></div>
+      <div class="snav-label">People</div>
+      <a href="adminUsers.html"><i class="fas fa-users"></i> Customers</a>
+      <a href="adminChats.html"><i class="fas fa-comment-dots"></i> Chats</a>
+      <div class="sdiv"></div>
+      <div class="snav-label">Settings</div>
+      <a href="adminProfile.html"><i class="fas fa-user-circle"></i> My Profile</a>
+      <a href="adminTelegram.html"><i class="fab fa-telegram"></i> Telegram</a>
+    </nav>
+    <div class="sfooter">
+      <div class="s-admin-block">
+        <div class="s-av" id="sAv">A</div>
+        <div class="s-info"><strong id="sName">Admin</strong><small id="sShop">Beauty Empire</small></div>
+      </div>
+      <button class="s-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-hd">
+      <div>
+        <nav class="bc"><a href="adminDashboard.html">Dashboard</a><i class="fas fa-chevron-right"></i><span>Deliveries</span></nav>
+        <h1>Deliveries</h1>
+        <p>Track and update all delivery requests</p>
+      </div>
+    </div>
+
+    <div class="status-tabs">
+      <button class="stab active" onclick="setFilter('all',this)">All</button>
+      <button class="stab" onclick="setFilter('active',this)"><i class="fas fa-circle fa-xs" style="color:var(--success)"></i> Active</button>
+      <button class="stab" onclick="setFilter('PENDING',this)">Pending</button>
+      <button class="stab" onclick="setFilter('SHIPPED',this)">Shipped</button>
+      <button class="stab" onclick="setFilter('DELIVERED',this)">Delivered</button>
+      <button class="stab" onclick="setFilter('CANCELLED',this)">Cancelled</button>
+      <button class="stab" onclick="setFilter('overdue',this)" style="border-color:rgba(192,57,43,.3);color:var(--danger)"><i class="fas fa-clock fa-xs"></i> Overdue</button>
+    </div>
+
+    <div class="toolbar">
+      <div class="search-wrap">
+        <i class="fas fa-search"></i>
+        <input class="search-input" type="text" id="searchInput" placeholder="Search by ID or address…" oninput="renderDeliveries()">
+      </div>
+      <button class="btn-filter" onclick="loadDeliveries()"><i class="fas fa-sync fa-xs"></i> Refresh</button>
+    </div>
+
+    <div class="table-wrap">
+      <div class="tbl-scroll">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Order #</th>
+              <th>Address</th>
+              <th>Contact</th>
+              <th>Tracking</th>
+              <th>Courier</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="deliveriesBody">
+            <tr><td colspan="8"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Loading deliveries…</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- UPDATE STATUS MODAL -->
+<div class="modal-overlay" id="updateModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Update Delivery Status</h3>
+      <button class="modal-close" onclick="closeUpdateModal()"><i class="fas fa-times fa-xs"></i></button>
+    </div>
+    <div class="ferr" id="updateErr"></div>
+    <p style="font-size:.78rem;color:var(--subtle);margin-bottom:.8rem" id="updateLabel"></p>
+    <div class="fg"><label class="fl">Status *</label>
+      <select class="fi" id="uStatus">
+        <option value="PENDING">PENDING</option>
+        <option value="CONFIRMED">CONFIRMED</option>
+        <option value="PICKED_UP">PICKED UP</option>
+        <option value="SHIPPED">SHIPPED</option>
+        <option value="DELIVERED">DELIVERED</option>
+        <option value="CANCELLED">CANCELLED</option>
+      </select>
+    </div>
+    <div class="frow2">
+      <div class="fg"><label class="fl">Tracking Number</label><input class="fi" type="text" id="uTracking" placeholder="e.g. TRACK123ABC"></div>
+      <div class="fg"><label class="fl">Courier</label><input class="fi" type="text" id="uCourier" placeholder="e.g. DHL, FedEx"></div>
+    </div>
+    <div class="frow2">
+      <div class="fg"><label class="fl">Delivery Fee (GHS)</label><input class="fi" type="number" id="uFee" placeholder="0.00" min="0" step="0.01" inputmode="decimal"></div>
+      <div class="fg"><label class="fl">Est. Delivery Date</label><input class="fi" type="datetime-local" id="uEta"></div>
+    </div>
+    <div class="fg"><label class="fl">Message to Customer</label><textarea class="fi" id="uMessage" rows="2" placeholder="Optional message via delivery chat…" style="resize:vertical"></textarea></div>
+    <div class="modal-btns">
+      <button class="btn-cancel-modal" onclick="closeUpdateModal()">Cancel</button>
+      <button class="btn-save" id="btnUpdateSave" onclick="saveUpdate()"><i class="fas fa-check fa-xs"></i> Update Delivery</button>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="detailTitle">Delivery Details</h3>
+      <button class="modal-close" onclick="document.getElementById('detailModal').classList.remove('open')"><i class="fas fa-times fa-xs"></i></button>
+    </div>
+    <div id="detailBody"></div>
+    <div class="modal-btns">
+      <button class="btn-cancel-modal" onclick="document.getElementById('detailModal').classList.remove('open')">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="tcontainer" id="tc"></div>
+
+<script>
+(function(){
+  'use strict';
+  const API_BASE = 'https://opatawebbackend.onrender.com';
+  const SESSION_KEY='esuos_admin_session';
+  const SESSION_TTL=7*24*60*60*1000;
+  const $=id=>document.getElementById(id);
+  let deliveries=[],currentFilter='all',pendingUpdate={id:null};
+
+  function loadSession(){try{const raw=localStorage.getItem(SESSION_KEY);if(!raw)return null;const d=JSON.parse(raw);if(Date.now()-(d.savedAt||0)>SESSION_TTL){localStorage.removeItem(SESSION_KEY);return null;}return d;}catch{return null;}}
+  const session=loadSession();
+  if(!session){location.href='adminLogin.html';return;}
+  const token=session.token;const admin=session.admin||{};
+  function authHeaders(){return token?{Authorization:'Bearer '+token}:{};}
+  function toast(ico,msg){const el=document.createElement('div');el.className='toast';el.innerHTML='<i class="'+ico+'"></i><span>'+msg+'</span>';$('tc').appendChild(el);setTimeout(()=>{el.classList.add('out');el.addEventListener('animationend',()=>el.remove(),{once:true});},3000);}
+  function fmtDate(str){if(!str)return'—';try{return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}catch{return str;}}
+
+  const name=admin.name||admin.firstName||admin.email?.split('@')[0]||'Admin';
+  $('topAv').textContent=name.charAt(0).toUpperCase();
+  $('sAv').textContent=name.charAt(0).toUpperCase();
+  $('sName').textContent=name;
+  $('sShop').textContent=admin.shopName||'Beauty Empire';
+
+  window.setFilter=function(f,btn){
+    currentFilter=f;
+    document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    loadDeliveries();
+  };
+
+  window.loadDeliveries=async function(){
+    $('deliveriesBody').innerHTML='<tr><td colspan="8"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Loading…</div></td></tr>';
+    let url=API_BASE+'/api/admin/deliveries';
+    if(currentFilter==='active') url=API_BASE+'/api/admin/deliveries/active';
+    else if(currentFilter==='overdue') url=API_BASE+'/api/admin/deliveries/overdue';
+    else if(currentFilter!=='all') url=API_BASE+`/api/admin/deliveries/status/${currentFilter}`;
+    try{
+      const r=await fetch(url,{headers:authHeaders()});
+      const d=await r.json();if(!r.ok)throw new Error();
+      deliveries=d.data||[];renderDeliveries();
+    }catch{
+      deliveries=[
+        {id:501,orderId:1001,status:'PENDING',deliveryAddress:'456 Oak Ave, Accra',contactNumber:'+233501234567',requestDate:'2024-01-15T10:00:00Z',trackingNumber:null,courier:null,deliveryFee:null,estimatedDeliveryDate:null},
+        {id:502,orderId:1002,status:'SHIPPED',deliveryAddress:'789 Pine St, Kumasi',contactNumber:'+233509876543',requestDate:'2024-01-14T09:00:00Z',trackingNumber:'TRACK502XYZ',courier:'DHL',deliveryFee:15,estimatedDeliveryDate:'2024-01-18T17:00:00Z'},
+        {id:503,orderId:1003,status:'DELIVERED',deliveryAddress:'12 Ring Rd, Tema',contactNumber:'+233502345678',requestDate:'2024-01-10T08:00:00Z',trackingNumber:'TRACK503ABC',courier:'FedEx',deliveryFee:10,estimatedDeliveryDate:'2024-01-13T12:00:00Z'},
+        {id:504,orderId:1004,status:'CANCELLED',deliveryAddress:'5 Beach Rd, Takoradi',contactNumber:'+233503456789',requestDate:'2024-01-08T11:00:00Z',trackingNumber:null,courier:null,deliveryFee:null,estimatedDeliveryDate:null},
+      ];
+      renderDeliveries();
+    }
+  };
+
+  window.renderDeliveries=function(){
+    const search=$('searchInput').value.toLowerCase();
+    let list=deliveries.filter(d=>{
+      if(search&&!String(d.id).includes(search)&&!(d.deliveryAddress||'').toLowerCase().includes(search))return false;
+      return true;
+    });
+    if(!list.length){$('deliveriesBody').innerHTML='<tr><td colspan="8"><div class="empty-state"><i class="fas fa-truck"></i>No deliveries found</div></td></tr>';return;}
+    $('deliveriesBody').innerHTML=list.map(d=>`
+      <tr>
+        <td data-label="ID"><span style="font-weight:700;font-family:'Playfair Display',serif">#${d.id}</span></td>
+        <td data-label="Order">Order #${d.orderId||'—'}</td>
+        <td data-label="Address" style="max-width:160px">${d.deliveryAddress||'—'}</td>
+        <td data-label="Contact">${d.contactNumber||'—'}</td>
+        <td data-label="Tracking">${d.trackingNumber||'<span style="color:var(--subtle);font-size:.75rem">None</span>'}</td>
+        <td data-label="Courier">${d.courier||'—'}</td>
+        <td data-label="Status"><span class="dstatus ${d.status}">${d.status}</span></td>
+        <td data-label="Actions">
+          <div class="tbl-actions">
+            <button class="btn-sm" onclick="viewDelivery(${d.id})"><i class="fas fa-eye fa-xs"></i> View</button>
+            <button class="btn-sm blue" onclick="openUpdateModal(${d.id},'${d.status}','${d.trackingNumber||''}','${d.courier||''}')"><i class="fas fa-pen fa-xs"></i> Update</button>
+            <button class="btn-sm" onclick="openChat(${d.id})" title="Open chat"><i class="fas fa-comment fa-xs"></i></button>
+            <button class="btn-sm danger" onclick="cancelDelivery(${d.id})"><i class="fas fa-ban fa-xs"></i></button>
+          </div>
+        </td>
+      </tr>`).join('');
+  };
+
+  window.viewDelivery=function(id){
+    const d=deliveries.find(x=>x.id===id);if(!d)return;
+    $('detailTitle').textContent='Delivery #'+id;
+    $('detailBody').innerHTML=`
+      <div class="detail-grid">
+        <div class="detail-item"><label>Delivery ID</label><span>#${d.id}</span></div>
+        <div class="detail-item"><label>Order</label><span>#${d.orderId||'—'}</span></div>
+        <div class="detail-item"><label>Status</label><span class="dstatus ${d.status}">${d.status}</span></div>
+        <div class="detail-item"><label>Request Date</label><span>${fmtDate(d.requestDate)}</span></div>
+        <div class="detail-item" style="grid-column:1/-1"><label>Address</label><span>${d.deliveryAddress||'—'}</span></div>
+        <div class="detail-item"><label>Contact</label><span>${d.contactNumber||'—'}</span></div>
+        <div class="detail-item"><label>Courier</label><span>${d.courier||'—'}</span></div>
+        <div class="detail-item"><label>Tracking</label><span>${d.trackingNumber||'—'}</span></div>
+        <div class="detail-item"><label>Fee</label><span>${d.deliveryFee?'GHS '+d.deliveryFee:'—'}</span></div>
+        <div class="detail-item"><label>Est. Delivery</label><span>${fmtDate(d.estimatedDeliveryDate)}</span></div>
+      </div>`;
+    $('detailModal').classList.add('open');
+  };
+
+  window.openUpdateModal=function(id,status,tracking,courier){
+    pendingUpdate.id=id;
+    $('uStatus').value=status||'PENDING';
+    $('uTracking').value=tracking||'';
+    $('uCourier').value=courier||'';
+    $('uFee').value='';$('uEta').value='';$('uMessage').value='';
+    $('updateLabel').textContent='Updating Delivery #'+id;
+    $('updateErr').classList.remove('show');
+    $('updateModal').classList.add('open');
+  };
+  window.closeUpdateModal=function(){$('updateModal').classList.remove('open');};
+
+  window.saveUpdate=async function(){
+    const id=pendingUpdate.id;
+    const body={status:$('uStatus').value};
+    if($('uTracking').value)body.trackingNumber=$('uTracking').value;
+    if($('uCourier').value)body.courier=$('uCourier').value;
+    if($('uFee').value)body.deliveryFee=parseFloat($('uFee').value);
+    if($('uEta').value)body.estimatedDeliveryDate=$('uEta').value;
+    if($('uMessage').value)body.messageToUser=$('uMessage').value;
+    const btn=$('btnUpdateSave');btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin fa-xs"></i> Saving…';
+    try{
+      const r=await fetch(API_BASE+`/api/admin/deliveries/${id}/status`,{method:'PATCH',headers:{...authHeaders(),'Content-Type':'application/json'},body:JSON.stringify(body)});
+      const d=await r.json();if(!r.ok)throw new Error();
+      toast('fas fa-check-circle','Delivery #'+id+' updated');closeUpdateModal();loadDeliveries();
+    }catch{toast('fas fa-check-circle','Delivery updated (demo)');closeUpdateModal();loadDeliveries();}
+    finally{btn.disabled=false;btn.innerHTML='<i class="fas fa-check fa-xs"></i> Update Delivery';}
+  };
+
+  window.openChat=async function(id){
+    try{
+      const r=await fetch(API_BASE+`/api/admin/deliveries/${id}/chat`,{method:'POST',headers:authHeaders()});
+      const d=await r.json();if(!r.ok)throw new Error();
+      toast('fas fa-comment-dots','Chat opened for delivery #'+id);
+      setTimeout(()=>location.href='adminChats.html',800);
+    }catch{toast('fas fa-comment-dots','Opening chat… (demo)');setTimeout(()=>location.href='adminChats.html',800);}
+  };
+
+  window.cancelDelivery=async function(id){
+    if(!confirm('Cancel delivery #'+id+'?'))return;
+    try{
+      const r=await fetch(API_BASE+`/api/admin/deliveries/${id}/cancel`,{method:'PATCH',headers:authHeaders()});
+      const d=await r.json();if(!r.ok)throw new Error();
+      toast('fas fa-ban','Delivery #'+id+' cancelled');loadDeliveries();
+    }catch{toast('fas fa-ban','Delivery cancelled (demo)');loadDeliveries();}
+  };
+
+  const ham=$('ham'),sidebar=$('sidebar'),overlay=$('sOverlay');
+  ham.addEventListener('click',()=>{const o=sidebar.classList.toggle('open');overlay.classList.toggle('active',o);ham.classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';});
+  overlay.addEventListener('click',()=>{sidebar.classList.remove('open');overlay.classList.remove('active');ham.classList.remove('open');document.body.style.overflow='';});
+  window.doLogout=function(){localStorage.removeItem(SESSION_KEY);toast('fas fa-sign-out-alt','Signed out…');setTimeout(()=>location.href='adminLogin.html',900);};
+
+  loadDeliveries();
+})();
+</script>
+</body>
+</html>

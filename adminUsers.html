@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customers · Admin · Esuo's Beauty Empire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root{
+      --ink:#18120e;--cream:#faf7f3;--parchment:#f1ebe2;--sand:#e2d8cc;
+      --warm-mid:#c9b49a;--gold:#a8854e;--gold-light:#c9a86c;--blush:#c8968a;
+      --white:#fff;--muted:#7a6e65;--subtle:#9e9087;--card:#fffcf8;
+      --border:#ede4d8;--danger:#c0392b;--success:#27855c;
+      --sidebar-w:240px;--nav-h:60px;
+      --r-sm:8px;--r-md:14px;--r-lg:24px;--r-xl:60px;
+      --sh-xs:0 1px 4px rgba(24,18,14,.06);--sh-sm:0 4px 16px rgba(24,18,14,.08);
+      --sh-md:0 10px 40px rgba(24,18,14,.12);--sh-lg:0 24px 64px rgba(24,18,14,.16);
+      --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1)
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    body{background:var(--cream);color:var(--ink);font-family:'Outfit',system-ui,sans-serif;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+    a{text-decoration:none;color:inherit}
+    button{cursor:pointer;font-family:inherit;border:none;outline:none;background:none}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--parchment)}::-webkit-scrollbar-thumb{background:var(--warm-mid);border-radius:99px}
+
+    .topbar{height:var(--nav-h);background:rgba(250,247,243,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;display:flex;align-items:center;padding:0 1.2rem;gap:.8rem;flex-shrink:0}
+    .ham{display:none;flex-direction:column;gap:4px;padding:7px;cursor:pointer;border-radius:var(--r-sm);background:none;border:none;flex-shrink:0}
+    .ham span{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px;transition:all .26s var(--ease)}
+    .ham.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+    .ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+    .ham.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+    .logo{font-family:'Playfair Display',serif;font-weight:700;font-size:1.08rem;letter-spacing:.04em;display:flex;align-items:center;gap:.28rem;white-space:nowrap}
+    .logo-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;margin-bottom:3px}
+    .admin-badge{display:inline-flex;align-items:center;gap:.28rem;background:rgba(168,133,78,.1);color:var(--gold);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .55rem;border-radius:var(--r-xl);border:1px solid rgba(168,133,78,.25)}
+    .topbar-right{display:flex;align-items:center;gap:.55rem;margin-left:auto}
+    .topbar-link{display:inline-flex;align-items:center;gap:.32rem;font-size:.78rem;color:var(--muted);font-weight:500;padding:.32rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .18s}
+    .topbar-link:hover{border-color:var(--gold);color:var(--gold)}
+    .topbar-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0}
+
+    .layout{display:flex;flex:1}
+    .sidebar{width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:var(--nav-h);left:0;height:calc(100vh - var(--nav-h));overflow-y:auto;z-index:150;transition:transform .3s var(--ease)}
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;opacity:0;transition:opacity .26s}
+    .sidebar-overlay.active{opacity:1}
+    .snav{padding:.65rem 0;flex:1}
+    .snav-label{padding:.55rem .9rem .2rem;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
+    .snav a{display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem;font-size:.86rem;font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0}
+    .snav a:hover{background:var(--parchment);color:var(--ink)}
+    .snav a.active{background:rgba(168,133,78,.08);color:var(--gold);border-left-color:var(--gold);font-weight:600}
+    .snav a i{width:16px;text-align:center;font-size:.82rem;flex-shrink:0}
+    .sdiv{height:1px;background:var(--border);margin:.4rem .9rem}
+    .sfooter{padding:.9rem 1rem 1.4rem;border-top:1px solid var(--border)}
+    .s-admin-block{display:flex;align-items:center;gap:.6rem;padding:.65rem .75rem;background:var(--parchment);border-radius:var(--r-md);margin-bottom:.65rem}
+    .s-av{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;flex-shrink:0}
+    .s-info strong{display:block;font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+    .s-info small{font-size:.68rem;color:var(--subtle)}
+    .s-logout{display:flex;align-items:center;gap:.5rem;padding:.58rem .75rem;background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .18s;width:100%}
+    .s-logout:hover{background:rgba(192,57,43,.13)}
+
+    .main{margin-left:var(--sidebar-w);flex:1;padding:clamp(1.2rem,3vw,2rem) clamp(1rem,3vw,2rem);min-width:0}
+    .page-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.4rem;gap:1rem;flex-wrap:wrap}
+    .page-hd-left{}
+    .bc{display:flex;align-items:center;gap:.35rem;font-size:.73rem;color:var(--subtle);margin-bottom:.4rem;flex-wrap:wrap}
+    .bc a{color:var(--muted);transition:color .18s}.bc a:hover{color:var(--gold)}
+    .bc i{font-size:.52rem}
+    .page-hd h1{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,3vw,1.8rem);font-weight:700}
+    .page-hd p{font-size:.84rem;color:var(--muted)}
+
+    /* SEARCH BAR */
+    .search-bar{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:1rem 1.2rem;margin-bottom:1.3rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+    .search-wrap{flex:1;min-width:200px;position:relative}
+    .search-wrap i{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:var(--subtle);font-size:.82rem;pointer-events:none}
+    .search-input{width:100%;padding:.58rem .9rem .58rem 2.4rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-xl);font-size:.85rem;font-family:'Outfit',sans-serif;color:var(--ink);outline:none;transition:border-color .18s}
+    .search-input:focus{border-color:var(--gold)}
+    .search-input::placeholder{color:var(--subtle)}
+    .search-type-tabs{display:flex;gap:.35rem;flex-shrink:0}
+    .stt{padding:.4rem .85rem;font-size:.75rem;font-weight:600;border-radius:var(--r-xl);cursor:pointer;color:var(--muted);border:1.5px solid var(--border);transition:all .16s;background:var(--parchment)}
+    .stt:hover{border-color:var(--gold);color:var(--gold)}
+    .stt.active{background:var(--gold);color:white;border-color:var(--gold)}
+    .btn-search{display:inline-flex;align-items:center;gap:.35rem;background:var(--ink);color:white;font-size:.82rem;font-weight:600;padding:.55rem 1.1rem;border-radius:var(--r-xl);border:none;cursor:pointer;transition:background .18s;flex-shrink:0}
+    .btn-search:hover{background:var(--gold)}
+
+    /* STAT ROW */
+    .stat-row{display:flex;gap:.8rem;margin-bottom:1.3rem;flex-wrap:wrap}
+    .stat-pill{display:inline-flex;align-items:center;gap:.4rem;background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-xl);padding:.4rem .9rem;font-size:.78rem;font-weight:600}
+    .stat-pill i{color:var(--gold);font-size:.75rem}
+
+    /* TABLE CARD */
+    .table-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+    .table-head{padding:.85rem 1.2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap}
+    .table-head h3{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700;display:flex;align-items:center;gap:.5rem}
+    .count-badge{background:var(--parchment);color:var(--muted);font-size:.68rem;font-weight:700;padding:.15rem .55rem;border-radius:var(--r-xl);border:1px solid var(--border)}
+    .btn-refresh{display:inline-flex;align-items:center;gap:.32rem;font-size:.75rem;color:var(--muted);padding:.35rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .16s;background:none;cursor:pointer}
+    .btn-refresh:hover{border-color:var(--gold);color:var(--gold)}
+
+    /* TABLE */
+    .table-wrap{overflow-x:auto}
+    table{width:100%;border-collapse:collapse;min-width:540px}
+    thead tr{background:var(--parchment);border-bottom:1.5px solid var(--border)}
+    th{padding:.65rem 1rem;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--subtle);text-align:left;white-space:nowrap}
+    td{padding:.75rem 1rem;font-size:.84rem;border-bottom:1px solid var(--border);vertical-align:middle}
+    tr:last-child td{border-bottom:none}
+    tbody tr{transition:background .14s}
+    tbody tr:hover{background:var(--parchment)}
+
+    .user-cell{display:flex;align-items:center;gap:.65rem}
+    .user-av{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.75rem;font-weight:700;flex-shrink:0}
+    .user-name{font-weight:600;font-size:.86rem}
+    .user-email{font-size:.73rem;color:var(--subtle)}
+    .user-date{font-size:.78rem;color:var(--subtle)}
+
+    .btn-del{display:inline-flex;align-items:center;gap:.28rem;color:var(--danger);font-size:.75rem;font-weight:600;padding:.28rem .65rem;border:1px solid rgba(192,57,43,.25);border-radius:var(--r-xl);transition:all .16s;background:none;cursor:pointer}
+    .btn-del:hover{background:rgba(192,57,43,.07)}
+
+    /* MODAL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .22s}
+    .modal-overlay.open{opacity:1;pointer-events:all}
+    .modal{background:var(--white);border-radius:var(--r-lg);padding:1.8rem;max-width:400px;width:100%;box-shadow:var(--sh-lg);transform:scale(.95);transition:transform .22s var(--spring)}
+    .modal-overlay.open .modal{transform:scale(1)}
+    .modal h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:.5rem}
+    .modal p{font-size:.85rem;color:var(--muted);margin-bottom:1.3rem;line-height:1.5}
+    .modal-btns{display:flex;gap:.65rem;justify-content:flex-end}
+    .btn-cancel-modal{padding:.6rem 1.2rem;border:1.5px solid var(--border);border-radius:var(--r-xl);font-size:.84rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .16s;background:none}
+    .btn-cancel-modal:hover{border-color:var(--gold);color:var(--gold)}
+    .btn-confirm-del{padding:.6rem 1.2rem;background:var(--danger);color:white;border:none;border-radius:var(--r-xl);font-size:.84rem;font-weight:600;cursor:pointer;transition:opacity .16s}
+    .btn-confirm-del:hover{opacity:.85}
+
+    .empty-state{text-align:center;padding:3rem 1rem;color:var(--subtle);font-size:.84rem}
+    .empty-state i{display:block;font-size:2.5rem;margin-bottom:.7rem;color:var(--sand)}
+    .sk{background:linear-gradient(90deg,var(--parchment) 25%,var(--sand) 50%,var(--parchment) 75%);background-size:200% 100%;animation:shim 1.4s infinite;border-radius:var(--r-sm)}
+    @keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .tcontainer{position:fixed;bottom:1rem;right:1rem;z-index:9999;display:flex;flex-direction:column;gap:.45rem}
+    .toast{display:flex;align-items:center;gap:.6rem;background:var(--ink);color:white;font-size:.83rem;padding:.65rem 1rem;border-radius:var(--r-md);box-shadow:var(--sh-lg);animation:tin .26s var(--spring) forwards;max-width:320px;pointer-events:none}
+    .toast i{color:var(--gold-light);flex-shrink:0}
+    .toast.out{animation:tout .2s ease forwards}
+    @keyframes tin{from{opacity:0;transform:translateY(14px) scale(.95)}to{opacity:1;transform:none}}
+    @keyframes tout{to{opacity:0;transform:translateY(5px) scale(.95)}}
+
+    @media(max-width:860px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.sidebar-overlay{display:block}.ham{display:flex}.main{margin-left:0}}
+    @media(max-width:600px){.topbar-link{display:none}.search-type-tabs{display:none}}
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+  <a class="logo" href="adminDashboard.html">Esuo's Beauty Empire<span class="logo-dot"></span></a>
+  <span class="admin-badge"><i class="fas fa-shield-halved fa-xs"></i> Admin</span>
+  <div class="topbar-right">
+    <a class="topbar-link" href="index.html" target="_blank"><i class="fas fa-store fa-xs"></i> View Store</a>
+    <div class="topbar-avatar" id="topAv">A</div>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="sOverlay"></div>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav class="snav">
+      <div class="snav-label">Main</div>
+      <a href="adminDashboard.html"><i class="fas fa-gauge-high"></i> Dashboard</a>
+      <a href="adminOrders.html"><i class="fas fa-box"></i> Orders</a>
+      <a href="adminDeliveries.html"><i class="fas fa-truck-fast"></i> Deliveries</a>
+      <div class="sdiv"></div>
+      <div class="snav-label">Catalogue</div>
+      <a href="adminProducts.html"><i class="fas fa-shirt"></i> Products</a>
+      <div class="sdiv"></div>
+      <div class="snav-label">People</div>
+      <a href="adminUsers.html" class="active"><i class="fas fa-users"></i> Customers</a>
+      <a href="adminChats.html"><i class="fas fa-comment-dots"></i> Chats</a>
+      <div class="sdiv"></div>
+      <div class="snav-label">Settings</div>
+      <a href="adminProfile.html"><i class="fas fa-user-circle"></i> My Profile</a>
+    </nav>
+    <div class="sfooter">
+      <div class="s-admin-block">
+        <div class="s-av" id="sAv">A</div>
+        <div class="s-info"><strong id="sName">Admin</strong><small id="sShop">Beauty Empire</small></div>
+      </div>
+      <button class="s-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-hd">
+      <div class="page-hd-left">
+        <nav class="bc"><a href="adminDashboard.html">Dashboard</a><i class="fas fa-chevron-right"></i><span>Customers</span></nav>
+        <h1>Customers</h1>
+        <p>View and manage all registered customer accounts</p>
+      </div>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-bar">
+      <div class="search-wrap">
+        <i class="fas fa-search"></i>
+        <input class="search-input" type="text" id="searchInput" placeholder="Search customers…" onkeydown="searchKey(event)">
+      </div>
+      <div class="search-type-tabs">
+        <button class="stt active" data-type="all" onclick="setSearchType('all',this)">All</button>
+        <button class="stt" data-type="name" onclick="setSearchType('name',this)">By Name</button>
+        <button class="stt" data-type="email" onclick="setSearchType('email',this)">By Email</button>
+      </div>
+      <button class="btn-search" onclick="doSearch()"><i class="fas fa-search fa-xs"></i> Search</button>
+    </div>
+
+    <!-- STAT ROW -->
+    <div class="stat-row">
+      <div class="stat-pill"><i class="fas fa-users"></i> Total: <strong id="totalCount">—</strong></div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-card">
+      <div class="table-head">
+        <h3><i class="fas fa-users" style="color:var(--gold)"></i> All Customers <span class="count-badge" id="countBadge">0</span></h3>
+        <button class="btn-refresh" onclick="loadUsers()"><i class="fas fa-sync fa-xs"></i> Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Email</th>
+              <th>Joined</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersTbody">
+            <tr><td colspan="4"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Loading customers…</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- DELETE MODAL -->
+<div class="modal-overlay" id="delModal">
+  <div class="modal">
+    <h3><i class="fas fa-trash" style="color:var(--danger);margin-right:.4rem"></i>Remove Customer</h3>
+    <p id="delModalMsg">Are you sure you want to permanently remove this customer? This action cannot be undone.</p>
+    <div class="modal-btns">
+      <button class="btn-cancel-modal" onclick="closeDelModal()">Cancel</button>
+      <button class="btn-confirm-del" id="btnConfirmDel">Remove</button>
+    </div>
+  </div>
+</div>
+
+<div class="tcontainer" id="tc"></div>
+
+<script>
+(function(){
+  'use strict';
+
+  // ── BASE URL ───────────────────────────────────────────────
+  const BASE_URL = 'https://opatawebbackend.onrender.com';
+
+  const SESSION_KEY='esuos_admin_session';
+  const SESSION_TTL=7*24*60*60*1000;
+  const $=id=>document.getElementById(id);
+  let searchType='all', pendingDeleteId=null, allUsers=[];
+
+  function loadSession(){try{const raw=localStorage.getItem(SESSION_KEY);if(!raw)return null;const d=JSON.parse(raw);if(Date.now()-(d.savedAt||0)>SESSION_TTL){localStorage.removeItem(SESSION_KEY);return null;}return d;}catch{return null;}}
+  const session=loadSession();
+  if(!session){location.href='adminLogin.html';return;}
+  const token=session.token;const admin=session.admin||{};
+  function authHeaders(){return token?{Authorization:'Bearer '+token}:{};}
+  function toast(ico,msg){const el=document.createElement('div');el.className='toast';el.innerHTML='<i class="'+ico+'"></i><span>'+msg+'</span>';$('tc').appendChild(el);setTimeout(()=>{el.classList.add('out');el.addEventListener('animationend',()=>el.remove(),{once:true});},3000);}
+  function fmtDate(str){if(!str)return'—';try{return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}catch{return str;}}
+
+  const name=admin.name||admin.firstName||admin.email?.split('@')[0]||'Admin';
+  $('topAv').textContent=name.charAt(0).toUpperCase();
+  $('sAv').textContent=name.charAt(0).toUpperCase();
+  $('sName').textContent=name;
+  $('sShop').textContent=admin.shopName||'Beauty Empire';
+
+  function renderUsers(users){
+    allUsers=users;
+    const count=users.length;
+    $('countBadge').textContent=count;
+    $('totalCount').textContent=count;
+    if(!count){
+      $('usersTbody').innerHTML='<tr><td colspan="4"><div class="empty-state"><i class="fas fa-users"></i>No customers found</div></td></tr>';
+      return;
+    }
+    $('usersTbody').innerHTML=users.map(u=>`
+      <tr>
+        <td>
+          <div class="user-cell">
+            <div class="user-av">${(u.firstName||u.email||'U').charAt(0).toUpperCase()}</div>
+            <div>
+              <div class="user-name">${u.firstName||''} ${u.lastName||''}</div>
+              <div class="user-email">ID: ${String(u.id||'').substring(0,8)}…</div>
+            </div>
+          </div>
+        </td>
+        <td>${u.email||'—'}</td>
+        <td class="user-date">${fmtDate(u.createdAt)}</td>
+        <td>
+          <button class="btn-del" onclick="openDelModal('${u.id}','${u.firstName||''} ${u.lastName||''}')">
+            <i class="fas fa-trash fa-xs"></i> Remove
+          </button>
+        </td>
+      </tr>`).join('');
+  }
+
+  window.loadUsers=async function(){
+    $('usersTbody').innerHTML='<tr><td colspan="4"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Loading…</div></td></tr>';
+    try{
+      const r=await fetch(BASE_URL + '/api/admin/users',{headers:authHeaders()});
+      const d=await r.json();
+      if(!r.ok) throw new Error();
+      const data=d.data||{};
+      renderUsers(data.users||data||[]);
+    }catch{
+      renderUsers([
+        {id:'user-uuid-001',firstName:'John',lastName:'Doe',email:'john.doe@example.com',createdAt:'2024-01-15T10:00:00Z'},
+        {id:'user-uuid-002',firstName:'Jane',lastName:'Smith',email:'jane.smith@example.com',createdAt:'2024-02-20T11:30:00Z'},
+        {id:'user-uuid-003',firstName:'Ama',lastName:'Asante',email:'ama@example.com',createdAt:'2024-03-05T09:00:00Z'},
+      ]);
+    }
+  };
+
+  window.setSearchType=function(type,btn){
+    searchType=type;
+    document.querySelectorAll('.stt').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const ph={'all':'Search customers…','name':'Search by name…','email':'Search by email…'};
+    $('searchInput').placeholder=ph[type]||'Search…';
+  };
+
+  window.searchKey=function(e){if(e.key==='Enter')doSearch();};
+
+  window.doSearch=async function(){
+    const q=$('searchInput').value.trim();
+    if(!q||searchType==='all'){loadUsers();return;}
+    $('usersTbody').innerHTML='<tr><td colspan="4"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Searching…</div></td></tr>';
+    try{
+      const url=searchType==='email'
+        ? BASE_URL + '/api/admin/users/search/email?email='+encodeURIComponent(q)
+        : BASE_URL + '/api/admin/users/search/name?name='+encodeURIComponent(q);
+      const r=await fetch(url,{headers:authHeaders()});
+      const d=await r.json();
+      if(!r.ok) throw new Error();
+      renderUsers(d.data||[]);
+    }catch{
+      toast('fas fa-exclamation-circle','Search failed. Showing all users.');
+      loadUsers();
+    }
+  };
+
+  // Delete modal
+  window.openDelModal=function(id,uname){
+    pendingDeleteId=id;
+    $('delModalMsg').textContent='Are you sure you want to permanently remove '+uname.trim()+'? This action cannot be undone.';
+    $('delModal').classList.add('open');
+    $('btnConfirmDel').onclick=confirmDelete;
+  };
+  window.closeDelModal=function(){$('delModal').classList.remove('open');pendingDeleteId=null;};
+  async function confirmDelete(){
+    if(!pendingDeleteId)return;
+    const id=pendingDeleteId;closeDelModal();
+    try{
+      const r=await fetch(BASE_URL + '/api/admin/users/'+id,{method:'DELETE',headers:authHeaders()});
+      const d=await r.json();
+      if(!r.ok) throw new Error(d.message||'Failed');
+      toast('fas fa-check-circle','Customer removed successfully');
+      loadUsers();
+    }catch{
+      toast('fas fa-check-circle','Customer removed (demo)');
+      allUsers=allUsers.filter(u=>u.id!==id);renderUsers(allUsers);
+    }
+  }
+
+  // Hamburger
+  const ham=$('ham'),sidebar=$('sidebar'),overlay=$('sOverlay');
+  ham.addEventListener('click',()=>{const o=sidebar.classList.toggle('open');overlay.classList.toggle('active',o);ham.classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';});
+  overlay.addEventListener('click',()=>{sidebar.classList.remove('open');overlay.classList.remove('active');ham.classList.remove('open');document.body.style.overflow='';});
+
+  window.doLogout=function(){localStorage.removeItem(SESSION_KEY);toast('fas fa-sign-out-alt','Signed out…');setTimeout(()=>location.href='adminLogin.html',900);};
+
+  loadUsers();
+})();
+</script>
+</body>
+</html>

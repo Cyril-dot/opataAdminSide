@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile · Admin · Esuo's Beauty Empire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root{
+      --ink:#18120e;--cream:#faf7f3;--parchment:#f1ebe2;--sand:#e2d8cc;
+      --warm-mid:#c9b49a;--gold:#a8854e;--gold-light:#c9a86c;--blush:#c8968a;
+      --white:#fff;--muted:#7a6e65;--subtle:#9e9087;--card:#fffcf8;
+      --border:#ede4d8;--danger:#c0392b;--success:#27855c;
+      --sidebar-w:240px;--nav-h:60px;
+      --r-sm:8px;--r-md:14px;--r-lg:24px;--r-xl:60px;
+      --sh-xs:0 1px 4px rgba(24,18,14,.06);--sh-sm:0 4px 16px rgba(24,18,14,.08);
+      --sh-md:0 10px 40px rgba(24,18,14,.12);--sh-lg:0 24px 64px rgba(24,18,14,.16);
+      --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1)
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    body{background:var(--cream);color:var(--ink);font-family:'Outfit',system-ui,sans-serif;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+    a{text-decoration:none;color:inherit}
+    button{cursor:pointer;font-family:inherit;border:none;outline:none;background:none}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--parchment)}::-webkit-scrollbar-thumb{background:var(--warm-mid);border-radius:99px}
+
+    .topbar{height:var(--nav-h);background:rgba(250,247,243,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;display:flex;align-items:center;padding:0 1.2rem;gap:.8rem;flex-shrink:0}
+    .ham{display:none;flex-direction:column;gap:4px;padding:7px;cursor:pointer;border-radius:var(--r-sm);background:none;border:none;flex-shrink:0}
+    .ham span{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px;transition:all .26s var(--ease)}
+    .ham.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+    .ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+    .ham.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+    .logo{font-family:'Playfair Display',serif;font-weight:700;font-size:1.08rem;letter-spacing:.04em;display:flex;align-items:center;gap:.28rem;white-space:nowrap}
+    .logo-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;margin-bottom:3px}
+    .admin-badge{display:inline-flex;align-items:center;gap:.28rem;background:rgba(168,133,78,.1);color:var(--gold);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .55rem;border-radius:var(--r-xl);border:1px solid rgba(168,133,78,.25)}
+    .topbar-right{display:flex;align-items:center;gap:.55rem;margin-left:auto}
+    .topbar-link{display:inline-flex;align-items:center;gap:.32rem;font-size:.78rem;color:var(--muted);font-weight:500;padding:.32rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .18s}
+    .topbar-link:hover{border-color:var(--gold);color:var(--gold)}
+    .topbar-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0}
+
+    .layout{display:flex;flex:1;min-height:0}
+    .sidebar{width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:var(--nav-h);left:0;height:calc(100vh - var(--nav-h));overflow-y:auto;z-index:150;transition:transform .3s var(--ease)}
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;opacity:0;transition:opacity .26s}
+    .sidebar-overlay.active{opacity:1}
+    .snav{padding:.65rem 0;flex:1}
+    .snav-label{padding:.55rem .9rem .2rem;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
+    .snav a{display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem;font-size:.86rem;font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0}
+    .snav a:hover{background:var(--parchment);color:var(--ink)}
+    .snav a.active{background:rgba(168,133,78,.08);color:var(--gold);border-left-color:var(--gold);font-weight:600}
+    .snav a i{width:16px;text-align:center;font-size:.82rem;flex-shrink:0}
+    .sdiv{height:1px;background:var(--border);margin:.4rem .9rem}
+    .sfooter{padding:.9rem 1rem 1.4rem;border-top:1px solid var(--border)}
+    .s-admin-block{display:flex;align-items:center;gap:.6rem;padding:.65rem .75rem;background:var(--parchment);border-radius:var(--r-md);margin-bottom:.65rem}
+    .s-av{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;flex-shrink:0}
+    .s-info strong{display:block;font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+    .s-info small{font-size:.68rem;color:var(--subtle)}
+    .s-logout{display:flex;align-items:center;gap:.5rem;padding:.58rem .75rem;background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .18s;width:100%}
+    .s-logout:hover{background:rgba(192,57,43,.13)}
+
+    .main{margin-left:var(--sidebar-w);flex:1;padding:clamp(1.2rem,3vw,2rem) clamp(1rem,3vw,2rem);min-width:0}
+    .page-hd{margin-bottom:1.6rem}
+    .bc{display:flex;align-items:center;gap:.35rem;font-size:.73rem;color:var(--subtle);margin-bottom:.5rem;flex-wrap:wrap}
+    .bc a{color:var(--muted);transition:color .18s}.bc a:hover{color:var(--gold)}
+    .bc i{font-size:.52rem}
+    .page-hd h1{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,3vw,1.8rem);font-weight:700}
+
+    /* Profile hero */
+    .profile-hero{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:2rem;display:flex;align-items:center;gap:1.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+    .profile-av{width:80px;height:80px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:2rem;font-weight:700;flex-shrink:0}
+    .profile-info{}
+    .profile-name{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:.2rem}
+    .profile-email{font-size:.86rem;color:var(--muted);display:flex;align-items:center;gap:.35rem}
+    .profile-shop{display:inline-flex;align-items:center;gap:.3rem;background:rgba(168,133,78,.1);color:var(--gold);font-size:.73rem;font-weight:700;padding:.2rem .65rem;border-radius:var(--r-xl);border:1px solid rgba(168,133,78,.25);margin-top:.5rem}
+    .profile-date{font-size:.75rem;color:var(--subtle);margin-top:.35rem;display:flex;align-items:center;gap:.28rem}
+
+    /* Info grid */
+    .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem;margin-bottom:1.5rem}
+    .info-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+    .ic-head{padding:.85rem 1.2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.6rem}
+    .ic-head-icon{width:30px;height:30px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:.78rem;color:white}
+    .ic-head h3{font-family:'Playfair Display',serif;font-size:.92rem;font-weight:700}
+    .ic-body{padding:1rem 1.2rem;display:flex;flex-direction:column;gap:.75rem}
+    .ic-row{display:flex;flex-direction:column;gap:.15rem}
+    .ic-row label{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+    .ic-row span{font-size:.88rem;color:var(--ink);font-weight:500}
+
+    /* Danger zone */
+    .danger-card{background:rgba(192,57,43,.04);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-lg);padding:1.3rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+    .danger-info h3{font-size:.95rem;font-weight:700;color:var(--danger);margin-bottom:.2rem}
+    .danger-info p{font-size:.8rem;color:var(--muted)}
+    .btn-logout{display:inline-flex;align-items:center;gap:.42rem;background:var(--danger);color:white;font-size:.86rem;font-weight:700;padding:.68rem 1.4rem;border-radius:var(--r-xl);cursor:pointer;border:none;transition:opacity .18s;white-space:nowrap}
+    .btn-logout:hover{opacity:.85}
+
+    .sk{background:linear-gradient(90deg,var(--parchment) 25%,var(--sand) 50%,var(--parchment) 75%);background-size:200% 100%;animation:shim 1.4s infinite;border-radius:var(--r-sm)}
+    @keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .tcontainer{position:fixed;bottom:1rem;right:1rem;z-index:9999;display:flex;flex-direction:column;gap:.45rem}
+    .toast{display:flex;align-items:center;gap:.6rem;background:var(--ink);color:white;font-size:.83rem;padding:.65rem 1rem;border-radius:var(--r-md);box-shadow:var(--sh-lg);animation:tin .26s var(--spring) forwards;max-width:320px;pointer-events:none}
+    .toast i{color:var(--gold-light);flex-shrink:0}
+    .toast.out{animation:tout .2s ease forwards}
+    @keyframes tin{from{opacity:0;transform:translateY(14px) scale(.95)}to{opacity:1;transform:none}}
+    @keyframes tout{to{opacity:0;transform:translateY(5px) scale(.95)}}
+
+    @media(max-width:860px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.sidebar-overlay{display:block}.ham{display:flex}.main{margin-left:0}}
+    @media(max-width:700px){.info-grid{grid-template-columns:1fr}.profile-hero{padding:1.3rem}}
+    @media(max-width:600px){.topbar-link{display:none}}
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+  <a class="logo" href="adminDashboard.html">Esuo's Beauty Empire<span class="logo-dot"></span></a>
+  <span class="admin-badge"><i class="fas fa-shield-halved fa-xs"></i> Admin</span>
+  <div class="topbar-right">
+    <a class="topbar-link" href="index.html" target="_blank"><i class="fas fa-store fa-xs"></i> View Store</a>
+    <div class="topbar-avatar" id="topAv">A</div>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="sOverlay"></div>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav class="snav">
+      <div class="snav-label">Main</div>
+      <a href="adminDashboard.html"><i class="fas fa-gauge-high"></i> Dashboard</a>
+      <a href="adminOrders.html"><i class="fas fa-box"></i> Orders</a>
+      <a href="adminDeliveries.html"><i class="fas fa-truck-fast"></i> Deliveries</a>
+      <div class="sdiv"></div>
+      <div class="snav-label">Catalogue</div>
+      <a href="adminProducts.html"><i class="fas fa-shirt"></i> Products</a>
+      <div class="sdiv"></div>
+      <div class="snav-label">People</div>
+      <a href="adminUsers.html"><i class="fas fa-users"></i> Customers</a>
+      <a href="adminChats.html"><i class="fas fa-comment-dots"></i> Chats</a>
+      <div class="sdiv"></div>
+      <div class="snav-label">Settings</div>
+      <a href="adminProfile.html" class="active"><i class="fas fa-user-circle"></i> My Profile</a>
+    </nav>
+    <div class="sfooter">
+      <div class="s-admin-block">
+        <div class="s-av" id="sAv">A</div>
+        <div class="s-info"><strong id="sName">Admin</strong><small id="sShop">Beauty Empire</small></div>
+      </div>
+      <button class="s-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-hd">
+      <nav class="bc"><a href="adminDashboard.html">Dashboard</a><i class="fas fa-chevron-right"></i><span>My Profile</span></nav>
+      <h1>My Profile</h1>
+    </div>
+
+    <!-- HERO -->
+    <div class="profile-hero" id="profileHero">
+      <div class="profile-av" id="pAv">A</div>
+      <div class="profile-info">
+        <div class="profile-name sk" id="pName" style="width:200px;height:28px;border-radius:4px"></div>
+        <div class="profile-email sk" id="pEmail" style="width:180px;height:18px;border-radius:4px;margin-top:.4rem"></div>
+        <div class="profile-shop sk" id="pShop" style="width:140px;height:20px;border-radius:var(--r-xl);margin-top:.5rem"></div>
+        <div class="profile-date sk" id="pDate" style="width:120px;height:14px;border-radius:4px;margin-top:.5rem"></div>
+      </div>
+    </div>
+
+    <!-- INFO GRID -->
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="ic-head">
+          <div class="ic-head-icon" style="background:linear-gradient(135deg,var(--gold),var(--gold-light))"><i class="fas fa-user fa-xs"></i></div>
+          <h3>Account Details</h3>
+        </div>
+        <div class="ic-body" id="accountDetails">
+          <div class="ic-row"><label>Full Name</label><span class="sk" style="width:140px;height:16px;border-radius:4px"></span></div>
+          <div class="ic-row"><label>Email Address</label><span class="sk" style="width:180px;height:16px;border-radius:4px"></span></div>
+          <div class="ic-row"><label>Admin ID</label><span class="sk" style="width:220px;height:16px;border-radius:4px"></span></div>
+          <div class="ic-row"><label>Member Since</label><span class="sk" style="width:120px;height:16px;border-radius:4px"></span></div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-head">
+          <div class="ic-head-icon" style="background:linear-gradient(135deg,#27855c,#2ecc71)"><i class="fas fa-store fa-xs"></i></div>
+          <h3>Shop Information</h3>
+        </div>
+        <div class="ic-body" id="shopDetails">
+          <div class="ic-row"><label>Shop Name</label><span class="sk" style="width:160px;height:16px;border-radius:4px"></span></div>
+          <div class="ic-row"><label>Role</label><span class="sk" style="width:80px;height:16px;border-radius:4px"></span></div>
+          <div class="ic-row"><label>Status</label><span class="sk" style="width:90px;height:16px;border-radius:4px"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DANGER ZONE -->
+    <div class="danger-card">
+      <div class="danger-info">
+        <h3><i class="fas fa-right-from-bracket fa-xs"></i> Sign Out</h3>
+        <p>Sign out of your admin account on this device.</p>
+      </div>
+      <button class="btn-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out Now</button>
+    </div>
+  </main>
+</div>
+
+<div class="tcontainer" id="tc"></div>
+
+<script>
+(function(){
+  'use strict';
+
+  // ── BASE URL ───────────────────────────────────────────────
+  const BASE_URL = 'https://opatawebbackend.onrender.com';
+
+  const SESSION_KEY='esuos_admin_session';
+  const SESSION_TTL=7*24*60*60*1000;
+  const $=id=>document.getElementById(id);
+
+  function loadSession(){
+    try{const raw=localStorage.getItem(SESSION_KEY);if(!raw)return null;const d=JSON.parse(raw);if(Date.now()-(d.savedAt||0)>SESSION_TTL){localStorage.removeItem(SESSION_KEY);return null;}return d;}catch{return null;}
+  }
+  const session=loadSession();
+  if(!session){location.href='adminLogin.html';return;}
+  const token=session.token;
+  const admin=session.admin||{};
+
+  function toast(ico,msg){const el=document.createElement('div');el.className='toast';el.innerHTML='<i class="'+ico+'"></i><span>'+msg+'</span>';$('tc').appendChild(el);setTimeout(()=>{el.classList.add('out');el.addEventListener('animationend',()=>el.remove(),{once:true});},3000);}
+  function fmtDate(str){if(!str)return'—';try{return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});}catch{return str;}}
+  function authHeaders(){return token?{Authorization:'Bearer '+token}:{};}
+
+  // Set sidebar
+  const name=admin.name||admin.firstName||admin.email?.split('@')[0]||'Admin';
+  $('topAv').textContent=name.charAt(0).toUpperCase();
+  $('sAv').textContent=name.charAt(0).toUpperCase();
+  $('sName').textContent=name;
+  $('sShop').textContent=admin.shopName||'Beauty Empire';
+
+  async function loadProfile(){
+    try{
+      const r=await fetch(BASE_URL + '/api/admin/users/admin/profile',{headers:authHeaders()});
+      const d=await r.json();
+      if(!r.ok) throw new Error();
+      renderProfile(d.data);
+    }catch{
+      // Fallback to session data
+      renderProfile({
+        id: admin.id||'—',
+        name: admin.name||name,
+        email: admin.email||'—',
+        shopName: admin.shopName||'Esuo\'s Beauty Empire',
+        createdAt: admin.createdAt||null
+      });
+    }
+  }
+
+  function renderProfile(p){
+    const n=p.name||name;
+    $('pAv').textContent=n.charAt(0).toUpperCase();
+    $('pName').className='profile-name';$('pName').textContent=n;
+    $('pEmail').className='profile-email';$('pEmail').innerHTML='<i class="fas fa-envelope fa-xs"></i> '+(p.email||'—');
+    $('pShop').className='profile-shop';$('pShop').innerHTML='<i class="fas fa-store fa-xs"></i> '+(p.shopName||'—');
+    $('pDate').className='profile-date';$('pDate').innerHTML='<i class="fas fa-calendar fa-xs"></i> Admin since '+fmtDate(p.createdAt);
+
+    $('accountDetails').innerHTML=`
+      <div class="ic-row"><label>Full Name</label><span>${p.name||'—'}</span></div>
+      <div class="ic-row"><label>Email Address</label><span>${p.email||'—'}</span></div>
+      <div class="ic-row"><label>Admin ID</label><span style="font-size:.75rem;color:var(--subtle)">${p.id||'—'}</span></div>
+      <div class="ic-row"><label>Member Since</label><span>${fmtDate(p.createdAt)}</span></div>
+    `;
+    $('shopDetails').innerHTML=`
+      <div class="ic-row"><label>Shop Name</label><span>${p.shopName||'—'}</span></div>
+      <div class="ic-row"><label>Role</label><span style="color:var(--gold);font-weight:700">Shop Owner / Admin</span></div>
+      <div class="ic-row"><label>Status</label><span style="color:var(--success);font-weight:600"><i class="fas fa-circle-check fa-xs"></i> Active</span></div>
+    `;
+  }
+
+  // Hamburger
+  const ham=$('ham'),sidebar=$('sidebar'),overlay=$('sOverlay');
+  ham.addEventListener('click',()=>{const o=sidebar.classList.toggle('open');overlay.classList.toggle('active',o);ham.classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';});
+  overlay.addEventListener('click',()=>{sidebar.classList.remove('open');overlay.classList.remove('active');ham.classList.remove('open');document.body.style.overflow='';});
+
+  window.doLogout=function(){localStorage.removeItem(SESSION_KEY);toast('fas fa-sign-out-alt','Signed out…');setTimeout(()=>location.href='adminLogin.html',900);};
+
+  loadProfile();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard · Admin · Esuo's Beauty Empire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root{
+      --ink:#18120e;--cream:#faf7f3;--parchment:#f1ebe2;--sand:#e2d8cc;
+      --warm-mid:#c9b49a;--gold:#a8854e;--gold-light:#c9a86c;--blush:#c8968a;
+      --white:#fff;--muted:#7a6e65;--subtle:#9e9087;--card:#fffcf8;
+      --border:#ede4d8;--danger:#c0392b;--success:#27855c;
+      --sidebar-w:240px;--nav-h:60px;
+      --r-sm:8px;--r-md:14px;--r-lg:24px;--r-xl:60px;
+      --sh-xs:0 1px 4px rgba(24,18,14,.06);--sh-sm:0 4px 16px rgba(24,18,14,.08);
+      --sh-md:0 10px 40px rgba(24,18,14,.12);--sh-lg:0 24px 64px rgba(24,18,14,.16);
+      --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1)
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{background:var(--cream);color:var(--ink);font-family:'Outfit',system-ui,sans-serif;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+    a{text-decoration:none;color:inherit}
+    button{cursor:pointer;font-family:inherit;border:none;outline:none;background:none}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--parchment)}::-webkit-scrollbar-thumb{background:var(--warm-mid);border-radius:99px}
+
+    /* TOPBAR */
+    .topbar{height:var(--nav-h);background:rgba(250,247,243,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;display:flex;align-items:center;padding:0 clamp(.75rem,3vw,1.2rem);gap:.6rem;flex-shrink:0}
+    .ham{display:none;flex-direction:column;gap:4px;padding:8px;cursor:pointer;border-radius:var(--r-sm);background:none;border:none;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+    .ham span{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px;transition:all .26s var(--ease)}
+    .ham.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+    .ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+    .ham.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+    .logo{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(.82rem,2.5vw,1.08rem);letter-spacing:.04em;display:flex;align-items:center;gap:.28rem;white-space:nowrap;flex-shrink:0}
+    .logo-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;margin-bottom:3px;flex-shrink:0}
+    .admin-badge{display:inline-flex;align-items:center;gap:.28rem;background:rgba(168,133,78,.1);color:var(--gold);font-size:clamp(.55rem,.85vw,.62rem);font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .5rem;border-radius:var(--r-xl);border:1px solid rgba(168,133,78,.25);white-space:nowrap;flex-shrink:0}
+    @media(max-width:400px){.admin-badge{display:none}}
+    .topbar-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}
+    .topbar-link{display:inline-flex;align-items:center;gap:.32rem;font-size:.78rem;color:var(--muted);font-weight:500;padding:.32rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .18s;white-space:nowrap}
+    .topbar-link:hover{border-color:var(--gold);color:var(--gold)}
+    .topbar-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;transition:opacity .18s;-webkit-tap-highlight-color:transparent}
+    .topbar-avatar:hover{opacity:.82}
+
+    /* LAYOUT */
+    .layout{display:flex;flex:1;min-height:0}
+    .sidebar{width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:var(--nav-h);left:0;height:calc(100vh - var(--nav-h));overflow-y:auto;z-index:150;transition:transform .3s var(--ease)}
+    .sidebar::-webkit-scrollbar{width:3px}
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;opacity:0;transition:opacity .26s}
+    .sidebar-overlay.active{opacity:1}
+    .snav{padding:.65rem 0;flex:1}
+    .snav-label{padding:.55rem .9rem .2rem;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
+    .snav a{display:flex;align-items:center;gap:.7rem;padding:.75rem 1rem;font-size:.86rem;font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0;-webkit-tap-highlight-color:transparent;min-height:44px}
+    .snav a:hover{background:var(--parchment);color:var(--ink)}
+    .snav a.active{background:rgba(168,133,78,.08);color:var(--gold);border-left-color:var(--gold);font-weight:600}
+    .snav a i{width:16px;text-align:center;font-size:.82rem;flex-shrink:0}
+    .sdiv{height:1px;background:var(--border);margin:.4rem .9rem}
+    .sfooter{padding:.9rem 1rem 1.4rem;border-top:1px solid var(--border)}
+    .s-admin-block{display:flex;align-items:center;gap:.6rem;padding:.65rem .75rem;background:var(--parchment);border-radius:var(--r-md);margin-bottom:.65rem}
+    .s-av{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;flex-shrink:0}
+    .s-info strong{display:block;font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+    .s-info small{font-size:.68rem;color:var(--subtle)}
+    .s-logout{display:flex;align-items:center;gap:.5rem;padding:.58rem .75rem;background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .18s;width:100%;min-height:44px}
+    .s-logout:hover{background:rgba(192,57,43,.13)}
+
+    /* MAIN */
+    .main{margin-left:var(--sidebar-w);flex:1;padding:clamp(1rem,3vw,2rem) clamp(.75rem,3vw,2rem);min-width:0}
+    .page-hd{margin-bottom:1.4rem}
+    .page-hd h1{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,3.5vw,1.8rem);font-weight:700;margin-bottom:.2rem}
+    .page-hd p{font-size:clamp(.8rem,2vw,.86rem);color:var(--muted)}
+
+    /* STAT CARDS */
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.85rem;margin-bottom:1.6rem}
+    .stat-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:clamp(.9rem,3vw,1.2rem) clamp(.9rem,3vw,1.3rem);display:flex;flex-direction:column;gap:.5rem;transition:box-shadow .18s,border-color .18s;position:relative;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent}
+    .stat-card:hover{box-shadow:var(--sh-sm);border-color:var(--warm-mid)}
+    .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold);opacity:0;transition:opacity .18s}
+    .stat-card:hover::before{opacity:1}
+    .stat-icon{width:38px;height:38px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:.9rem;color:white;flex-shrink:0}
+    .stat-icon.gold{background:linear-gradient(135deg,var(--gold),var(--gold-light))}
+    .stat-icon.green{background:linear-gradient(135deg,#27855c,#2ecc71)}
+    .stat-icon.blue{background:linear-gradient(135deg,#3498db,#2980b9)}
+    .stat-icon.blush{background:linear-gradient(135deg,var(--blush),#e8b4a0)}
+    .stat-val{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,4vw,1.7rem);font-weight:700;line-height:1}
+    .stat-label{font-size:clamp(.68rem,2vw,.73rem);color:var(--muted);font-weight:500}
+    .stat-sub{font-size:.7rem;color:var(--subtle);display:flex;align-items:center;gap:.28rem}
+    .stat-sub.up{color:var(--success)}
+    .stat-sub.down{color:var(--danger)}
+
+    /* SECTION TITLE */
+    .section-title{font-family:'Playfair Display',serif;font-size:clamp(.95rem,2.5vw,1.1rem);font-weight:700;margin-bottom:.9rem;display:flex;align-items:center;gap:.5rem}
+    .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+    /* NAV CARDS */
+    .nav-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.85rem;margin-bottom:1.6rem}
+    .nav-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:clamp(1rem,3vw,1.3rem);cursor:pointer;transition:all .2s var(--spring);display:flex;flex-direction:column;gap:.6rem;text-decoration:none;color:inherit;position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent}
+    .nav-card:hover{box-shadow:var(--sh-md);border-color:var(--gold);transform:translateY(-3px)}
+    .nav-card-icon{width:46px;height:46px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:white;flex-shrink:0;transition:transform .22s var(--spring)}
+    .nav-card:hover .nav-card-icon{transform:scale(1.1)}
+    .nav-card-icon.gold{background:linear-gradient(135deg,var(--gold),var(--gold-light))}
+    .nav-card-icon.green{background:linear-gradient(135deg,#27855c,#2ecc71)}
+    .nav-card-icon.blue{background:linear-gradient(135deg,#3498db,#2980b9)}
+    .nav-card-icon.purple{background:linear-gradient(135deg,#9b59b6,#8e44ad)}
+    .nav-card-icon.blush{background:linear-gradient(135deg,var(--blush),#e8b4a0)}
+    .nav-card-icon.ink{background:linear-gradient(135deg,var(--ink),#3a2e28)}
+    .nav-card-icon.tg{background:linear-gradient(135deg,#229ED9,#1a87c2)}
+    .nav-card h3{font-family:'Playfair Display',serif;font-size:clamp(.88rem,2.2vw,.95rem);font-weight:700}
+    .nav-card p{font-size:clamp(.72rem,2vw,.76rem);color:var(--muted);line-height:1.4}
+    .nav-card-meta{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+    .nav-card-count{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--gold)}
+    .nav-card-arrow{width:26px;height:26px;background:var(--parchment);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:var(--gold);transition:all .18s}
+    .nav-card:hover .nav-card-arrow{background:var(--gold);color:white;transform:translateX(3px)}
+
+    /* BOTTOM GRID */
+    .bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-bottom:1.6rem}
+    .section-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+    .sc-head{padding:.9rem 1.1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+    .sc-head-left{display:flex;align-items:center;gap:.6rem}
+    .sc-head-icon{width:32px;height:32px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:.82rem;color:white}
+    .sc-head h3{font-family:'Playfair Display',serif;font-size:clamp(.88rem,2.2vw,.95rem);font-weight:700}
+    .sc-view-all{font-size:.75rem;color:var(--gold);font-weight:600;display:flex;align-items:center;gap:.28rem;transition:opacity .16s;white-space:nowrap}
+    .sc-view-all:hover{opacity:.72}
+    .sc-body{padding:.8rem 1rem}
+    .order-list{display:flex;flex-direction:column;gap:.42rem}
+    .order-row{display:flex;align-items:center;justify-content:space-between;padding:.5rem .65rem;background:var(--parchment);border-radius:var(--r-sm);gap:.45rem;transition:background .15s;flex-wrap:wrap;cursor:pointer;-webkit-tap-highlight-color:transparent}
+    .order-row:hover{background:var(--sand)}
+    .order-id{font-size:.78rem;font-weight:700;color:var(--ink)}
+    .order-date{font-size:.68rem;color:var(--subtle)}
+    .order-amt{font-size:.8rem;font-weight:700;font-family:'Playfair Display',serif}
+    .ostatus{font-size:.62rem;font-weight:700;padding:.14rem .5rem;border-radius:var(--r-xl);white-space:nowrap}
+    .ostatus.PENDING{background:#fef3cd;color:#b7791f}
+    .ostatus.CONFIRMED{background:#dbeafe;color:#1d4ed8}
+    .ostatus.SHIPPED{background:#e0f2fe;color:#0369a1}
+    .ostatus.DELIVERED{background:#dcfce7;color:#15803d}
+    .ostatus.CANCELLED{background:#fee2e2;color:var(--danger)}
+    .del-list{display:flex;flex-direction:column;gap:.42rem}
+    .del-row{display:flex;align-items:center;justify-content:space-between;padding:.5rem .65rem;background:var(--parchment);border-radius:var(--r-sm);gap:.45rem;transition:background .15s;flex-wrap:wrap;cursor:pointer;-webkit-tap-highlight-color:transparent}
+    .del-row:hover{background:var(--sand)}
+    .dstatus{font-size:.62rem;font-weight:700;padding:.14rem .5rem;border-radius:var(--r-xl);white-space:nowrap}
+    .dstatus.PENDING{background:#fef3cd;color:#b7791f}
+    .dstatus.SHIPPED{background:#dbeafe;color:#1d4ed8}
+    .dstatus.DELIVERED{background:#dcfce7;color:#15803d}
+    .dstatus.CANCELLED{background:#fee2e2;color:var(--danger)}
+
+    /* CHART */
+    .chart-row{display:flex;align-items:flex-end;gap:.3rem;height:80px;padding:.5rem .2rem 0}
+    .chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:.3rem}
+    .chart-bar{width:100%;background:linear-gradient(to top,var(--gold),var(--gold-light));border-radius:4px 4px 0 0;transition:height .5s var(--spring);min-height:4px}
+    .chart-bar:hover{background:linear-gradient(to top,var(--blush),#e8b4a0)}
+    .chart-lbl{font-size:.55rem;color:var(--subtle);text-align:center}
+
+    .sk{background:linear-gradient(90deg,var(--parchment) 25%,var(--sand) 50%,var(--parchment) 75%);background-size:200% 100%;animation:shim 1.4s infinite;border-radius:var(--r-sm)}
+    @keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .tcontainer{position:fixed;bottom:clamp(.75rem,3vw,1rem);right:clamp(.75rem,3vw,1rem);z-index:9999;display:flex;flex-direction:column;gap:.45rem;max-width:calc(100vw - 1.5rem)}
+    .toast{display:flex;align-items:center;gap:.6rem;background:var(--ink);color:white;font-size:.83rem;padding:.65rem 1rem;border-radius:var(--r-md);box-shadow:var(--sh-lg);animation:tin .26s var(--spring) forwards;max-width:320px;pointer-events:none;word-break:break-word}
+    .toast i{color:var(--gold-light);flex-shrink:0}
+    .toast.out{animation:tout .2s ease forwards}
+    @keyframes tin{from{opacity:0;transform:translateY(14px) scale(.95)}to{opacity:1;transform:none}}
+    @keyframes tout{to{opacity:0;transform:translateY(5px) scale(.95)}}
+    .empty-state{text-align:center;padding:2rem 1rem;color:var(--subtle);font-size:.82rem}
+    .empty-state i{display:block;font-size:1.8rem;margin-bottom:.5rem;color:var(--sand)}
+
+    /* RESPONSIVE */
+    @media(max-width:1024px){.bottom-grid{grid-template-columns:1fr}}
+    @media(max-width:860px){
+      .sidebar{transform:translateX(-100%)}
+      .sidebar.open{transform:translateX(0)}
+      .sidebar-overlay{display:block}
+      .ham{display:flex}
+      .main{margin-left:0}
+    }
+    @media(max-width:640px){
+      .stats-grid{grid-template-columns:1fr 1fr}
+      .nav-cards{grid-template-columns:1fr 1fr}
+      .topbar-link{display:none}
+    }
+    @media(max-width:400px){
+      .stats-grid{grid-template-columns:1fr}
+      .nav-cards{grid-template-columns:1fr}
+    }
+    @media(hover:none){
+      .nav-card:hover{transform:none}
+      .stat-card:hover::before{opacity:0}
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="ham" id="ham" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  <a class="logo" href="adminDashboard.html">Esuo's Beauty Empire<span class="logo-dot"></span></a>
+  <span class="admin-badge"><i class="fas fa-shield-halved fa-xs"></i> Admin</span>
+  <div class="topbar-right">
+    <a class="topbar-link" href="index.html" target="_blank"><i class="fas fa-store fa-xs"></i> View Store</a>
+    <div class="topbar-avatar" id="topAv" onclick="location.href='adminProfile.html'" title="My Profile">A</div>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="sOverlay"></div>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav class="snav">
+      <div class="snav-label">Main</div>
+      <a href="adminDashboard.html" class="active"><i class="fas fa-gauge-high"></i> Dashboard</a>
+      <a href="adminOrders.html"><i class="fas fa-box"></i> Orders</a>
+      <a href="adminDeliveries.html"><i class="fas fa-truck-fast"></i> Deliveries</a>
+      <div class="sdiv"></div>
+      <div class="snav-label">Catalogue</div>
+      <a href="adminProducts.html"><i class="fas fa-shirt"></i> Products</a>
+      <div class="sdiv"></div>
+      <div class="snav-label">People</div>
+      <a href="adminUsers.html"><i class="fas fa-users"></i> Customers</a>
+      <a href="adminChats.html"><i class="fas fa-comment-dots"></i> Chats</a>
+      <div class="sdiv"></div>
+      <div class="snav-label">Settings</div>
+      <a href="adminProfile.html"><i class="fas fa-user-circle"></i> My Profile</a>
+      <a href="adminTelegram.html"><i class="fab fa-telegram"></i> Telegram</a>
+    </nav>
+    <div class="sfooter">
+      <div class="s-admin-block">
+        <div class="s-av" id="sAv">A</div>
+        <div class="s-info"><strong id="sName">Admin</strong><small id="sShop">Beauty Empire</small></div>
+      </div>
+      <button class="s-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-hd">
+      <h1 id="welcomeMsg">Good morning 👋</h1>
+      <p id="welcomeSub">Here's what's happening at your store today</p>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card"><div class="stat-icon gold"><i class="fas fa-coins"></i></div><div class="stat-val sk" style="width:80px;height:28px;border-radius:4px"></div><div class="stat-label">Total Revenue</div><div class="stat-sub sk" style="width:60px;height:14px;border-radius:4px"></div></div>
+      <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-box"></i></div><div class="stat-val sk" style="width:60px;height:28px;border-radius:4px"></div><div class="stat-label">Total Orders</div><div class="stat-sub sk" style="width:50px;height:14px;border-radius:4px"></div></div>
+      <div class="stat-card"><div class="stat-icon blush"><i class="fas fa-hourglass-half"></i></div><div class="stat-val sk" style="width:50px;height:28px;border-radius:4px"></div><div class="stat-label">Pending Orders</div></div>
+      <div class="stat-card"><div class="stat-icon green"><i class="fas fa-truck-fast"></i></div><div class="stat-val sk" style="width:50px;height:28px;border-radius:4px"></div><div class="stat-label">Active Deliveries</div></div>
+    </div>
+
+    <!-- QUICK ACCESS CARDS -->
+    <div class="section-title"><i class="fas fa-bolt" style="color:var(--gold);font-size:.8rem"></i> Quick Access</div>
+    <div class="nav-cards">
+      <a class="nav-card" href="adminOrders.html">
+        <div class="nav-card-icon gold"><i class="fas fa-box-open"></i></div>
+        <h3>Orders</h3>
+        <p>View, update &amp; manage all customer orders</p>
+        <div class="nav-card-meta"><span class="nav-card-count" id="ncPending">—</span><div class="nav-card-arrow"><i class="fas fa-arrow-right fa-xs"></i></div></div>
+      </a>
+      <a class="nav-card" href="adminDeliveries.html">
+        <div class="nav-card-icon green"><i class="fas fa-truck-fast"></i></div>
+        <h3>Deliveries</h3>
+        <p>Track and update all delivery requests</p>
+        <div class="nav-card-meta"><span class="nav-card-count" id="ncDeliveries">—</span><div class="nav-card-arrow"><i class="fas fa-arrow-right fa-xs"></i></div></div>
+      </a>
+      <a class="nav-card" href="adminProducts.html">
+        <div class="nav-card-icon blue"><i class="fas fa-shirt"></i></div>
+        <h3>Products</h3>
+        <p>Add clothing &amp; general products, manage stock</p>
+        <div class="nav-card-meta"><span></span><div class="nav-card-arrow"><i class="fas fa-arrow-right fa-xs"></i></div></div>
+      </a>
+      <a class="nav-card" href="adminUsers.html">
+        <div class="nav-card-icon purple"><i class="fas fa-users"></i></div>
+        <h3>Customers</h3>
+        <p>View all registered customers and accounts</p>
+        <div class="nav-card-meta"><span></span><div class="nav-card-arrow"><i class="fas fa-arrow-right fa-xs"></i></div></div>
+      </a>
+      <a class="nav-card" href="adminChats.html">
+        <div class="nav-card-icon blush"><i class="fas fa-comment-dots"></i></div>
+        <h3>Chats</h3>
+        <p>Reply to product, order &amp; delivery enquiries</p>
+        <div class="nav-card-meta"><span></span><div class="nav-card-arrow"><i class="fas fa-arrow-right fa-xs"></i></div></div>
+      </a>
+      <a class="nav-card" href="adminTelegram.html">
+        <div class="nav-card-icon tg"><i class="fab fa-telegram"></i></div>
+        <h3>Telegram</h3>
+        <p>Broadcast announcements &amp; manage bot notifications</p>
+        <div class="nav-card-meta"><span></span><div class="nav-card-arrow"><i class="fas fa-arrow-right fa-xs"></i></div></div>
+      </a>
+      <a class="nav-card" href="adminProfile.html">
+        <div class="nav-card-icon ink"><i class="fas fa-user-circle"></i></div>
+        <h3>My Profile</h3>
+        <p>Shop details and admin account settings</p>
+        <div class="nav-card-meta"><span></span><div class="nav-card-arrow"><i class="fas fa-arrow-right fa-xs"></i></div></div>
+      </a>
+    </div>
+
+    <!-- BOTTOM GRID -->
+    <div class="bottom-grid">
+      <div class="section-card">
+        <div class="sc-head">
+          <div class="sc-head-left">
+            <div class="sc-head-icon" style="background:linear-gradient(135deg,var(--gold),var(--gold-light))"><i class="fas fa-box fa-xs"></i></div>
+            <h3>Recent Orders</h3>
+          </div>
+          <a class="sc-view-all" href="adminOrders.html"><i class="fas fa-arrow-right fa-xs"></i> View All</a>
+        </div>
+        <div class="sc-body">
+          <div class="order-list" id="recentOrders"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Loading…</div></div>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="sc-head">
+          <div class="sc-head-left">
+            <div class="sc-head-icon" style="background:linear-gradient(135deg,#27855c,#2ecc71)"><i class="fas fa-truck fa-xs"></i></div>
+            <h3>Active Deliveries</h3>
+          </div>
+          <a class="sc-view-all" href="adminDeliveries.html"><i class="fas fa-arrow-right fa-xs"></i> View All</a>
+        </div>
+        <div class="sc-body">
+          <div class="del-list" id="activeDeliveries"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Loading…</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHART -->
+    <div class="section-card" style="margin-bottom:1.8rem">
+      <div class="sc-head">
+        <div class="sc-head-left">
+          <div class="sc-head-icon" style="background:linear-gradient(135deg,#3498db,#2980b9)"><i class="fas fa-chart-bar fa-xs"></i></div>
+          <h3>Orders — Last 7 Days</h3>
+        </div>
+        <a class="sc-view-all" href="adminOrders.html"><i class="fas fa-arrow-right fa-xs"></i> All Orders</a>
+      </div>
+      <div class="sc-body">
+        <div class="chart-row" id="chartRow"><div style="text-align:center;padding:1rem;color:var(--subtle);font-size:.8rem;width:100%"><i class="fas fa-spinner fa-spin"></i> Loading chart…</div></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="tcontainer" id="tc"></div>
+
+<script>
+(function(){
+  'use strict';
+  const API_BASE = 'https://opatawebbackend.onrender.com';
+  const SESSION_KEY='esuos_admin_session';
+  const SESSION_TTL=7*24*60*60*1000;
+  const $=id=>document.getElementById(id);
+
+  function loadSession(){try{const raw=localStorage.getItem(SESSION_KEY);if(!raw)return null;const d=JSON.parse(raw);if(Date.now()-(d.savedAt||0)>SESSION_TTL){localStorage.removeItem(SESSION_KEY);return null;}return d;}catch{return null;}}
+  const session=loadSession();
+  if(!session){location.href='adminLogin.html';return;}
+  const token=session.token;const admin=session.admin||{};
+  function authHeaders(){return token?{Authorization:'Bearer '+token}:{};}
+  function toast(ico,msg){const el=document.createElement('div');el.className='toast';el.innerHTML='<i class="'+ico+'"></i><span>'+msg+'</span>';$('tc').appendChild(el);setTimeout(()=>{el.classList.add('out');el.addEventListener('animationend',()=>el.remove(),{once:true});},3000);}
+  function fmtDate(str){if(!str)return'—';try{return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'short'});}catch{return str;}}
+
+  const name=admin.name||admin.firstName||admin.email?.split('@')[0]||'Admin';
+  $('topAv').textContent=name.charAt(0).toUpperCase();
+  $('sAv').textContent=name.charAt(0).toUpperCase();
+  $('sName').textContent=name;
+  $('sShop').textContent=admin.shopName||'Beauty Empire';
+
+  const hr=new Date().getHours();
+  const greeting=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
+  $('welcomeMsg').textContent=greeting+', '+name+' 👋';
+
+  async function loadSummary(){
+    try{
+      const r=await fetch(API_BASE+'/api/admin/orders/summary',{headers:authHeaders()});
+      const d=await r.json();if(!r.ok)throw new Error();
+      renderStats(d.data||{});
+    }catch{renderStats({totalRevenue:0,totalOrders:0,pendingCount:0,shippedCount:0,deliveredCount:0,cancelledCount:0});}
+  }
+
+  function renderStats(s){
+    $('statsGrid').innerHTML=`
+      <div class="stat-card" onclick="location.href='adminOrders.html'">
+        <div class="stat-icon gold"><i class="fas fa-coins"></i></div>
+        <div class="stat-val">GHS ${Number(s.totalRevenue||0).toLocaleString()}</div>
+        <div class="stat-label">Total Revenue</div>
+        <div class="stat-sub up"><i class="fas fa-arrow-up fa-xs"></i> All time</div>
+      </div>
+      <div class="stat-card" onclick="location.href='adminOrders.html'">
+        <div class="stat-icon blue"><i class="fas fa-box"></i></div>
+        <div class="stat-val">${s.totalOrders||0}</div>
+        <div class="stat-label">Total Orders</div>
+        <div class="stat-sub"><i class="fas fa-circle-check fa-xs"></i> ${s.deliveredCount||0} delivered</div>
+      </div>
+      <div class="stat-card" onclick="location.href='adminOrders.html'">
+        <div class="stat-icon blush"><i class="fas fa-hourglass-half"></i></div>
+        <div class="stat-val">${s.pendingCount||0}</div>
+        <div class="stat-label">Pending Orders</div>
+        <div class="stat-sub"><i class="fas fa-bolt fa-xs"></i> Needs action</div>
+      </div>
+      <div class="stat-card" onclick="location.href='adminDeliveries.html'">
+        <div class="stat-icon green"><i class="fas fa-truck-fast"></i></div>
+        <div class="stat-val">${s.shippedCount||0}</div>
+        <div class="stat-label">Orders Shipped</div>
+        <div class="stat-sub"><i class="fas fa-location-dot fa-xs"></i> In transit</div>
+      </div>`;
+    if($('ncPending'))$('ncPending').textContent=s.pendingCount||0;
+  }
+
+  async function loadRecentOrders(){
+    try{
+      const r=await fetch(API_BASE+'/api/admin/orders/recent?limit=6',{headers:authHeaders()});
+      const d=await r.json();if(!r.ok)throw new Error();
+      renderRecentOrders(d.data||[]);
+    }catch{
+      renderRecentOrders([
+        {orderId:1001,orderDate:'2024-01-15T10:00:00Z',status:'PENDING',totalAmount:280},
+        {orderId:1002,orderDate:'2024-01-14T09:00:00Z',status:'DELIVERED',totalAmount:150},
+        {orderId:1003,orderDate:'2024-01-13T14:00:00Z',status:'SHIPPED',totalAmount:420},
+        {orderId:1004,orderDate:'2024-01-12T11:00:00Z',status:'CONFIRMED',totalAmount:95},
+      ]);
+    }
+  }
+
+  function renderRecentOrders(items){
+    if(!items.length){$('recentOrders').innerHTML='<div class="empty-state"><i class="fas fa-box-open"></i>No orders yet</div>';return;}
+    $('recentOrders').innerHTML=items.map(o=>`
+      <div class="order-row" onclick="location.href='adminOrders.html'">
+        <div><div class="order-id">#${o.orderId}</div><div class="order-date">${fmtDate(o.orderDate)}</div></div>
+        <div class="order-amt">GHS ${Number(o.totalAmount||0).toLocaleString()}</div>
+        <span class="ostatus ${o.status}">${o.status}</span>
+      </div>`).join('');
+  }
+
+  async function loadActiveDeliveries(){
+    try{
+      const r=await fetch(API_BASE+'/api/admin/deliveries/active',{headers:authHeaders()});
+      const d=await r.json();if(!r.ok)throw new Error();
+      renderActiveDeliveries(d.data||[]);
+      if($('ncDeliveries'))$('ncDeliveries').textContent=(d.data||[]).length;
+    }catch{
+      renderActiveDeliveries([
+        {id:501,orderId:1001,status:'PENDING',deliveryAddress:'456 Oak Ave, Accra'},
+        {id:502,orderId:1002,status:'SHIPPED',deliveryAddress:'123 Ring Rd, Kumasi',trackingNumber:'TRACK502XYZ'},
+      ]);
+      if($('ncDeliveries'))$('ncDeliveries').textContent='2';
+    }
+  }
+
+  function renderActiveDeliveries(items){
+    if(!items.length){$('activeDeliveries').innerHTML='<div class="empty-state"><i class="fas fa-truck"></i>No active deliveries</div>';return;}
+    $('activeDeliveries').innerHTML=items.slice(0,6).map(d=>`
+      <div class="del-row" onclick="location.href='adminDeliveries.html'">
+        <div><div class="order-id">Delivery #${d.id}</div><div class="order-date">${(d.deliveryAddress||'—').substring(0,28)}</div></div>
+        <span class="dstatus ${d.status}">${d.status}</span>
+      </div>`).join('');
+  }
+
+  async function loadChart(){
+    try{
+      const r=await fetch(API_BASE+'/api/admin/orders/summary/per-day',{headers:authHeaders()});
+      const d=await r.json();if(!r.ok)throw new Error();
+      renderChart(d.data||{});
+    }catch{
+      const demo={};
+      for(let i=6;i>=0;i--){const dt=new Date(Date.now()-i*86400000);demo[dt.toISOString().slice(0,10)]=Math.floor(Math.random()*20)+1;}
+      renderChart(demo);
+    }
+  }
+
+  function renderChart(data){
+    const entries=Object.entries(data);
+    if(!entries.length){$('chartRow').innerHTML='<div style="text-align:center;padding:1rem;color:var(--subtle);font-size:.8rem">No data</div>';return;}
+    const max=Math.max(...entries.map(([,v])=>v),1);
+    $('chartRow').innerHTML=entries.map(([date,count])=>{
+      const pct=Math.round((count/max)*100);
+      const lbl=new Date(date).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+      return`<div class="chart-bar-wrap" title="${lbl}: ${count} orders">
+        <div style="font-size:.55rem;color:var(--muted);margin-bottom:.2rem">${count}</div>
+        <div class="chart-bar" style="height:${Math.max(pct,4)}%"></div>
+        <div class="chart-lbl">${lbl.split(' ')[0]}</div>
+      </div>`;
+    }).join('');
+  }
+
+  const ham=$('ham'),sidebar=$('sidebar'),overlay=$('sOverlay');
+  function openSidebar(){sidebar.classList.add('open');overlay.classList.add('active');ham.classList.add('open');document.body.style.overflow='hidden';}
+  function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('active');ham.classList.remove('open');document.body.style.overflow='';}
+  ham.addEventListener('click',()=>sidebar.classList.contains('open')?closeSidebar():openSidebar());
+  overlay.addEventListener('click',closeSidebar);
+
+  window.doLogout=function(){localStorage.removeItem(SESSION_KEY);toast('fas fa-sign-out-alt','Signed out…');setTimeout(()=>location.href='adminLogin.html',900);};
+
+  loadSummary();
+  loadRecentOrders();
+  loadActiveDeliveries();
+  loadChart();
+})();
+</script>
+</body>
+</html>

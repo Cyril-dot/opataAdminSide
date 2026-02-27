@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chats · Admin · Esuo's Beauty Empire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root{
+      --ink:#18120e;--cream:#faf7f3;--parchment:#f1ebe2;--sand:#e2d8cc;
+      --warm-mid:#c9b49a;--gold:#a8854e;--gold-light:#c9a86c;--blush:#c8968a;
+      --white:#fff;--muted:#7a6e65;--subtle:#9e9087;--card:#fffcf8;
+      --border:#ede4d8;--danger:#c0392b;--success:#27855c;
+      --sidebar-w:240px;--nav-h:60px;
+      --r-sm:8px;--r-md:14px;--r-lg:24px;--r-xl:60px;
+      --sh-xs:0 1px 4px rgba(24,18,14,.06);--sh-sm:0 4px 16px rgba(24,18,14,.08);
+      --sh-md:0 10px 40px rgba(24,18,14,.12);--sh-lg:0 24px 64px rgba(24,18,14,.16);
+      --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1)
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    body{background:var(--cream);color:var(--ink);font-family:'Outfit',system-ui,sans-serif;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+    a{text-decoration:none;color:inherit}
+    button{cursor:pointer;font-family:inherit;border:none;outline:none;background:none}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--parchment)}::-webkit-scrollbar-thumb{background:var(--warm-mid);border-radius:99px}
+
+    /* TOPBAR */
+    .topbar{height:var(--nav-h);background:rgba(250,247,243,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;display:flex;align-items:center;padding:0 clamp(.75rem,3vw,1.2rem);gap:.6rem;flex-shrink:0}
+    .ham{display:none;flex-direction:column;gap:4px;padding:8px;cursor:pointer;border-radius:var(--r-sm);background:none;border:none;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+    .ham span{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px;transition:all .26s var(--ease)}
+    .ham.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+    .ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+    .ham.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+    .logo{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(.82rem,2.5vw,1.08rem);letter-spacing:.04em;display:flex;align-items:center;gap:.28rem;white-space:nowrap;flex-shrink:0}
+    .logo-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;margin-bottom:3px}
+    .admin-badge{display:inline-flex;align-items:center;gap:.28rem;background:rgba(168,133,78,.1);color:var(--gold);font-size:clamp(.55rem,.85vw,.62rem);font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .5rem;border-radius:var(--r-xl);border:1px solid rgba(168,133,78,.25);flex-shrink:0}
+    @media(max-width:400px){.admin-badge{display:none}}
+    .topbar-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}
+    .topbar-link{display:inline-flex;align-items:center;gap:.32rem;font-size:.78rem;color:var(--muted);font-weight:500;padding:.32rem .75rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .18s}
+    .topbar-link:hover{border-color:var(--gold);color:var(--gold)}
+    .topbar-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+
+    /* SIDEBAR */
+    .layout{display:flex;flex:1}
+    .sidebar{width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:var(--nav-h);left:0;height:calc(100vh - var(--nav-h));overflow-y:auto;z-index:150;transition:transform .3s var(--ease)}
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;opacity:0;transition:opacity .26s}
+    .sidebar-overlay.active{opacity:1}
+    .snav{padding:.65rem 0;flex:1}
+    .snav-label{padding:.55rem .9rem .2rem;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
+    .snav a{display:flex;align-items:center;gap:.7rem;padding:.75rem 1rem;font-size:.86rem;font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0;min-height:44px;-webkit-tap-highlight-color:transparent}
+    .snav a:hover{background:var(--parchment);color:var(--ink)}
+    .snav a.active{background:rgba(168,133,78,.08);color:var(--gold);border-left-color:var(--gold);font-weight:600}
+    .snav a i{width:16px;text-align:center;font-size:.82rem;flex-shrink:0}
+    .sdiv{height:1px;background:var(--border);margin:.4rem .9rem}
+    .sfooter{padding:.9rem 1rem 1.4rem;border-top:1px solid var(--border)}
+    .s-admin-block{display:flex;align-items:center;gap:.6rem;padding:.65rem .75rem;background:var(--parchment);border-radius:var(--r-md);margin-bottom:.65rem}
+    .s-av{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;flex-shrink:0}
+    .s-info strong{display:block;font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+    .s-info small{font-size:.68rem;color:var(--subtle)}
+    .s-logout{display:flex;align-items:center;gap:.5rem;padding:.58rem .75rem;background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .18s;width:100%;min-height:44px}
+    .s-logout:hover{background:rgba(192,57,43,.13)}
+
+    /* MAIN */
+    .main{margin-left:var(--sidebar-w);flex:1;padding:clamp(1rem,3vw,2rem) clamp(.75rem,3vw,2rem);min-width:0;display:flex;flex-direction:column;height:calc(100vh - var(--nav-h));overflow:hidden}
+    .page-hd{margin-bottom:.9rem;flex-shrink:0}
+    .bc{display:flex;align-items:center;gap:.35rem;font-size:.73rem;color:var(--subtle);margin-bottom:.4rem;flex-wrap:wrap}
+    .bc a{color:var(--muted);transition:color .18s}.bc a:hover{color:var(--gold)}
+    .bc i{font-size:.52rem}
+    .page-hd h1{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,3.5vw,1.8rem);font-weight:700}
+
+    /* CHAT LAYOUT */
+    .chat-layout{display:grid;grid-template-columns:300px 1fr;gap:1rem;flex:1;min-height:0;overflow:hidden}
+    .chat-sidebar{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r-lg);display:flex;flex-direction:column;overflow:hidden}
+    .cs-head{padding:.85rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-shrink:0}
+    .cs-head h3{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700}
+    .cs-search{padding:.5rem .9rem;border-bottom:1px solid var(--border);flex-shrink:0}
+    .cs-search input{width:100%;padding:.45rem .8rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-xl);font-size:.8rem;font-family:'Outfit',sans-serif;outline:none;color:var(--ink);-webkit-appearance:none}
+    .cs-search input:focus{border-color:var(--gold)}
+    @media(max-width:480px){.cs-search input{font-size:16px}}
+    .cs-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
+    .cs-tab{flex:1;padding:.5rem;font-size:.72rem;font-weight:700;color:var(--muted);cursor:pointer;text-align:center;transition:all .16s;border-bottom:2px solid transparent;min-height:40px;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
+    .cs-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+    .cs-tab:hover{color:var(--ink)}
+    .rooms-list{overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
+    .room-item{padding:.75rem 1rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .14s;display:flex;gap:.65rem;align-items:flex-start;-webkit-tap-highlight-color:transparent;min-height:60px}
+    .room-item:hover{background:var(--parchment)}
+    .room-item.active{background:rgba(168,133,78,.07);border-left:3px solid var(--gold)}
+    .room-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:white;flex-shrink:0}
+    .room-av.product{background:linear-gradient(135deg,var(--blush),#e8b4a0)}
+    .room-av.order{background:linear-gradient(135deg,var(--gold),var(--gold-light))}
+    .room-av.delivery{background:linear-gradient(135deg,#27855c,#2ecc71)}
+    .room-meta{flex:1;min-width:0}
+    .room-title{font-size:.83rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .room-sub{font-size:.72rem;color:var(--subtle);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .room-badge{font-size:.6rem;font-weight:700;padding:.12rem .45rem;border-radius:var(--r-xl);margin-left:auto;flex-shrink:0;white-space:nowrap;margin-top:.15rem}
+    .rb-product{background:#fce7f3;color:#be185d}
+    .rb-order{background:#fef3cd;color:#b7791f}
+    .rb-delivery{background:#dcfce7;color:#15803d}
+
+    /* CHAT WINDOW */
+    .chat-window{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r-lg);display:flex;flex-direction:column;overflow:hidden;min-height:0}
+    .cw-head{padding:.85rem 1.2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.75rem;flex-shrink:0}
+    /* Mobile back button in chat window */
+    .cw-back{display:none;width:32px;height:32px;background:var(--parchment);border-radius:50%;align-items:center;justify-content:center;font-size:.8rem;color:var(--muted);cursor:pointer;border:none;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+    .cw-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;color:white;flex-shrink:0}
+    .cw-info strong{display:block;font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700}
+    .cw-info small{font-size:.72rem;color:var(--subtle)}
+    .cw-actions{margin-left:auto;display:flex;gap:.4rem}
+    .cw-action-btn{width:32px;height:32px;background:var(--parchment);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;color:var(--muted);cursor:pointer;transition:all .16s;border:none;-webkit-tap-highlight-color:transparent}
+    .cw-action-btn:hover{background:var(--sand);color:var(--ink)}
+    .cw-messages{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.65rem;-webkit-overflow-scrolling:touch}
+    .msg{max-width:75%;display:flex;flex-direction:column;gap:.18rem}
+    .msg.mine{align-self:flex-end;align-items:flex-end}
+    .msg.theirs{align-self:flex-start;align-items:flex-start}
+    .msg-bubble{padding:.6rem .9rem;border-radius:var(--r-md);font-size:clamp(.8rem,2.5vw,.84rem);line-height:1.45;word-break:break-word}
+    .msg.mine .msg-bubble{background:var(--gold);color:white;border-bottom-right-radius:4px}
+    .msg.theirs .msg-bubble{background:var(--parchment);color:var(--ink);border-bottom-left-radius:4px}
+    .msg-meta{font-size:.63rem;color:var(--subtle)}
+    .cw-input{border-top:1px solid var(--border);padding:.65rem 1rem;display:flex;gap:.55rem;align-items:flex-end;flex-shrink:0}
+    .cw-textarea{flex:1;padding:.6rem .9rem;background:var(--parchment);border:1.5px solid var(--border);border-radius:var(--r-lg);font-size:.84rem;font-family:'Outfit',sans-serif;color:var(--ink);outline:none;resize:none;max-height:100px;transition:border-color .18s;line-height:1.45;-webkit-appearance:none}
+    .cw-textarea:focus{border-color:var(--gold)}
+    @media(max-width:480px){.cw-textarea{font-size:16px}}
+    .cw-send{width:42px;height:42px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.9rem;cursor:pointer;transition:opacity .16s;flex-shrink:0;border:none;-webkit-tap-highlight-color:transparent}
+    .cw-send:hover{opacity:.82}
+    .cw-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--subtle);font-size:.84rem;text-align:center;gap:.5rem;padding:2rem}
+    .cw-empty i{font-size:2.5rem;color:var(--sand)}
+
+    .empty-state{text-align:center;padding:2rem 1rem;color:var(--subtle);font-size:.82rem}
+    .empty-state i{display:block;font-size:1.8rem;margin-bottom:.5rem;color:var(--sand)}
+    .tcontainer{position:fixed;bottom:clamp(.75rem,3vw,1rem);right:clamp(.75rem,3vw,1rem);z-index:9999;display:flex;flex-direction:column;gap:.45rem;max-width:calc(100vw - 1.5rem)}
+    .toast{display:flex;align-items:center;gap:.6rem;background:var(--ink);color:white;font-size:.83rem;padding:.65rem 1rem;border-radius:var(--r-md);box-shadow:var(--sh-lg);animation:tin .26s var(--spring) forwards;max-width:320px;pointer-events:none;word-break:break-word}
+    .toast i{color:var(--gold-light);flex-shrink:0}
+    .toast.out{animation:tout .2s ease forwards}
+    @keyframes tin{from{opacity:0;transform:translateY(14px) scale(.95)}to{opacity:1;transform:none}}
+    @keyframes tout{to{opacity:0;transform:translateY(5px) scale(.95)}}
+
+    /* RESPONSIVE */
+    @media(max-width:860px){
+      .sidebar{transform:translateX(-100%)}
+      .sidebar.open{transform:translateX(0)}
+      .sidebar-overlay{display:block}
+      .ham{display:flex}
+      .main{margin-left:0;height:calc(100vh - var(--nav-h))}
+    }
+    @media(max-width:700px){
+      /* Stack chat layout: rooms list on top, window below */
+      .chat-layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+      .chat-sidebar{max-height:45vh;min-height:200px}
+      .chat-window{min-height:280px}
+    }
+    @media(max-width:640px){
+      .topbar-link{display:none}
+      .main{padding:.75rem}
+    }
+    /* On very small screens, when a chat is open, hide rooms list */
+    @media(max-width:500px){
+      .chat-layout.chat-open .chat-sidebar{display:none}
+      .chat-layout.chat-open .chat-window{display:flex}
+      .cw-back{display:flex}
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="ham" id="ham" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  <a class="logo" href="adminDashboard.html">Esuo's Beauty Empire<span class="logo-dot"></span></a>
+  <span class="admin-badge"><i class="fas fa-shield-halved fa-xs"></i> Admin</span>
+  <div class="topbar-right">
+    <a class="topbar-link" href="index.html" target="_blank"><i class="fas fa-store fa-xs"></i> View Store</a>
+    <div class="topbar-avatar" id="topAv">A</div>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="sOverlay"></div>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav class="snav">
+      <div class="snav-label">Main</div>
+      <a href="adminDashboard.html"><i class="fas fa-gauge-high"></i> Dashboard</a>
+      <a href="adminOrders.html"><i class="fas fa-box"></i> Orders</a>
+      <a href="adminDeliveries.html"><i class="fas fa-truck-fast"></i> Deliveries</a>
+      <div class="sdiv"></div>
+      <div class="snav-label">Catalogue</div>
+      <a href="adminProducts.html"><i class="fas fa-shirt"></i> Products</a>
+      <div class="sdiv"></div>
+      <div class="snav-label">People</div>
+      <a href="adminUsers.html"><i class="fas fa-users"></i> Customers</a>
+      <a href="adminChats.html" class="active"><i class="fas fa-comment-dots"></i> Chats</a>
+      <div class="sdiv"></div>
+      <div class="snav-label">Settings</div>
+      <a href="adminProfile.html"><i class="fas fa-user-circle"></i> My Profile</a>
+      <a href="adminTelegram.html"><i class="fab fa-telegram"></i> Telegram</a>
+    </nav>
+    <div class="sfooter">
+      <div class="s-admin-block">
+        <div class="s-av" id="sAv">A</div>
+        <div class="s-info"><strong id="sName">Admin</strong><small id="sShop">Beauty Empire</small></div>
+      </div>
+      <button class="s-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-hd">
+      <nav class="bc"><a href="adminDashboard.html">Dashboard</a><i class="fas fa-chevron-right"></i><span>Chats</span></nav>
+      <h1>Chats</h1>
+    </div>
+
+    <div class="chat-layout" id="chatLayout">
+      <!-- ROOMS SIDEBAR -->
+      <div class="chat-sidebar">
+        <div class="cs-head">
+          <h3>Conversations</h3>
+          <button onclick="loadRooms()" style="font-size:.72rem;color:var(--gold);font-weight:600;min-height:36px;padding:0 .5rem"><i class="fas fa-sync fa-xs"></i> Refresh</button>
+        </div>
+        <div class="cs-search">
+          <input type="text" id="roomSearch" placeholder="Search chats…" oninput="filterRooms()">
+        </div>
+        <div class="cs-tabs">
+          <div class="cs-tab active" onclick="setRoomTab('all',this)">All</div>
+          <div class="cs-tab" onclick="setRoomTab('orders',this)">Orders</div>
+          <div class="cs-tab" onclick="setRoomTab('deliveries',this)">Deliveries</div>
+        </div>
+        <div class="rooms-list" id="roomsList">
+          <div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Loading…</div>
+        </div>
+      </div>
+
+      <!-- CHAT WINDOW -->
+      <div class="chat-window">
+        <div id="cwEmpty" class="cw-empty">
+          <i class="fas fa-comment-dots"></i>
+          <strong>Select a conversation</strong>
+          <span>Choose a chat room to view messages and reply</span>
+        </div>
+        <div id="cwActive" style="display:none;flex-direction:column;overflow:hidden;flex:1">
+          <div class="cw-head">
+            <button class="cw-back" id="cwBack" onclick="closeChatWindow()" aria-label="Back to rooms"><i class="fas fa-arrow-left fa-xs"></i></button>
+            <div class="cw-av" id="cwAv" style="background:linear-gradient(135deg,var(--gold),var(--blush))">C</div>
+            <div class="cw-info">
+              <strong id="cwTitle">Chat</strong>
+              <small id="cwSub">—</small>
+            </div>
+            <div class="cw-actions">
+              <button class="cw-action-btn" onclick="loadHistory(activeChatId)" title="Refresh"><i class="fas fa-sync fa-xs"></i></button>
+            </div>
+          </div>
+          <div class="cw-messages" id="cwMessages"></div>
+          <div class="cw-input">
+            <textarea class="cw-textarea" id="cwTextarea" placeholder="Type a message…" rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
+            <button class="cw-send" onclick="sendMessage()"><i class="fas fa-paper-plane fa-xs"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="tcontainer" id="tc"></div>
+
+<script>
+(function(){
+  'use strict';
+  const API_BASE = 'https://opatawebbackend.onrender.com';
+  const SESSION_KEY='esuos_admin_session';
+  const SESSION_TTL=7*24*60*60*1000;
+  const $=id=>document.getElementById(id);
+  let rooms=[],activeRoomTab='all';
+  window.activeChatId=null;
+
+  function loadSession(){try{const raw=localStorage.getItem(SESSION_KEY);if(!raw)return null;const d=JSON.parse(raw);if(Date.now()-(d.savedAt||0)>SESSION_TTL){localStorage.removeItem(SESSION_KEY);return null;}return d;}catch{return null;}}
+  const session=loadSession();
+  if(!session){location.href='adminLogin.html';return;}
+  const token=session.token;const admin=session.admin||{};
+  function authHeaders(){return token?{Authorization:'Bearer '+token}:{};}
+  function toast(ico,msg){const el=document.createElement('div');el.className='toast';el.innerHTML='<i class="'+ico+'"></i><span>'+msg+'</span>';$('tc').appendChild(el);setTimeout(()=>{el.classList.add('out');el.addEventListener('animationend',()=>el.remove(),{once:true});},3000);}
+  function fmtTime(str){if(!str)return'';try{return new Date(str).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}catch{return '';}}
+
+  const name=admin.name||admin.firstName||admin.email?.split('@')[0]||'Admin';
+  $('topAv').textContent=name.charAt(0).toUpperCase();
+  $('sAv').textContent=name.charAt(0).toUpperCase();
+  $('sName').textContent=name;
+  $('sShop').textContent=admin.shopName||'Beauty Empire';
+
+  const DEMO_ROOMS=[
+    {id:1,type:'PRODUCT_ENQUIRY',product:{id:123,name:'Satin Wrap Dress'},user:{id:'u1',firstName:'Ama',lastName:'Owusu'}},
+    {id:2,type:'ORDER_SUPPORT',order:{id:1001,status:'PENDING'},user:{id:'u2',firstName:'Kofi',lastName:'Mensah'}},
+    {id:3,type:'DELIVERY_SUPPORT',delivery:{id:501,status:'SHIPPED'},user:{id:'u3',firstName:'Abena',lastName:'Asante'}},
+    {id:4,type:'ORDER_SUPPORT',order:{id:1002,status:'CONFIRMED'},user:{id:'u4',firstName:'Yaw',lastName:'Boateng'}},
+  ];
+  const DEMO_MESSAGES={
+    1:[{id:101,chatRoomId:1,senderId:'u1',senderType:'USER',content:'Hi! Is this dress available in size L?',timestamp:'2024-01-15T10:05:00Z'},{id:102,chatRoomId:1,senderId:'admin-1',senderType:'ADMIN',content:'Yes! We have size L in black and white. Would you like to add it to your cart?',timestamp:'2024-01-15T10:07:00Z'}],
+    2:[{id:103,chatRoomId:2,senderId:'admin-1',senderType:'ADMIN',content:'Hi Kofi, your order #1001 is being prepared.',timestamp:'2024-01-15T11:00:00Z'},{id:104,chatRoomId:2,senderId:'u2',senderType:'USER',content:'Thanks! When should I expect it?',timestamp:'2024-01-15T11:05:00Z'}],
+    3:[{id:105,chatRoomId:3,senderId:'admin-1',senderType:'ADMIN',content:'Your delivery has been shipped with DHL. Tracking: TRACK502XYZ',timestamp:'2024-01-15T12:00:00Z'}],
+    4:[],
+  };
+
+  window.loadRooms=async function(){
+    $('roomsList').innerHTML='<div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Loading…</div>';
+    let url=API_BASE+'/api/admin/chat/rooms';
+    if(activeRoomTab==='orders') url=API_BASE+'/api/admin/chat/rooms/orders';
+    else if(activeRoomTab==='deliveries') url=API_BASE+'/api/admin/chat/rooms/deliveries';
+    try{
+      const r=await fetch(url,{headers:authHeaders()});
+      const d=await r.json();if(!r.ok)throw new Error();
+      rooms=d.data||[];renderRooms();
+    }catch{rooms=DEMO_ROOMS;renderRooms();}
+  };
+
+  function roomTypeInfo(r){
+    if(r.type==='PRODUCT_ENQUIRY')return{cls:'product',icon:'fas fa-shirt',badge:'rb-product',label:'Product',sub:r.product?.name||'Product'};
+    if(r.type==='ORDER_SUPPORT')return{cls:'order',icon:'fas fa-box',badge:'rb-order',label:'Order',sub:'Order #'+(r.order?.id||'—')};
+    return{cls:'delivery',icon:'fas fa-truck',badge:'rb-delivery',label:'Delivery',sub:'Delivery #'+(r.delivery?.id||'—')};
+  }
+
+  function renderRooms(){
+    const q=$('roomSearch').value.toLowerCase();
+    let list=rooms.filter(r=>{
+      const u=r.user;const uName=((u?.firstName||'')+(u?.lastName||'')).toLowerCase();
+      if(q&&!uName.includes(q)&&!String(r.id).includes(q))return false;
+      return true;
+    });
+    if(!list.length){$('roomsList').innerHTML='<div class="empty-state"><i class="fas fa-comment"></i>No chats found</div>';return;}
+    $('roomsList').innerHTML=list.map(r=>{
+      const ti=roomTypeInfo(r);const u=r.user;
+      return`<div class="room-item ${activeChatId===r.id?'active':''}" onclick="openRoom(${r.id})">
+        <div class="room-av ${ti.cls}"><i class="${ti.icon} fa-xs"></i></div>
+        <div class="room-meta">
+          <div class="room-title">${u?.firstName||'User'} ${u?.lastName||''}</div>
+          <div class="room-sub">${ti.sub}</div>
+        </div>
+        <span class="room-badge ${ti.badge}">${ti.label}</span>
+      </div>`;
+    }).join('');
+  }
+
+  window.filterRooms=function(){renderRooms();};
+
+  window.setRoomTab=function(t,btn){
+    activeRoomTab=t;
+    document.querySelectorAll('.cs-tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    loadRooms();
+  };
+
+  window.closeChatWindow=function(){
+    activeChatId=null;
+    $('chatLayout').classList.remove('chat-open');
+    $('cwEmpty').style.display='flex';
+    $('cwActive').style.display='none';
+    renderRooms();
+  };
+
+  window.openRoom=async function(id){
+    activeChatId=id;
+    const room=rooms.find(r=>r.id===id);
+    if(!room)return;
+    renderRooms();
+    const ti=roomTypeInfo(room);const u=room.user;
+    $('cwAv').textContent=(u?.firstName||'C').charAt(0).toUpperCase();
+    $('cwAv').style.background=ti.cls==='product'?'linear-gradient(135deg,var(--blush),#e8b4a0)':ti.cls==='order'?'linear-gradient(135deg,var(--gold),var(--gold-light))':'linear-gradient(135deg,#27855c,#2ecc71)';
+    $('cwTitle').textContent=(u?.firstName||'')+' '+(u?.lastName||'');
+    $('cwSub').textContent=ti.sub;
+    $('cwEmpty').style.display='none';
+    $('cwActive').style.display='flex';
+    // On small screens, show chat window fullscreen
+    $('chatLayout').classList.add('chat-open');
+    await loadHistory(id);
+  };
+
+  window.loadHistory=async function(id){
+    $('cwMessages').innerHTML='<div style="text-align:center;padding:1rem;color:var(--subtle);font-size:.8rem"><i class="fas fa-spinner fa-spin"></i> Loading…</div>';
+    try{
+      const r=await fetch(API_BASE+`/api/admin/chat/rooms/${id}/history`,{headers:authHeaders()});
+      const d=await r.json();if(!r.ok)throw new Error();
+      renderMessages(d.data||[]);
+    }catch{renderMessages(DEMO_MESSAGES[id]||[]);}
+  };
+
+  function renderMessages(msgs){
+    if(!msgs.length){$('cwMessages').innerHTML='<div style="text-align:center;padding:2rem;color:var(--subtle);font-size:.8rem">No messages yet. Start the conversation!</div>';return;}
+    $('cwMessages').innerHTML=msgs.map(m=>{
+      const mine=m.senderType==='ADMIN';
+      return`<div class="msg ${mine?'mine':'theirs'}">
+        ${mine?'':'<div class="msg-meta">'+(m.senderType||'')+'</div>'}
+        <div class="msg-bubble">${m.content||'[media]'}</div>
+        <div class="msg-meta">${fmtTime(m.timestamp)}</div>
+      </div>`;
+    }).join('');
+    $('cwMessages').scrollTop=$('cwMessages').scrollHeight;
+  }
+
+  window.sendMessage=async function(){
+    if(!activeChatId){toast('fas fa-info-circle','Select a chat room first');return;}
+    const content=$('cwTextarea').value.trim();
+    if(!content)return;
+    $('cwTextarea').value='';
+    const formData=new FormData();
+    formData.append('message',new Blob([JSON.stringify({content})],{type:'application/json'}));
+    try{
+      const r=await fetch(API_BASE+`/api/admin/chat/rooms/${activeChatId}/send`,{method:'POST',headers:{...(token?{Authorization:'Bearer '+token}:{})},body:formData});
+      const d=await r.json();if(!r.ok)throw new Error();
+      loadHistory(activeChatId);
+    }catch{
+      const msgs=$('cwMessages');
+      const div=document.createElement('div');div.className='msg mine';
+      div.innerHTML=`<div class="msg-bubble">${content}</div><div class="msg-meta">just now</div>`;
+      msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
+    }
+  };
+
+  const ham=$('ham'),sidebar=$('sidebar'),overlay=$('sOverlay');
+  ham.addEventListener('click',()=>{const o=sidebar.classList.toggle('open');overlay.classList.toggle('active',o);ham.classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';});
+  overlay.addEventListener('click',()=>{sidebar.classList.remove('open');overlay.classList.remove('active');ham.classList.remove('open');document.body.style.overflow='';});
+  window.doLogout=function(){localStorage.removeItem(SESSION_KEY);toast('fas fa-sign-out-alt','Signed out…');setTimeout(()=>location.href='adminLogin.html',900);};
+
+  loadRooms();
+})();
+</script>
+</body>
+</html>

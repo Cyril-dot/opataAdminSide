@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telegram · Admin · Esuo's Beauty Empire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root{
+      --ink:#18120e;--cream:#faf7f3;--parchment:#f1ebe2;--sand:#e2d8cc;
+      --warm-mid:#c9b49a;--gold:#a8854e;--gold-light:#c9a86c;--blush:#c8968a;
+      --white:#fff;--muted:#7a6e65;--subtle:#9e9087;--card:#fffcf8;
+      --border:#ede4d8;--danger:#c0392b;--success:#27855c;--tg:#229ED9;
+      --sidebar-w:240px;--nav-h:62px;
+      --r-sm:8px;--r-md:14px;--r-lg:20px;--r-xl:60px;
+      --sh-sm:0 2px 12px rgba(24,18,14,.07);--sh-md:0 8px 32px rgba(24,18,14,.11);--sh-lg:0 20px 60px rgba(24,18,14,.16);
+      --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1)
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{background:var(--cream);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+    a{text-decoration:none;color:inherit}
+    button{cursor:pointer;font-family:inherit;border:none;outline:none;background:none}
+    ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--warm-mid);border-radius:99px}
+
+    /* ── TOPBAR ── */
+    .topbar{height:var(--nav-h);background:rgba(250,247,243,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;display:flex;align-items:center;padding:0 clamp(.75rem,3vw,1.4rem);gap:.6rem;flex-shrink:0}
+    .ham{display:none;flex-direction:column;gap:4.5px;padding:9px;cursor:pointer;border-radius:var(--r-sm);flex-shrink:0;-webkit-tap-highlight-color:transparent}
+    .ham span{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px;transition:all .25s var(--ease)}
+    .ham.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+    .ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+    .ham.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+    .logo{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(.84rem,2.4vw,1.08rem);letter-spacing:.03em;display:flex;align-items:center;gap:.3rem;white-space:nowrap;flex-shrink:0}
+    .logo-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;flex-shrink:0}
+    .admin-badge{display:inline-flex;align-items:center;gap:.3rem;background:rgba(168,133,78,.1);color:var(--gold);font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .55rem;border-radius:var(--r-xl);border:1px solid rgba(168,133,78,.25);flex-shrink:0}
+    @media(max-width:400px){.admin-badge{display:none}}
+    .topbar-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}
+    .topbar-link{display:inline-flex;align-items:center;gap:.32rem;font-size:.78rem;color:var(--muted);font-weight:500;padding:.32rem .8rem;border:1.5px solid var(--border);border-radius:var(--r-xl);transition:all .18s}
+    .topbar-link:hover{border-color:var(--gold);color:var(--gold)}
+    .topbar-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;box-shadow:0 2px 8px rgba(168,133,78,.3)}
+
+    /* ── SIDEBAR ── */
+    .layout{display:flex;flex:1}
+    .sidebar{width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:var(--nav-h);left:0;height:calc(100vh - var(--nav-h));overflow-y:auto;z-index:150;transition:transform .3s var(--ease)}
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:140;opacity:0;transition:opacity .26s}
+    .sidebar-overlay.active{opacity:1}
+    .snav{padding:.7rem 0;flex:1}
+    .snav-label{padding:.6rem .95rem .22rem;font-size:.58rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--subtle)}
+    .snav a{display:flex;align-items:center;gap:.72rem;padding:.78rem 1rem;font-size:.85rem;font-weight:500;color:var(--muted);transition:all .16s;border-left:3px solid transparent;margin:1px .45rem;border-radius:0 var(--r-sm) var(--r-sm) 0;min-height:44px;-webkit-tap-highlight-color:transparent}
+    .snav a:hover{background:var(--parchment);color:var(--ink)}
+    .snav a.active{background:rgba(168,133,78,.09);color:var(--gold);border-left-color:var(--gold);font-weight:600}
+    .snav a i{width:16px;text-align:center;font-size:.82rem;flex-shrink:0}
+    .sdiv{height:1px;background:var(--border);margin:.42rem .9rem}
+    .sfooter{padding:.9rem 1rem 1.4rem;border-top:1px solid var(--border)}
+    .s-admin-block{display:flex;align-items:center;gap:.6rem;padding:.68rem .78rem;background:var(--parchment);border-radius:var(--r-md);margin-bottom:.65rem}
+    .s-av{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--blush));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:.78rem;font-weight:700;flex-shrink:0}
+    .s-info strong{display:block;font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+    .s-info small{font-size:.68rem;color:var(--subtle)}
+    .s-logout{display:flex;align-items:center;gap:.5rem;padding:.58rem .78rem;background:rgba(192,57,43,.07);border:1.5px solid rgba(192,57,43,.18);border-radius:var(--r-md);color:var(--danger);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .18s;width:100%;min-height:44px}
+    .s-logout:hover{background:rgba(192,57,43,.14)}
+
+    /* ── MAIN ── */
+    .main{margin-left:var(--sidebar-w);flex:1;padding:clamp(1rem,3vw,2rem) clamp(.85rem,3vw,2.2rem);min-width:0}
+    .page-hd{margin-bottom:1.6rem}
+    .bc{display:flex;align-items:center;gap:.35rem;font-size:.72rem;color:var(--subtle);margin-bottom:.5rem;flex-wrap:wrap}
+    .bc a{color:var(--muted);transition:color .18s}.bc a:hover{color:var(--gold)}
+    .bc i{font-size:.5rem}
+    .page-hd h1{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,3.5vw,2rem);font-weight:700;line-height:1.15;letter-spacing:-.01em}
+    .page-hd p{font-size:.84rem;color:var(--muted);margin-top:.3rem}
+
+    /* ── HERO BANNER ── */
+    .tg-banner{background:linear-gradient(130deg,#0d6fa8 0%,#229ED9 55%,#1a87c2 100%);border-radius:var(--r-lg);padding:clamp(1.2rem,3vw,1.8rem) clamp(1.2rem,3vw,2rem);display:flex;align-items:center;gap:1.2rem;margin-bottom:2rem;color:white;flex-wrap:wrap;position:relative;overflow:hidden}
+    .tg-banner::before{content:'';position:absolute;top:-50px;right:-30px;width:200px;height:200px;background:rgba(255,255,255,.06);border-radius:50%;pointer-events:none}
+    .tg-banner::after{content:'';position:absolute;bottom:-70px;right:80px;width:150px;height:150px;background:rgba(255,255,255,.04);border-radius:50%;pointer-events:none}
+    .tg-banner-icon{width:52px;height:52px;background:rgba(255,255,255,.15);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0}
+    .tg-banner-text h2{font-family:'Playfair Display',serif;font-size:clamp(1rem,3vw,1.3rem);font-weight:700;margin-bottom:.25rem}
+    .tg-banner-text p{font-size:.82rem;opacity:.88;max-width:520px;line-height:1.55}
+    .tg-banner-status{margin-left:auto;display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);padding:.4rem .9rem;border-radius:var(--r-xl);font-size:.75rem;font-weight:600;white-space:nowrap;flex-shrink:0}
+    .dot{width:7px;height:7px;background:#4ade80;border-radius:50%;box-shadow:0 0 0 2px rgba(74,222,128,.3);animation:blink 2s infinite}
+    @keyframes blink{0%,100%{box-shadow:0 0 0 2px rgba(74,222,128,.3)}50%{box-shadow:0 0 0 5px rgba(74,222,128,.1)}}
+
+    /* ── SECTION LABEL ── */
+    .slabel{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle);margin-bottom:.85rem;display:flex;align-items:center;gap:.6rem}
+    .slabel::after{content:'';flex:1;height:1px;background:var(--border)}
+
+    /* ── TILES ── */
+    .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:.85rem;margin-bottom:1.8rem}
+    .tile{background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.15rem 1.2rem;display:flex;flex-direction:column;gap:.7rem;transition:box-shadow .18s,border-color .18s;position:relative;overflow:hidden}
+    .tile:hover{box-shadow:var(--sh-sm);border-color:var(--sand)}
+    .tile::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:var(--r-lg) var(--r-lg) 0 0}
+    .t-tg::before{background:#229ED9}.t-gold::before{background:var(--gold)}.t-red::before{background:#e74c3c}
+    .t-blush::before{background:var(--blush)}.t-green::before{background:#27855c}.t-purple::before{background:#8b5cf6}
+    .tile-top{display:flex;align-items:center;gap:.65rem}
+    .tico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.85rem;color:white;flex-shrink:0}
+    .tico.tg{background:#229ED9}.tico.gold{background:var(--gold)}.tico.red{background:#e74c3c}
+    .tico.blush{background:var(--blush)}.tico.green{background:#27855c}.tico.purple{background:#8b5cf6}
+    .ttitle{font-weight:600;font-size:.87rem;color:var(--ink)}
+    .tdesc{font-size:.77rem;color:var(--muted);line-height:1.55;flex:1}
+
+    /* ── OUTLINE TRIGGER BUTTON ── */
+    .tbtn{display:inline-flex;align-items:center;justify-content:center;gap:.38rem;padding:.48rem .95rem;border-radius:var(--r-sm);font-size:.79rem;font-weight:600;cursor:pointer;transition:background .15s,color .15s;border:1.5px solid;background:transparent;min-height:36px;width:100%;-webkit-tap-highlight-color:transparent}
+    .tbtn:active{transform:scale(.98)}
+    .tbtn.tg{border-color:#229ED9;color:#229ED9}.tbtn.tg:hover{background:#229ED9;color:#fff}
+    .tbtn.gold{border-color:var(--gold);color:var(--gold)}.tbtn.gold:hover{background:var(--gold);color:#fff}
+    .tbtn.red{border-color:#e74c3c;color:#e74c3c}.tbtn.red:hover{background:#e74c3c;color:#fff}
+    .tbtn.blush{border-color:var(--blush);color:var(--blush)}.tbtn.blush:hover{background:var(--blush);color:#fff}
+    .tbtn.green{border-color:#27855c;color:#27855c}.tbtn.green:hover{background:#27855c;color:#fff}
+    .tbtn.purple{border-color:#8b5cf6;color:#8b5cf6}.tbtn.purple:hover{background:#8b5cf6;color:#fff}
+
+    /* ── MODAL ── */
+    .modal-overlay{position:fixed;inset:0;background:rgba(18,12,8,.58);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .2s var(--ease)}
+    .modal-overlay.active{opacity:1;pointer-events:all}
+    .modal{background:var(--white);border-radius:var(--r-lg);width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:var(--sh-lg);transform:translateY(16px) scale(.97);transition:transform .22s var(--spring),opacity .2s;opacity:0}
+    .modal-overlay.active .modal{transform:none;opacity:1}
+    .mhead{display:flex;align-items:center;gap:.7rem;padding:1.05rem 1.2rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--white);z-index:2;border-radius:var(--r-lg) var(--r-lg) 0 0}
+    .mico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.82rem;color:white;flex-shrink:0}
+    .mhead h2{font-family:'Playfair Display',serif;font-size:.98rem;font-weight:700;flex:1;color:var(--ink)}
+    .mx{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--subtle);transition:all .14s;cursor:pointer;background:var(--parchment);flex-shrink:0;font-size:.75rem}
+    .mx:hover{background:var(--sand);color:var(--ink)}
+    .mbody{padding:1.1rem 1.2rem}
+    .mfoot{padding:.8rem 1.2rem;border-top:1px solid var(--border);display:flex;gap:.5rem;justify-content:flex-end;flex-wrap:wrap}
+
+    /* ── FORM ── */
+    .fg{margin-bottom:.75rem}.fg:last-child{margin-bottom:0}
+    .fl{display:flex;align-items:center;gap:.28rem;font-size:.66rem;font-weight:700;color:var(--muted);margin-bottom:.28rem;letter-spacing:.07em;text-transform:uppercase}
+    .req{color:var(--blush)}
+    .fwrap{position:relative}
+    .fic{position:absolute;left:.8rem;top:50%;transform:translateY(-50%);color:var(--warm-mid);font-size:.76rem;pointer-events:none}
+    .fic.tp{top:.82rem;transform:none}
+    .fi{width:100%;padding:.6rem .88rem .6rem .8rem;background:var(--cream);border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:.875rem;font-family:'DM Sans',sans-serif;color:var(--ink);outline:none;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:none}
+    .fi.ic{padding-left:2.25rem}
+    .fi:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(168,133,78,.1);background:var(--white)}
+    .fi::placeholder{color:var(--warm-mid)}
+    @media(max-width:480px){.fi{font-size:16px}}
+    textarea.fi{resize:vertical;min-height:90px}
+    .fr2{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+    @media(max-width:360px){.fr2{grid-template-columns:1fr}}
+    .fmsg{display:none;align-items:center;gap:.38rem;font-size:.75rem;padding:.36rem .62rem;border-radius:var(--r-sm);margin-bottom:.65rem;line-height:1.4}
+    .fmsg.err{color:var(--danger);background:rgba(192,57,43,.07);border-left:3px solid var(--danger)}
+    .fmsg.ok{color:var(--success);background:rgba(39,133,92,.07);border-left:3px solid var(--success)}
+    .fmsg.show{display:flex}
+
+    /* ── FILE UPLOAD ── */
+    .fupload{position:relative;width:100%}
+    .fupload input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2;width:100%;height:100%}
+    .fupload-face{display:flex;align-items:center;gap:.7rem;padding:.6rem .88rem;background:var(--cream);border:1.5px dashed var(--border);border-radius:var(--r-sm);transition:border-color .15s,background .15s;min-height:44px;cursor:pointer}
+    .fupload:hover .fupload-face,.fupload:focus-within .fupload-face{border-color:var(--gold);background:var(--white)}
+    .fupload-ico{width:28px;height:28px;border-radius:7px;background:rgba(168,133,78,.1);display:flex;align-items:center;justify-content:center;font-size:.75rem;color:var(--gold);flex-shrink:0;transition:background .15s}
+    .fupload:hover .fupload-ico,.fupload:focus-within .fupload-ico{background:rgba(168,133,78,.18)}
+    .fupload-text{flex:1;min-width:0}
+    .fupload-label{display:block;font-size:.8rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .fupload-hint{display:block;font-size:.68rem;color:var(--subtle)}
+    /* preview thumbnail */
+    .fupload-thumb{width:28px;height:28px;border-radius:6px;object-fit:cover;flex-shrink:0;display:none;border:1.5px solid var(--border)}
+    .fupload-thumb.show{display:block}
+    .fupload-clear{width:20px;height:20px;border-radius:4px;display:none;align-items:center;justify-content:center;color:var(--subtle);font-size:.62rem;background:var(--parchment);flex-shrink:0;cursor:pointer;z-index:3;position:relative;transition:background .14s}
+    .fupload-clear:hover{background:var(--sand);color:var(--danger)}
+    .fupload-clear.show{display:flex}
+
+    /* ── NOTIF SUB ── */
+    .nsub{border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;margin-bottom:.75rem}
+    .nsub:last-child{margin-bottom:0}
+    .nshead{padding:.55rem .88rem;background:var(--parchment);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.5rem}
+    .nshead i{color:var(--subtle);font-size:.78rem;flex-shrink:0}
+    .nshead span{font-size:.68rem;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;flex:1}
+    .nsbody{padding:.8rem .88rem .88rem}
+
+    /* ── MODAL BUTTONS ── */
+    .mbtn{display:inline-flex;align-items:center;gap:.35rem;padding:.5rem 1.05rem;border-radius:var(--r-sm);font-size:.79rem;font-weight:600;cursor:pointer;transition:all .14s;min-height:36px}
+    .mbtn:active{transform:scale(.97)}
+    .mbtn.cancel{border:1.5px solid var(--border);color:var(--muted);background:var(--white)}.mbtn.cancel:hover{background:var(--parchment);color:var(--ink)}
+    .mbtn.sub{border:none;color:white}
+    .mbtn.stg{background:#229ED9}.mbtn.stg:hover{background:#1a87c2}
+    .mbtn.sgold{background:var(--gold)}.mbtn.sgold:hover{background:#956f3a}
+    .mbtn.sred{background:#e74c3c}.mbtn.sred:hover{background:#c0392b}
+    .mbtn.sblush{background:var(--blush)}.mbtn.sblush:hover{background:#b8867a}
+    .mbtn.sgreen{background:#27855c}.mbtn.sgreen:hover{background:#1e6b4a}
+    .mbtn.spurple{background:#8b5cf6}.mbtn.spurple:hover{background:#7c3aed}
+    .mbtn:disabled{opacity:.5;cursor:not-allowed}
+    .mbtn.sm{padding:.36rem .75rem;font-size:.75rem;min-height:32px}
+
+    /* ── TOAST ── */
+    .tcontainer{position:fixed;bottom:clamp(.75rem,3vw,1rem);right:clamp(.75rem,3vw,1rem);z-index:9999;display:flex;flex-direction:column;gap:.4rem;max-width:min(300px,calc(100vw - 1.5rem));pointer-events:none}
+    .toast{display:flex;align-items:center;gap:.6rem;background:var(--ink);color:white;font-size:.79rem;padding:.62rem .95rem;border-radius:var(--r-md);box-shadow:var(--sh-lg);animation:tin .22s var(--spring) forwards;line-height:1.4}
+    .toast i{color:var(--gold-light);flex-shrink:0}
+    .toast.out{animation:tout .17s ease forwards}
+    @keyframes tin{from{opacity:0;transform:translateY(10px) scale(.95)}to{opacity:1;transform:none}}
+    @keyframes tout{to{opacity:0;transform:translateY(4px) scale(.95)}}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:860px){
+      .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
+      .sidebar-overlay{display:block}.ham{display:flex}.main{margin-left:0}
+    }
+    @media(max-width:640px){
+      .topbar-link{display:none}.tiles{grid-template-columns:1fr}.tg-banner-status{display:none}
+    }
+    @media(max-width:400px){
+      .mfoot{flex-direction:column-reverse}
+      .mfoot .mbtn{width:100%;justify-content:center}
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="ham" id="ham" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  <a class="logo" href="adminDashboard.html">Esuo's Beauty Empire<span class="logo-dot"></span></a>
+  <span class="admin-badge"><i class="fas fa-shield-halved fa-xs"></i> Admin</span>
+  <div class="topbar-right">
+    <a class="topbar-link" href="index.html" target="_blank"><i class="fas fa-store fa-xs"></i> View Store</a>
+    <div class="topbar-avatar" id="topAv">A</div>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="sOverlay"></div>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav class="snav">
+      <div class="snav-label">Main</div>
+      <a href="adminDashboard.html"><i class="fas fa-gauge-high"></i> Dashboard</a>
+      <a href="adminOrders.html"><i class="fas fa-box"></i> Orders</a>
+      <a href="adminDeliveries.html"><i class="fas fa-truck-fast"></i> Deliveries</a>
+      <div class="sdiv"></div>
+      <div class="snav-label">Catalogue</div>
+      <a href="adminProducts.html"><i class="fas fa-shirt"></i> Products</a>
+      <div class="sdiv"></div>
+      <div class="snav-label">People</div>
+      <a href="adminUsers.html"><i class="fas fa-users"></i> Customers</a>
+      <a href="adminChats.html"><i class="fas fa-comment-dots"></i> Chats</a>
+      <div class="sdiv"></div>
+      <div class="snav-label">Settings</div>
+      <a href="adminProfile.html"><i class="fas fa-user-circle"></i> My Profile</a>
+      <a href="adminTelegram.html" class="active"><i class="fab fa-telegram"></i> Telegram</a>
+    </nav>
+    <div class="sfooter">
+      <div class="s-admin-block">
+        <div class="s-av" id="sAv">A</div>
+        <div class="s-info"><strong id="sName">Admin</strong><small id="sShop">Beauty Empire</small></div>
+      </div>
+      <button class="s-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt fa-xs"></i> Sign Out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-hd">
+      <nav class="bc"><a href="adminDashboard.html">Dashboard</a><i class="fas fa-chevron-right"></i><span>Telegram</span></nav>
+      <h1>Telegram Bot</h1>
+      <p>Manage notifications, broadcasts and product announcements</p>
+    </div>
+
+    <div class="tg-banner">
+      <div class="tg-banner-icon"><i class="fab fa-telegram"></i></div>
+      <div class="tg-banner-text">
+        <h2>Telegram Integration</h2>
+        <p>Send real-time notifications to your admin account and broadcast announcements or product launches directly to your channel.</p>
+      </div>
+      <div class="tg-banner-status"><span class="dot"></span> Bot Connected</div>
+    </div>
+
+    <div class="slabel">Channel Actions</div>
+    <div class="tiles">
+
+      <div class="tile t-gold">
+        <div class="tile-top"><div class="tico gold"><i class="fas fa-bullhorn"></i></div><span class="ttitle">Broadcast Message</span></div>
+        <p class="tdesc">Post a custom announcement to your Telegram channel and reach all subscribers instantly.</p>
+        <button class="tbtn gold" onclick="openModal('modalBcast')"><i class="fas fa-paper-plane fa-xs"></i> Open Broadcast</button>
+      </div>
+
+      <div class="tile t-red">
+        <div class="tile-top"><div class="tico red"><i class="fas fa-fire"></i></div><span class="ttitle">Sale Announcement</span></div>
+        <p class="tdesc">Post a sale alert with the name, discount and end date to drive urgency on your channel.</p>
+        <button class="tbtn red" onclick="openModal('modalSale')"><i class="fas fa-tag fa-xs"></i> Post a Sale</button>
+      </div>
+
+      <div class="tile t-blush">
+        <div class="tile-top"><div class="tico blush"><i class="fas fa-shirt"></i></div><span class="ttitle">Announce Clothing</span></div>
+        <p class="tdesc">Announce a clothing product with sizes, colors, price and image to the channel.</p>
+        <button class="tbtn blush" onclick="openModal('modalClothing')"><i class="fas fa-shirt fa-xs"></i> Announce Clothing</button>
+      </div>
+
+      <div class="tile t-green">
+        <div class="tile-top"><div class="tico green"><i class="fas fa-box"></i></div><span class="ttitle">Announce Product</span></div>
+        <p class="tdesc">Announce skincare, accessories or any general product with tags and an image.</p>
+        <button class="tbtn green" onclick="openModal('modalGeneral')"><i class="fas fa-box fa-xs"></i> Announce Product</button>
+      </div>
+
+    </div>
+
+    <div class="slabel">Notifications</div>
+    <div class="tiles">
+      <div class="tile t-purple">
+        <div class="tile-top"><div class="tico purple"><i class="fas fa-bell"></i></div><span class="ttitle">Manual Notifications</span></div>
+        <p class="tdesc">Manually re-send or test order status, delivery request and delivery status notifications to your Telegram.</p>
+        <button class="tbtn purple" onclick="openModal('modalNotif')"><i class="fas fa-bell fa-xs"></i> Send Notification</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ════ MODALS ════ -->
+
+<!-- Broadcast -->
+<div class="modal-overlay" id="modalBcast">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="mhead">
+      <div class="mico" style="background:var(--gold)"><i class="fas fa-bullhorn"></i></div>
+      <h2>Broadcast to Channel</h2>
+      <button class="mx" onclick="closeModal('modalBcast')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="mbody">
+      <div class="fmsg err" id="bcastErr"><i class="fas fa-exclamation-circle fa-xs"></i><span></span></div>
+      <div class="fmsg ok" id="bcastOk"><i class="fas fa-check-circle fa-xs"></i><span></span></div>
+      <div class="fg">
+        <label class="fl" for="bcastMsg">Message <span class="req">*</span></label>
+        <div class="fwrap"><i class="fic tp fas fa-pen"></i><textarea class="fi ic" id="bcastMsg" rows="5" placeholder="Write your announcement…"></textarea></div>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="mbtn cancel" onclick="closeModal('modalBcast')">Cancel</button>
+      <button class="mbtn sub sgold" id="btnBcast" onclick="broadcastMsg()"><i class="fas fa-paper-plane fa-xs"></i> Send Broadcast</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sale -->
+<div class="modal-overlay" id="modalSale">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="mhead">
+      <div class="mico" style="background:#e74c3c"><i class="fas fa-fire"></i></div>
+      <h2>Sale Announcement</h2>
+      <button class="mx" onclick="closeModal('modalSale')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="mbody">
+      <div class="fmsg err" id="saleErr"><i class="fas fa-exclamation-circle fa-xs"></i><span></span></div>
+      <div class="fmsg ok" id="saleOk"><i class="fas fa-check-circle fa-xs"></i><span></span></div>
+      <div class="fg">
+        <label class="fl" for="saleName">Sale Name <span class="req">*</span></label>
+        <div class="fwrap"><i class="fic fas fa-tag"></i><input class="fi ic" type="text" id="saleName" placeholder="e.g. Summer Sale"></div>
+      </div>
+      <div class="fr2">
+        <div class="fg">
+          <label class="fl" for="saleDiscount">Discount <span class="req">*</span></label>
+          <div class="fwrap"><i class="fic fas fa-percent"></i><input class="fi ic" type="text" id="saleDiscount" placeholder="e.g. 20%"></div>
+        </div>
+        <div class="fg">
+          <label class="fl" for="saleEnd">End Date <span class="req">*</span></label>
+          <div class="fwrap"><i class="fic fas fa-calendar"></i><input class="fi ic" type="text" id="saleEnd" placeholder="Aug 31st"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="mbtn cancel" onclick="closeModal('modalSale')">Cancel</button>
+      <button class="mbtn sub sred" id="btnSale" onclick="postSale()"><i class="fas fa-fire fa-xs"></i> Post Sale</button>
+    </div>
+  </div>
+</div>
+
+<!-- Clothing — no Product ID field, image is a file upload -->
+<div class="modal-overlay" id="modalClothing">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="mhead">
+      <div class="mico" style="background:var(--blush)"><i class="fas fa-shirt"></i></div>
+      <h2>Announce Clothing Product</h2>
+      <button class="mx" onclick="closeModal('modalClothing')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="mbody">
+      <div class="fmsg err" id="cpErr"><i class="fas fa-exclamation-circle fa-xs"></i><span></span></div>
+      <div class="fmsg ok" id="cpOk"><i class="fas fa-check-circle fa-xs"></i><span></span></div>
+
+      <!-- Row: Name + Price -->
+      <div class="fr2">
+        <div class="fg">
+          <label class="fl" for="cpName">Product Name <span class="req">*</span></label>
+          <div class="fwrap"><i class="fic fas fa-shirt"></i><input class="fi ic" type="text" id="cpName" placeholder="Classic T-Shirt"></div>
+        </div>
+        <div class="fg">
+          <label class="fl" for="cpPrice">Price <span class="req">*</span></label>
+          <div class="fwrap"><i class="fic fas fa-coins"></i><input class="fi ic" type="text" id="cpPrice" placeholder="GHS 120"></div>
+        </div>
+      </div>
+
+      <!-- Row: Category + Sub-Category -->
+      <div class="fr2">
+        <div class="fg">
+          <label class="fl" for="cpCat">Category <span class="req">*</span></label>
+          <div class="fwrap"><i class="fic fas fa-folder"></i><input class="fi ic" type="text" id="cpCat" placeholder="Tops"></div>
+        </div>
+        <div class="fg">
+          <label class="fl" for="cpSubCat">Sub-Category</label>
+          <div class="fwrap"><i class="fic fas fa-folder-open"></i><input class="fi ic" type="text" id="cpSubCat" placeholder="Casual"></div>
+        </div>
+      </div>
+
+      <!-- Row: Sizes + Colors -->
+      <div class="fr2">
+        <div class="fg">
+          <label class="fl" for="cpSizes">Sizes</label>
+          <div class="fwrap"><i class="fic fas fa-ruler"></i><input class="fi ic" type="text" id="cpSizes" placeholder="S,M,L,XL"></div>
+        </div>
+        <div class="fg">
+          <label class="fl" for="cpColors">Colors</label>
+          <div class="fwrap"><i class="fic fas fa-palette"></i><input class="fi ic" type="text" id="cpColors" placeholder="BLACK,WHITE"></div>
+        </div>
+      </div>
+
+      <!-- Row: Material + Style -->
+      <div class="fr2">
+        <div class="fg">
+          <label class="fl" for="cpMaterial">Material</label>
+          <div class="fwrap"><i class="fic fas fa-layer-group"></i><input class="fi ic" type="text" id="cpMaterial" placeholder="Cotton"></div>
+        </div>
+        <div class="fg">
+          <label class="fl" for="cpStyle">Style</label>
+          <div class="fwrap"><i class="fic fas fa-star"></i><input class="fi ic" type="text" id="cpStyle" placeholder="Streetwear"></div>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="fg">
+        <label class="fl" for="cpDesc">Description</label>
+        <div class="fwrap"><i class="fic tp fas fa-align-left"></i><textarea class="fi ic" id="cpDesc" rows="2" placeholder="Short product description…"></textarea></div>
+      </div>
+
+      <!-- Image Upload -->
+      <div class="fg">
+        <label class="fl">Product Image <span style="color:var(--subtle);font-weight:400;text-transform:none;letter-spacing:0">(optional — uploaded to Cloudinary)</span></label>
+        <div class="fupload" id="cpImgWrap">
+          <input type="file" id="cpImg" accept="image/*" onchange="handleFileChange('cpImg','cpImgThumb','cpImgClear','cpImgLabel','cpImgHint')">
+          <div class="fupload-face">
+            <div class="fupload-ico"><i class="fas fa-cloud-arrow-up"></i></div>
+            <div class="fupload-text">
+              <span class="fupload-label" id="cpImgLabel">Click to upload image</span>
+              <span class="fupload-hint" id="cpImgHint">JPG, PNG, WEBP · max 10 MB</span>
+            </div>
+            <img class="fupload-thumb" id="cpImgThumb" alt="">
+            <button type="button" class="fupload-clear" id="cpImgClear" onclick="clearFile('cpImg','cpImgThumb','cpImgClear','cpImgLabel','cpImgHint')" aria-label="Remove image"><i class="fas fa-times"></i></button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="mfoot">
+      <button class="mbtn cancel" onclick="closeModal('modalClothing')">Cancel</button>
+      <button class="mbtn sub sblush" id="btnCp" onclick="announceClothing()"><i class="fas fa-shirt fa-xs"></i> Announce</button>
+    </div>
+  </div>
+</div>
+
+<!-- General Product — no Product ID field, image is a file upload -->
+<div class="modal-overlay" id="modalGeneral">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="mhead">
+      <div class="mico" style="background:#27855c"><i class="fas fa-box"></i></div>
+      <h2>Announce General Product</h2>
+      <button class="mx" onclick="closeModal('modalGeneral')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="mbody">
+      <div class="fmsg err" id="gpErr"><i class="fas fa-exclamation-circle fa-xs"></i><span></span></div>
+      <div class="fmsg ok" id="gpOk"><i class="fas fa-check-circle fa-xs"></i><span></span></div>
+
+      <!-- Row: Name + Price -->
+      <div class="fr2">
+        <div class="fg">
+          <label class="fl" for="gpName">Product Name <span class="req">*</span></label>
+          <div class="fwrap"><i class="fic fas fa-box"></i><input class="fi ic" type="text" id="gpName" placeholder="Face Cream"></div>
+        </div>
+        <div class="fg">
+          <label class="fl" for="gpPrice">Price <span class="req">*</span></label>
+          <div class="fwrap"><i class="fic fas fa-coins"></i><input class="fi ic" type="text" id="gpPrice" placeholder="GHS 45"></div>
+        </div>
+      </div>
+
+      <!-- Row: Category + Sub-Category -->
+      <div class="fr2">
+        <div class="fg">
+          <label class="fl" for="gpCat">Category <span class="req">*</span></label>
+          <div class="fwrap"><i class="fic fas fa-folder"></i><input class="fi ic" type="text" id="gpCat" placeholder="Skincare"></div>
+        </div>
+        <div class="fg">
+          <label class="fl" for="gpSubCat">Sub-Category</label>
+          <div class="fwrap"><i class="fic fas fa-folder-open"></i><input class="fi ic" type="text" id="gpSubCat" placeholder="Moisturiser"></div>
+        </div>
+      </div>
+
+      <!-- Tags -->
+      <div class="fg">
+        <label class="fl" for="gpTags">Tags</label>
+        <div class="fwrap"><i class="fic fas fa-tags"></i><input class="fi ic" type="text" id="gpTags" placeholder="Hydration, Daily Use"></div>
+      </div>
+
+      <!-- Description -->
+      <div class="fg">
+        <label class="fl" for="gpDesc">Description</label>
+        <div class="fwrap"><i class="fic tp fas fa-align-left"></i><textarea class="fi ic" id="gpDesc" rows="2" placeholder="Short product description…"></textarea></div>
+      </div>
+
+      <!-- Image Upload -->
+      <div class="fg">
+        <label class="fl">Product Image <span style="color:var(--subtle);font-weight:400;text-transform:none;letter-spacing:0">(optional — uploaded to Cloudinary)</span></label>
+        <div class="fupload" id="gpImgWrap">
+          <input type="file" id="gpImg" accept="image/*" onchange="handleFileChange('gpImg','gpImgThumb','gpImgClear','gpImgLabel','gpImgHint')">
+          <div class="fupload-face">
+            <div class="fupload-ico"><i class="fas fa-cloud-arrow-up"></i></div>
+            <div class="fupload-text">
+              <span class="fupload-label" id="gpImgLabel">Click to upload image</span>
+              <span class="fupload-hint" id="gpImgHint">JPG, PNG, WEBP · max 10 MB</span>
+            </div>
+            <img class="fupload-thumb" id="gpImgThumb" alt="">
+            <button type="button" class="fupload-clear" id="gpImgClear" onclick="clearFile('gpImg','gpImgThumb','gpImgClear','gpImgLabel','gpImgHint')" aria-label="Remove image"><i class="fas fa-times"></i></button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="mfoot">
+      <button class="mbtn cancel" onclick="closeModal('modalGeneral')">Cancel</button>
+      <button class="mbtn sub sgreen" id="btnGp" onclick="announceGeneral()"><i class="fas fa-box fa-xs"></i> Announce</button>
+    </div>
+  </div>
+</div>
+
+<!-- Notifications -->
+<div class="modal-overlay" id="modalNotif">
+  <div class="modal" role="dialog" aria-modal="true" style="max-width:530px">
+    <div class="mhead">
+      <div class="mico" style="background:#8b5cf6"><i class="fas fa-bell"></i></div>
+      <h2>Manual Notifications</h2>
+      <button class="mx" onclick="closeModal('modalNotif')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="mbody">
+
+      <div class="nsub">
+        <div class="nshead"><i class="fas fa-box"></i><span>Order Status Update</span></div>
+        <div class="nsbody">
+          <div class="fmsg err" id="notifOrdErr"><i class="fas fa-exclamation-circle fa-xs"></i><span></span></div>
+          <div class="fmsg ok" id="notifOrdOk"><i class="fas fa-check-circle fa-xs"></i><span></span></div>
+          <div class="fr2">
+            <div class="fg"><label class="fl" for="noCustomer">Customer Name</label><div class="fwrap"><i class="fic fas fa-user"></i><input class="fi ic" type="text" id="noCustomer" placeholder="John Doe"></div></div>
+            <div class="fg"><label class="fl" for="noOrderId">Order ID</label><div class="fwrap"><i class="fic fas fa-hashtag"></i><input class="fi ic" type="number" id="noOrderId" placeholder="1001" inputmode="numeric"></div></div>
+          </div>
+          <div class="fr2">
+            <div class="fg"><label class="fl" for="noOldStatus">Old Status</label><div class="fwrap"><i class="fic fas fa-clock"></i><input class="fi ic" type="text" id="noOldStatus" placeholder="PENDING"></div></div>
+            <div class="fg"><label class="fl" for="noNewStatus">New Status</label><div class="fwrap"><i class="fic fas fa-check"></i><input class="fi ic" type="text" id="noNewStatus" placeholder="CONFIRMED"></div></div>
+          </div>
+          <button class="mbtn sub spurple sm" onclick="notifyOrderStatus()"><i class="fas fa-paper-plane fa-xs"></i> Send</button>
+        </div>
+      </div>
+
+      <div class="nsub">
+        <div class="nshead"><i class="fas fa-truck-fast"></i><span>New Delivery Request</span></div>
+        <div class="nsbody">
+          <div class="fmsg err" id="notifDelErr"><i class="fas fa-exclamation-circle fa-xs"></i><span></span></div>
+          <div class="fmsg ok" id="notifDelOk"><i class="fas fa-check-circle fa-xs"></i><span></span></div>
+          <div class="fr2">
+            <div class="fg"><label class="fl" for="ndCustomer">Customer Name</label><div class="fwrap"><i class="fic fas fa-user"></i><input class="fi ic" type="text" id="ndCustomer" placeholder="Jane Smith"></div></div>
+            <div class="fg"><label class="fl" for="ndDelivId">Delivery ID</label><div class="fwrap"><i class="fic fas fa-hashtag"></i><input class="fi ic" type="number" id="ndDelivId" placeholder="501" inputmode="numeric"></div></div>
+          </div>
+          <div class="fr2">
+            <div class="fg"><label class="fl" for="ndAddress">Address</label><div class="fwrap"><i class="fic fas fa-location-dot"></i><input class="fi ic" type="text" id="ndAddress" placeholder="456 Oak Ave"></div></div>
+            <div class="fg"><label class="fl" for="ndCity">City</label><div class="fwrap"><i class="fic fas fa-city"></i><input class="fi ic" type="text" id="ndCity" placeholder="Accra"></div></div>
+          </div>
+          <button class="mbtn sub spurple sm" onclick="notifyDeliveryReq()"><i class="fas fa-paper-plane fa-xs"></i> Send</button>
+        </div>
+      </div>
+
+      <div class="nsub">
+        <div class="nshead"><i class="fas fa-map-pin"></i><span>Delivery Status Update</span></div>
+        <div class="nsbody">
+          <div class="fmsg err" id="notifDsErr"><i class="fas fa-exclamation-circle fa-xs"></i><span></span></div>
+          <div class="fmsg ok" id="notifDsOk"><i class="fas fa-check-circle fa-xs"></i><span></span></div>
+          <div class="fr2">
+            <div class="fg"><label class="fl" for="dsCustomer">Customer Name</label><div class="fwrap"><i class="fic fas fa-user"></i><input class="fi ic" type="text" id="dsCustomer" placeholder="Jane Smith"></div></div>
+            <div class="fg"><label class="fl" for="dsDelivId">Delivery ID</label><div class="fwrap"><i class="fic fas fa-hashtag"></i><input class="fi ic" type="number" id="dsDelivId" placeholder="501" inputmode="numeric"></div></div>
+          </div>
+          <div class="fr2">
+            <div class="fg"><label class="fl" for="dsStatus">New Status</label><div class="fwrap"><i class="fic fas fa-truck"></i><input class="fi ic" type="text" id="dsStatus" placeholder="SHIPPED"></div></div>
+            <div class="fg"><label class="fl" for="dsTracking">Tracking No.</label><div class="fwrap"><i class="fic fas fa-barcode"></i><input class="fi ic" type="text" id="dsTracking" placeholder="TRACK501ABC"></div></div>
+          </div>
+          <button class="mbtn sub spurple sm" onclick="notifyDeliveryStatus()"><i class="fas fa-paper-plane fa-xs"></i> Send</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="mfoot">
+      <button class="mbtn cancel" onclick="closeModal('modalNotif')">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="tcontainer" id="tc"></div>
+
+<script>
+(function(){
+  'use strict';
+  const API='https://opatawebbackend.onrender.com';
+  const SK='esuos_admin_session';
+  const TTL=7*24*60*60*1000;
+  const $=id=>document.getElementById(id);
+
+  function loadSess(){
+    try{const r=localStorage.getItem(SK);if(!r)return null;
+    const d=JSON.parse(r);if(Date.now()-(d.savedAt||0)>TTL){localStorage.removeItem(SK);return null;}return d;}
+    catch{return null;}
+  }
+  const sess=loadSess();
+  if(!sess){location.href='adminLogin.html';return;}
+  const tok=sess.token,adm=sess.admin||{};
+  const hdr=()=>tok?{Authorization:'Bearer '+tok}:{};
+
+  function toast(ico,txt){
+    const el=document.createElement('div');el.className='toast';
+    el.innerHTML='<i class="'+ico+'"></i><span>'+txt+'</span>';
+    $('tc').appendChild(el);
+    setTimeout(()=>{el.classList.add('out');el.addEventListener('animationend',()=>el.remove(),{once:true});},3000);
+  }
+
+  const nm=adm.name||adm.firstName||adm.email?.split('@')[0]||'Admin';
+  $('topAv').textContent=nm[0].toUpperCase();
+  $('sAv').textContent=nm[0].toUpperCase();
+  $('sName').textContent=nm;
+  $('sShop').textContent=adm.shopName||'Beauty Empire';
+
+  // ── MODAL HELPERS ──────────────────────────────────────────
+  window.openModal=id=>{
+    const m=$(id);if(!m)return;
+    m.classList.add('active');
+    document.body.style.overflow='hidden';
+    setTimeout(()=>{const f=m.querySelector('.fi');if(f)f.focus();},240);
+  };
+  window.closeModal=id=>{
+    const m=$(id);if(!m)return;
+    m.classList.remove('active');
+    document.body.style.overflow='';
+  };
+  document.querySelectorAll('.modal-overlay').forEach(o=>
+    o.addEventListener('click',e=>{if(e.target===o){o.classList.remove('active');document.body.style.overflow='';}}));
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape')
+      document.querySelectorAll('.modal-overlay.active').forEach(m=>{m.classList.remove('active');document.body.style.overflow='';});
+  });
+
+  // ── FILE UPLOAD HELPERS ────────────────────────────────────
+  window.handleFileChange=function(inputId,thumbId,clearId,labelId,hintId){
+    const file=$(inputId).files[0];
+    if(!file)return;
+    const thumb=$(thumbId),clr=$(clearId),lbl=$(labelId),hnt=$(hintId);
+    lbl.textContent=file.name.length>28?file.name.substring(0,26)+'…':file.name;
+    hnt.textContent=(file.size/1024<1024?(file.size/1024).toFixed(0)+' KB':((file.size/1024/1024).toFixed(1))+' MB');
+    clr.classList.add('show');
+    const reader=new FileReader();
+    reader.onload=ev=>{thumb.src=ev.target.result;thumb.classList.add('show');};
+    reader.readAsDataURL(file);
+  };
+  window.clearFile=function(inputId,thumbId,clearId,labelId,hintId){
+    const inp=$(inputId);
+    inp.value='';
+    $(thumbId).src='';$(thumbId).classList.remove('show');
+    $(clearId).classList.remove('show');
+    $(labelId).textContent='Click to upload image';
+    $(hintId).textContent='JPG, PNG, WEBP · max 10 MB';
+  };
+
+  // ── API HELPERS ────────────────────────────────────────────
+  // JSON API for regular param-based calls
+  async function api(url,opts={}){
+    const r=await fetch(url,{...opts,headers:{...hdr(),...(opts.headers||{})}});
+    const d=await r.json();if(!r.ok)throw new Error(d.message||'Request failed');return d;
+  }
+
+  // Multipart FormData upload — do NOT set Content-Type (browser sets boundary)
+  async function apiForm(url,formData){
+    const r=await fetch(url,{method:'POST',headers:hdr(),body:formData});
+    const d=await r.json();if(!r.ok)throw new Error(d.message||'Request failed');return d;
+  }
+
+  function ld(id,on,html){
+    const b=$(id);if(!b)return;
+    b.disabled=on;
+    if(on)b.innerHTML='<i class="fas fa-spinner fa-spin fa-xs"></i> Sending…';
+    else if(html)b.innerHTML=html;
+  }
+  function fm(eId,oId,type,txt){
+    const e=$(eId),o=$(oId);
+    e.classList.remove('show');o.classList.remove('show');
+    const t=type==='ok'?o:e;
+    const s=t.querySelector('span');
+    if(s)s.textContent=txt;else t.textContent=txt;
+    t.classList.add('show');
+  }
+
+  // ── BROADCAST ─────────────────────────────────────────────
+  window.broadcastMsg=async()=>{
+    const m=$('bcastMsg').value.trim();
+    if(!m){fm('bcastErr','bcastOk','err','Message cannot be empty.');return;}
+    ld('btnBcast',true);
+    try{
+      await api(API+`/api/admin/telegram/channel/broadcast?message=${encodeURIComponent(m)}`,{method:'POST'});
+      fm('bcastErr','bcastOk','ok','Broadcast sent to channel!');
+      toast('fas fa-bullhorn','Broadcast sent!');
+      $('bcastMsg').value='';
+    }catch(e){fm('bcastErr','bcastOk','err',e.message||'Failed to send.');}
+    finally{ld('btnBcast',false,'<i class="fas fa-paper-plane fa-xs"></i> Send Broadcast');}
+  };
+
+  // ── SALE ──────────────────────────────────────────────────
+  window.postSale=async()=>{
+    const sn=$('saleName').value.trim(),sd=$('saleDiscount').value.trim(),se=$('saleEnd').value.trim();
+    if(!sn||!sd||!se){fm('saleErr','saleOk','err','All fields are required.');return;}
+    ld('btnSale',true);
+    try{
+      await api(API+`/api/admin/telegram/channel/sale?saleName=${encodeURIComponent(sn)}&discount=${encodeURIComponent(sd)}&endDate=${encodeURIComponent(se)}`,{method:'POST'});
+      fm('saleErr','saleOk','ok','Sale announcement posted!');
+      toast('fas fa-fire','Sale announced!');
+    }catch(e){fm('saleErr','saleOk','err',e.message||'Failed.');}
+    finally{ld('btnSale',false,'<i class="fas fa-fire fa-xs"></i> Post Sale');}
+  };
+
+  // ── ANNOUNCE CLOTHING ─────────────────────────────────────
+  // Uses multipart/form-data — productId is auto-generated by backend.
+  window.announceClothing=async()=>{
+    const n=$('cpName').value.trim(),p=$('cpPrice').value.trim(),c=$('cpCat').value.trim();
+    if(!n||!p||!c){fm('cpErr','cpOk','err','Name, price and category are required.');return;}
+    ld('btnCp',true);
+
+    const fd=new FormData();
+    fd.append('name',n);
+    fd.append('price',p);
+    fd.append('category',c);
+    if($('cpSubCat').value.trim()) fd.append('subCategory',$('cpSubCat').value.trim());
+    if($('cpSizes').value.trim())  fd.append('sizes',$('cpSizes').value.trim());
+    if($('cpColors').value.trim()) fd.append('colors',$('cpColors').value.trim());
+    if($('cpMaterial').value.trim()) fd.append('material',$('cpMaterial').value.trim());
+    if($('cpStyle').value.trim())  fd.append('style',$('cpStyle').value.trim());
+    if($('cpDesc').value.trim())   fd.append('description',$('cpDesc').value.trim());
+    const imgFile=$('cpImg').files[0];
+    if(imgFile) fd.append('image',imgFile);
+
+    try{
+      const res=await apiForm(API+'/api/admin/telegram/channel/announce-product',fd);
+      fm('cpErr','cpOk','ok',res.message||'Clothing announced!');
+      toast('fas fa-shirt','Announced!');
+      // reset form
+      ['cpName','cpPrice','cpCat','cpSubCat','cpSizes','cpColors','cpMaterial','cpStyle','cpDesc'].forEach(id=>$(id).value='');
+      clearFile('cpImg','cpImgThumb','cpImgClear','cpImgLabel','cpImgHint');
+    }catch(e){fm('cpErr','cpOk','err',e.message||'Failed.');}
+    finally{ld('btnCp',false,'<i class="fas fa-shirt fa-xs"></i> Announce');}
+  };
+
+  // ── ANNOUNCE GENERAL PRODUCT ──────────────────────────────
+  // Uses multipart/form-data — productId is auto-generated by backend.
+  window.announceGeneral=async()=>{
+    const n=$('gpName').value.trim(),p=$('gpPrice').value.trim(),c=$('gpCat').value.trim();
+    if(!n||!p||!c){fm('gpErr','gpOk','err','Name, price and category are required.');return;}
+    ld('btnGp',true);
+
+    const fd=new FormData();
+    fd.append('name',n);
+    fd.append('price',p);
+    fd.append('category',c);
+    if($('gpSubCat').value.trim()) fd.append('subCategory',$('gpSubCat').value.trim());
+    if($('gpTags').value.trim())   fd.append('tags',$('gpTags').value.trim());
+    if($('gpDesc').value.trim())   fd.append('description',$('gpDesc').value.trim());
+    const imgFile=$('gpImg').files[0];
+    if(imgFile) fd.append('image',imgFile);
+
+    try{
+      const res=await apiForm(API+'/api/admin/telegram/channel/announce-general-product',fd);
+      fm('gpErr','gpOk','ok',res.message||'Product announced!');
+      toast('fas fa-box','Announced!');
+      ['gpName','gpPrice','gpCat','gpSubCat','gpTags','gpDesc'].forEach(id=>$(id).value='');
+      clearFile('gpImg','gpImgThumb','gpImgClear','gpImgLabel','gpImgHint');
+    }catch(e){fm('gpErr','gpOk','err',e.message||'Failed.');}
+    finally{ld('btnGp',false,'<i class="fas fa-box fa-xs"></i> Announce');}
+  };
+
+  // ── NOTIFICATIONS ─────────────────────────────────────────
+  window.notifyOrderStatus=async()=>{
+    const cn=$('noCustomer').value.trim(),oi=$('noOrderId').value,os=$('noOldStatus').value.trim(),ns=$('noNewStatus').value.trim();
+    if(!cn||!oi||!os||!ns){fm('notifOrdErr','notifOrdOk','err','All fields required.');return;}
+    try{
+      await api(API+`/api/admin/telegram/notify/order-status?customerName=${encodeURIComponent(cn)}&orderId=${oi}&oldStatus=${encodeURIComponent(os)}&newStatus=${encodeURIComponent(ns)}`,{method:'POST'});
+      fm('notifOrdErr','notifOrdOk','ok','Sent!');
+      toast('fas fa-bell','Order notif sent!');
+    }catch(e){fm('notifOrdErr','notifOrdOk','err',e.message||'Failed.');}
+  };
+
+  window.notifyDeliveryReq=async()=>{
+    const cn=$('ndCustomer').value.trim(),di=$('ndDelivId').value,addr=$('ndAddress').value.trim(),city=$('ndCity').value.trim();
+    if(!cn||!di||!addr){fm('notifDelErr','notifDelOk','err','Customer, ID and address required.');return;}
+    try{
+      await api(API+`/api/admin/telegram/notify/delivery-request?customerName=${encodeURIComponent(cn)}&deliveryId=${di}&address=${encodeURIComponent(addr)}&city=${encodeURIComponent(city)}`,{method:'POST'});
+      fm('notifDelErr','notifDelOk','ok','Sent!');
+      toast('fas fa-bell','Delivery notif sent!');
+    }catch(e){fm('notifDelErr','notifDelOk','err',e.message||'Failed.');}
+  };
+
+  window.notifyDeliveryStatus=async()=>{
+    const cn=$('dsCustomer').value.trim(),di=$('dsDelivId').value,st=$('dsStatus').value.trim(),tr=$('dsTracking').value.trim();
+    if(!cn||!di||!st){fm('notifDsErr','notifDsOk','err','Customer, ID and status required.');return;}
+    try{
+      await api(API+`/api/admin/telegram/notify/delivery-status?customerName=${encodeURIComponent(cn)}&deliveryId=${di}&newStatus=${encodeURIComponent(st)}&trackingNumber=${encodeURIComponent(tr)}`,{method:'POST'});
+      fm('notifDsErr','notifDsOk','ok','Sent!');
+      toast('fas fa-bell','Status sent!');
+    }catch(e){fm('notifDsErr','notifDsOk','err',e.message||'Failed.');}
+  };
+
+  // ── SIDEBAR / LOGOUT ──────────────────────────────────────
+  const ham=$('ham'),sb=$('sidebar'),ov=$('sOverlay');
+  ham.addEventListener('click',()=>{
+    const o=sb.classList.toggle('open');
+    ov.classList.toggle('active',o);
+    ham.classList.toggle('open',o);
+    document.body.style.overflow=o?'hidden':'';
+  });
+  ov.addEventListener('click',()=>{
+    sb.classList.remove('open');ov.classList.remove('active');
+    ham.classList.remove('open');document.body.style.overflow='';
+  });
+  window.doLogout=()=>{
+    localStorage.removeItem(SK);
+    toast('fas fa-sign-out-alt','Signed out…');
+    setTimeout(()=>location.href='adminLogin.html',900);
+  };
+})();
+</script>
+</body>
+</html>
