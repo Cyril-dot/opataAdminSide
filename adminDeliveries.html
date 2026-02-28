@@ -112,19 +112,18 @@
     .dc-order{font-size:.72rem;color:var(--subtle)}
     .dc-body{display:flex;flex-direction:column;gap:.28rem;margin-bottom:.75rem}
     .dc-row{display:flex;gap:.5rem;font-size:.78rem}
-    .dc-label{font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--subtle);min-width:62px;flex-shrink:0;padding-top:.1rem}
+    .dc-label{font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--subtle);min-width:66px;flex-shrink:0;padding-top:.1rem}
     .dc-val{color:var(--ink);word-break:break-word}
     .dc-actions{display:flex;gap:.35rem;flex-wrap:wrap}
 
-    /* ── ACTION BUTTONS — copied exactly from products page .btn-toggle etc ── */
+    /* ── ACTION BUTTONS ── */
     .btn-view,.btn-update,.btn-chat,.btn-cancel-del{
       font-size:.7rem;font-weight:600;padding:.3rem .65rem;border-radius:var(--r-xl);
       border:1.5px solid var(--border);cursor:pointer;transition:all .16s;background:none;
       min-height:44px;min-width:44px;
       display:inline-flex;align-items:center;justify-content:center;gap:.25rem;
       touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
-      pointer-events:auto;
-      position:relative;z-index:1;
+      pointer-events:auto;position:relative;z-index:1;
     }
     .btn-view i,.btn-update i,.btn-chat i,.btn-cancel-del i{pointer-events:none}
     .btn-view{color:var(--muted)}.btn-view:hover,.btn-view:active{border-color:var(--gold);color:var(--gold)}
@@ -132,16 +131,19 @@
     .btn-chat{color:var(--muted)}.btn-chat:hover,.btn-chat:active{border-color:var(--success);color:var(--success)}
     .btn-cancel-del{border-color:rgba(192,57,43,.25);color:var(--danger)}.btn-cancel-del:hover,.btn-cancel-del:active{background:rgba(192,57,43,.07)}
 
-    /* ── STATUS BADGE ── */
-    .dstatus{display:inline-flex;align-items:center;font-size:.6rem;font-weight:700;padding:.18rem .55rem;border-radius:var(--r-xl);white-space:nowrap;pointer-events:none}
-    .dstatus.PENDING  {background:#fef3cd;color:#b7791f}
-    .dstatus.CONFIRMED{background:#dbeafe;color:#1d4ed8}
-    .dstatus.PICKED_UP{background:#e0f2fe;color:#0369a1}
-    .dstatus.SHIPPED  {background:#e0e7ff;color:#4338ca}
-    .dstatus.DELIVERED{background:#dcfce7;color:#15803d}
-    .dstatus.CANCELLED{background:#fee2e2;color:var(--danger)}
+    /* ── STATUS BADGE — all real enum values from DeliveryStatus ── */
+    .dstatus{display:inline-flex;align-items:center;font-size:.6rem;font-weight:700;padding:.18rem .55rem;border-radius:var(--r-xl);white-space:nowrap;pointer-events:none;letter-spacing:.04em}
+    .dstatus.REQUESTED       {background:#fef3cd;color:#b7791f}
+    .dstatus.CONFIRMED       {background:#dbeafe;color:#1d4ed8}
+    .dstatus.ASSIGNED        {background:#e0f2fe;color:#0369a1}
+    .dstatus.PICKED_UP       {background:#ede9fe;color:#6d28d9}
+    .dstatus.IN_TRANSIT      {background:#e0e7ff;color:#4338ca}
+    .dstatus.OUT_FOR_DELIVERY{background:#fce7f3;color:#be185d}
+    .dstatus.DELIVERED       {background:#dcfce7;color:#15803d}
+    .dstatus.FAILED          {background:#fee2e2;color:var(--danger)}
+    .dstatus.CANCELLED       {background:#f3f4f6;color:#6b7280}
 
-    /* ── MODALS — same as products page ── */
+    /* ── MODALS ── */
     .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;display:flex;align-items:flex-start;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .22s;overflow-y:auto;-webkit-overflow-scrolling:touch;}
     .modal-overlay.open{opacity:1;pointer-events:auto}
     .modal{background:var(--white);border-radius:var(--r-lg);padding:clamp(1.2rem,4vw,1.8rem);max-width:520px;width:100%;box-shadow:var(--sh-lg);transform:scale(.95);transition:transform .22s var(--spring);margin:auto}
@@ -168,7 +170,7 @@
     .btn-save:hover,.btn-save:active{opacity:.85}
     .btn-save:disabled{opacity:.55;cursor:not-allowed}
 
-    /* detail grid in view modal */
+    /* detail grid */
     .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem .9rem;margin-bottom:.5rem}
     .detail-item label{display:block;font-size:.62rem;font-weight:700;color:var(--subtle);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.12rem}
     .detail-item span{font-size:.84rem;font-weight:500}
@@ -237,13 +239,26 @@
       </div>
     </div>
 
-    <!-- STATUS TABS -->
-    <div class="status-tabs">
+    <!--
+      STATUS TABS — all values match the real DeliveryStatus enum:
+      REQUESTED, CONFIRMED, ASSIGNED, PICKED_UP, IN_TRANSIT,
+      OUT_FOR_DELIVERY, DELIVERED, FAILED, CANCELLED
+
+      'active' and 'overdue' hit dedicated server endpoints.
+      All status values are filtered CLIENT-SIDE from the full /api/admin/deliveries list
+      to avoid the 500 error from the /status/{status} endpoint.
+    -->
+    <div class="status-tabs" id="statusTabs">
       <button class="stab active" data-filter="all">All</button>
       <button class="stab" data-filter="active"><i class="fas fa-circle fa-xs" style="color:var(--success)"></i> Active</button>
-      <button class="stab" data-filter="PENDING">Pending</button>
-      <button class="stab" data-filter="SHIPPED">Shipped</button>
+      <button class="stab" data-filter="REQUESTED">Requested</button>
+      <button class="stab" data-filter="CONFIRMED">Confirmed</button>
+      <button class="stab" data-filter="ASSIGNED">Assigned</button>
+      <button class="stab" data-filter="PICKED_UP">Picked Up</button>
+      <button class="stab" data-filter="IN_TRANSIT">In Transit</button>
+      <button class="stab" data-filter="OUT_FOR_DELIVERY">Out for Delivery</button>
       <button class="stab" data-filter="DELIVERED">Delivered</button>
+      <button class="stab" data-filter="FAILED" style="border-color:rgba(192,57,43,.3);color:var(--danger)">Failed</button>
       <button class="stab" data-filter="CANCELLED">Cancelled</button>
       <button class="stab" data-filter="overdue" style="border-color:rgba(192,57,43,.3);color:var(--danger)"><i class="fas fa-clock fa-xs"></i> Overdue</button>
     </div>
@@ -252,13 +267,13 @@
     <div class="toolbar">
       <div class="search-wrap">
         <i class="fas fa-search"></i>
-        <input class="search-input" type="text" id="searchInput" placeholder="Search by ID or address…">
+        <input class="search-input" type="text" id="searchInput" placeholder="Search by ID, name or address…">
       </div>
       <button class="btn-filter" id="btnSearch"><i class="fas fa-search fa-xs"></i></button>
       <button class="btn-filter" id="btnRefresh" style="background:var(--parchment);color:var(--muted);border:1.5px solid var(--border)"><i class="fas fa-sync fa-xs"></i></button>
     </div>
 
-    <!-- DELIVERIES GRID -->
+    <!-- DELIVERIES GRID — delegated click target -->
     <div class="deliveries-grid" id="deliveriesGrid">
       <div style="grid-column:1/-1"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i> Loading deliveries…</div></div>
     </div>
@@ -276,12 +291,16 @@
     <div class="ferr" id="updateErr"></div>
     <div class="fg">
       <label class="fl">Status *</label>
+      <!-- Options match DeliveryStatus enum exactly -->
       <select class="fi" id="uStatus">
-        <option value="PENDING">PENDING</option>
+        <option value="REQUESTED">REQUESTED</option>
         <option value="CONFIRMED">CONFIRMED</option>
+        <option value="ASSIGNED">ASSIGNED</option>
         <option value="PICKED_UP">PICKED UP</option>
-        <option value="SHIPPED">SHIPPED</option>
+        <option value="IN_TRANSIT">IN TRANSIT</option>
+        <option value="OUT_FOR_DELIVERY">OUT FOR DELIVERY</option>
         <option value="DELIVERED">DELIVERED</option>
+        <option value="FAILED">FAILED</option>
         <option value="CANCELLED">CANCELLED</option>
       </select>
     </div>
@@ -326,7 +345,15 @@
   const SESSION_TTL = 7 * 24 * 60 * 60 * 1000;
   const $ = id => document.getElementById(id);
 
-  let deliveries    = [];
+  /*
+   * allDeliveries  — full list fetched from the server (never filtered here)
+   * currentFilter  — tab value; status strings filtered CLIENT-SIDE
+   *                  'all'    → show allDeliveries as-is
+   *                  'active' → hits /active endpoint directly
+   *                  'overdue'→ hits /overdue endpoint directly
+   *                  anything else → client-side filter on allDeliveries by status
+   */
+  let allDeliveries = [];
   let currentFilter = 'all';
   let pendingUpdate = { id: null };
 
@@ -336,7 +363,7 @@
       const raw = localStorage.getItem(SESSION_KEY);
       if(!raw) return null;
       const d = JSON.parse(raw);
-      if(Date.now() - (d.savedAt || 0) > SESSION_TTL){ localStorage.removeItem(SESSION_KEY); return null; }
+      if(Date.now() - (d.savedAt||0) > SESSION_TTL){ localStorage.removeItem(SESSION_KEY); return null; }
       return d;
     }catch{ return null; }
   }
@@ -351,13 +378,18 @@
     el.className = 'toast';
     el.innerHTML = '<i class="' + ico + '"></i><span>' + msg + '</span>';
     $('tc').appendChild(el);
-    setTimeout(() => { el.classList.add('out'); el.addEventListener('animationend', () => el.remove(), { once: true }); }, 3500);
+    setTimeout(() => { el.classList.add('out'); el.addEventListener('animationend', () => el.remove(), { once:true }); }, 3500);
   }
 
   function fmtDate(str){
     if(!str) return '—';
     try{ return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); }
     catch{ return str; }
+  }
+
+  function fmtLabel(str){
+    if(!str) return '—';
+    return str.replace(/_/g,' ');
   }
 
   /* ── IDENTITY ── */
@@ -367,7 +399,7 @@
   $('sName').textContent = uname;
   $('sShop').textContent = admin.shopName || 'Beauty Empire';
 
-  /* ── SIDEBAR — exact same as products page ── */
+  /* ── SIDEBAR ── */
   const ham = $('ham'), sidebar = $('sidebar'), overlay = $('sOverlay');
   function toggleSidebar(open){
     sidebar.classList.toggle('open', open);
@@ -388,88 +420,110 @@
   });
 
   /* ── STATUS TABS ── */
-  document.querySelectorAll('.stab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.stab').forEach(b => b.classList.remove('active'));
-      tab.classList.add('active');
-      currentFilter = tab.dataset.filter;
-      loadDeliveries();
-    });
+  $('statusTabs').addEventListener('click', e => {
+    const tab = e.target.closest('.stab');
+    if(!tab) return;
+    document.querySelectorAll('.stab').forEach(b => b.classList.remove('active'));
+    tab.classList.add('active');
+    currentFilter = tab.dataset.filter;
+    loadDeliveries();
   });
 
   /* ── TOOLBAR ── */
-  $('btnSearch').addEventListener('click',  () => loadDeliveries());
+  $('btnSearch').addEventListener('click',  () => renderFiltered());
   $('btnRefresh').addEventListener('click', () => loadDeliveries());
-  $('searchInput').addEventListener('keydown', e => { if(e.key === 'Enter') loadDeliveries(); });
+  $('searchInput').addEventListener('input', () => renderFiltered());
+  $('searchInput').addEventListener('keydown', e => { if(e.key === 'Enter') renderFiltered(); });
 
-  /* ── LOAD DELIVERIES ── */
+  /* ── LOAD DELIVERIES ──────────────────────────────────────────
+     Strategy:
+     • 'active'  → GET /api/admin/deliveries/active   (dedicated endpoint, returns subset)
+     • 'overdue' → GET /api/admin/deliveries/overdue  (dedicated endpoint)
+     • everything else → GET /api/admin/deliveries    (full list, filter client-side)
+
+     We NEVER call /status/{status} because the Spring enum parser throws 500
+     for values the backend doesn't recognise (e.g. old "PENDING").
+  ─────────────────────────────────────────────────────────────── */
   async function loadDeliveries(){
     $('deliveriesGrid').innerHTML = '<div style="grid-column:1/-1"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i> Loading…</div></div>';
 
     let url = BASE_URL + '/api/admin/deliveries';
-    if(currentFilter === 'active')       url = BASE_URL + '/api/admin/deliveries/active';
-    else if(currentFilter === 'overdue') url = BASE_URL + '/api/admin/deliveries/overdue';
-    else if(currentFilter !== 'all')     url = BASE_URL + '/api/admin/deliveries/status/' + currentFilter;
-
-    const search = $('searchInput').value.trim();
+    if(currentFilter === 'active')  url = BASE_URL + '/api/admin/deliveries/active';
+    if(currentFilter === 'overdue') url = BASE_URL + '/api/admin/deliveries/overdue';
 
     try{
       const r = await fetch(url, { headers: authHeaders() });
       const d = await r.json();
-      if(!r.ok) throw new Error();
-      deliveries = d.data || [];
-    }catch{
-      deliveries = [
-        {id:501,orderId:1001,status:'PENDING',  deliveryAddress:'456 Oak Ave, Accra',   contactNumber:'+233501234567',requestDate:'2024-01-15T10:00:00Z',trackingNumber:null,         courier:null,   deliveryFee:null,estimatedDeliveryDate:null},
-        {id:502,orderId:1002,status:'SHIPPED',  deliveryAddress:'789 Pine St, Kumasi',  contactNumber:'+233509876543',requestDate:'2024-01-14T09:00:00Z',trackingNumber:'TRACK502XYZ',courier:'DHL', deliveryFee:15,  estimatedDeliveryDate:'2024-01-18T17:00:00Z'},
-        {id:503,orderId:1003,status:'DELIVERED',deliveryAddress:'12 Ring Rd, Tema',     contactNumber:'+233502345678',requestDate:'2024-01-10T08:00:00Z',trackingNumber:'TRACK503ABC',courier:'FedEx',deliveryFee:10,  estimatedDeliveryDate:'2024-01-13T12:00:00Z'},
-        {id:504,orderId:1004,status:'CANCELLED',deliveryAddress:'5 Beach Rd, Takoradi', contactNumber:'+233503456789',requestDate:'2024-01-08T11:00:00Z',trackingNumber:null,         courier:null,   deliveryFee:null,estimatedDeliveryDate:null},
+      if(!r.ok) throw new Error(d.message || 'Server error');
+      allDeliveries = d.data || [];
+    }catch(err){
+      console.warn('Delivery fetch failed, using demo data:', err.message);
+      allDeliveries = [
+        { id:501, orderId:1001, status:'REQUESTED',   customerName:'Ama Owusu',   deliveryAddress:'456 Oak Ave, Accra',    contactNumber:'+233501234567', requestDate:'2024-01-15T10:00:00Z', trackingNumber:null,          courierName:null,    deliveryFee:null, estimatedDeliveryTime:null },
+        { id:502, orderId:1002, status:'IN_TRANSIT',  customerName:'Kofi Mensah', deliveryAddress:'789 Pine St, Kumasi',   contactNumber:'+233509876543', requestDate:'2024-01-14T09:00:00Z', trackingNumber:'TRACK502XYZ', courierName:'DHL',   deliveryFee:15,   estimatedDeliveryTime:'2024-01-18T17:00:00Z' },
+        { id:503, orderId:1003, status:'DELIVERED',   customerName:'Abena Asante',deliveryAddress:'12 Ring Rd, Tema',      contactNumber:'+233502345678', requestDate:'2024-01-10T08:00:00Z', trackingNumber:'TRACK503ABC', courierName:'FedEx', deliveryFee:10,   estimatedDeliveryTime:'2024-01-13T12:00:00Z' },
+        { id:504, orderId:1004, status:'CANCELLED',   customerName:'Yaw Boateng', deliveryAddress:'5 Beach Rd, Takoradi',  contactNumber:'+233503456789', requestDate:'2024-01-08T11:00:00Z', trackingNumber:null,          courierName:null,    deliveryFee:null, estimatedDeliveryTime:null },
+        { id:505, orderId:1005, status:'CONFIRMED',   customerName:'Akua Sarpong',deliveryAddress:'22 High St, Cape Coast',contactNumber:'+233504567890', requestDate:'2024-01-16T07:00:00Z', trackingNumber:null,          courierName:null,    deliveryFee:null, estimatedDeliveryTime:null },
+        { id:506, orderId:1006, status:'PICKED_UP',   customerName:'Kojo Asiedu', deliveryAddress:'3 Link Rd, Sunyani',    contactNumber:'+233505678901', requestDate:'2024-01-13T14:00:00Z', trackingNumber:'TRACK506DEF', courierName:'GHL',   deliveryFee:12,   estimatedDeliveryTime:'2024-01-17T12:00:00Z' },
       ];
     }
 
-    // client-side search filter
-    if(search){
-      const q = search.toLowerCase();
-      deliveries = deliveries.filter(d =>
+    renderFiltered();
+  }
+
+  /* ── RENDER — apply client-side status + search filter ── */
+  function renderFiltered(){
+    const q   = $('searchInput').value.trim().toLowerCase();
+    const sta = currentFilter;
+
+    let list = allDeliveries;
+
+    // Client-side status filter (skip for 'all', 'active', 'overdue' — those come pre-filtered from server)
+    if(sta !== 'all' && sta !== 'active' && sta !== 'overdue'){
+      list = list.filter(d => (d.status || '') === sta);
+    }
+
+    // Search filter — match ID, address, contact, customer name
+    if(q){
+      list = list.filter(d =>
         String(d.id).includes(q) ||
         (d.deliveryAddress || '').toLowerCase().includes(q) ||
-        (d.contactNumber  || '').toLowerCase().includes(q)
+        (d.contactNumber   || '').toLowerCase().includes(q) ||
+        (d.customerName    || '').toLowerCase().includes(q) ||
+        (d.recipientName   || '').toLowerCase().includes(q)
       );
     }
 
-    renderGrid();
-  }
-
-  /* ── RENDER GRID — same pattern as renderGrid() in products ── */
-  function renderGrid(){
-    if(!deliveries.length){
+    if(!list.length){
       $('deliveriesGrid').innerHTML = '<div style="grid-column:1/-1"><div class="empty-state"><i class="fas fa-truck"></i> No deliveries found</div></div>';
       return;
     }
-    // innerHTML set once; delegated listener on #deliveriesGrid persists — no re-attach needed
-    $('deliveriesGrid').innerHTML = deliveries.map(d => renderDeliveryCard(d)).join('');
+
+    $('deliveriesGrid').innerHTML = list.map(d => renderCard(d)).join('');
   }
 
-  function renderDeliveryCard(d){
+  function renderCard(d){
+    const sta = d.status || 'REQUESTED';
     const trk = d.trackingNumber || '—';
-    const cou = d.courier        || '—';
+    const cou = d.courierName    || '—';
     const fee = d.deliveryFee    ? 'GHS ' + d.deliveryFee : '—';
-    const sta = d.status         || 'PENDING';
+    const who = d.customerName   || d.recipientName || '—';
     return `<div class="delivery-card" id="dcard-${d.id}">
       <div class="dc-head">
         <div>
           <div class="dc-id">#${d.id}</div>
           <div class="dc-order">Order #${d.orderId || '—'}</div>
         </div>
-        <span class="dstatus ${sta}">${sta}</span>
+        <span class="dstatus ${sta}">${fmtLabel(sta)}</span>
       </div>
       <div class="dc-body">
+        <div class="dc-row"><span class="dc-label">Customer</span><span class="dc-val">${who}</span></div>
         <div class="dc-row"><span class="dc-label">Address</span><span class="dc-val">${d.deliveryAddress || '—'}</span></div>
-        <div class="dc-row"><span class="dc-label">Contact</span><span class="dc-val">${d.contactNumber || '—'}</span></div>
+        <div class="dc-row"><span class="dc-label">Contact</span><span class="dc-val">${d.contactNumber || d.recipientPhone || '—'}</span></div>
         <div class="dc-row"><span class="dc-label">Tracking</span><span class="dc-val">${trk}</span></div>
         <div class="dc-row"><span class="dc-label">Courier</span><span class="dc-val">${cou}</span></div>
         <div class="dc-row"><span class="dc-label">Fee</span><span class="dc-val">${fee}</span></div>
-        <div class="dc-row"><span class="dc-label">Requested</span><span class="dc-val">${fmtDate(d.requestDate)}</span></div>
+        <div class="dc-row"><span class="dc-label">Requested</span><span class="dc-val">${fmtDate(d.createdAt || d.requestDate)}</span></div>
       </div>
       <div class="dc-actions">
         <button class="btn-view"       data-action="view"   data-id="${d.id}"><i class="fas fa-eye fa-xs"></i> View</button>
@@ -480,7 +534,7 @@
     </div>`;
   }
 
-  /* ── DELEGATED CLICK on grid — same pattern as products page ── */
+  /* ── DELEGATED CLICK on grid ── */
   $('deliveriesGrid').addEventListener('click', e => {
     const btn = e.target.closest('[data-action]');
     if(!btn) return;
@@ -498,21 +552,23 @@
   $('detailModal').addEventListener('click', e => { if(e.target === $('detailModal')) closeDetailModal(); });
 
   function viewDelivery(id){
-    const d = deliveries.find(x => x.id === id);
+    const d = allDeliveries.find(x => x.id === id);
     if(!d) return;
     $('detailTitle').textContent = 'Delivery #' + id;
     $('detailBody').innerHTML = `
       <div class="detail-grid">
         <div class="detail-item"><label>Delivery ID</label><span>#${d.id}</span></div>
         <div class="detail-item"><label>Order</label><span>#${d.orderId || '—'}</span></div>
-        <div class="detail-item"><label>Status</label><span class="dstatus ${d.status}">${d.status}</span></div>
-        <div class="detail-item"><label>Requested</label><span>${fmtDate(d.requestDate)}</span></div>
+        <div class="detail-item"><label>Status</label><span class="dstatus ${d.status}">${fmtLabel(d.status)}</span></div>
+        <div class="detail-item"><label>Requested</label><span>${fmtDate(d.createdAt || d.requestDate)}</span></div>
+        <div class="detail-item" style="grid-column:1/-1"><label>Customer</label><span>${d.customerName || d.recipientName || '—'}</span></div>
         <div class="detail-item" style="grid-column:1/-1"><label>Address</label><span>${d.deliveryAddress || '—'}</span></div>
-        <div class="detail-item"><label>Contact</label><span>${d.contactNumber || '—'}</span></div>
-        <div class="detail-item"><label>Courier</label><span>${d.courier || '—'}</span></div>
+        <div class="detail-item"><label>Contact</label><span>${d.contactNumber || d.recipientPhone || '—'}</span></div>
+        <div class="detail-item"><label>Courier</label><span>${d.courierName || '—'}</span></div>
         <div class="detail-item"><label>Tracking</label><span>${d.trackingNumber || '—'}</span></div>
         <div class="detail-item"><label>Fee</label><span>${d.deliveryFee ? 'GHS ' + d.deliveryFee : '—'}</span></div>
-        <div class="detail-item"><label>Est. Delivery</label><span>${fmtDate(d.estimatedDeliveryDate)}</span></div>
+        <div class="detail-item"><label>Est. Delivery</label><span>${fmtDate(d.estimatedDeliveryTime)}</span></div>
+        <div class="detail-item"><label>Actual Delivery</label><span>${fmtDate(d.actualDeliveryTime)}</span></div>
       </div>`;
     $('detailModal').classList.add('open');
   }
@@ -525,16 +581,21 @@
   $('updateModal').addEventListener('click', e => { if(e.target === $('updateModal')) closeUpdateModal(); });
 
   function openUpdateModal(id){
-    const d = deliveries.find(x => x.id === id);
+    const d = allDeliveries.find(x => x.id === id);
     if(!d) return;
     pendingUpdate.id = id;
-    $('uStatus').value   = d.status  || 'PENDING';
-    $('uTracking').value = d.trackingNumber || '';
-    $('uCourier').value  = d.courier  || '';
-    $('uFee').value      = d.deliveryFee || '';
+
+    // Set status to current value — no other defaults
+    $('uStatus').value   = d.status || 'REQUESTED';
+
+    // Clear all fields — no pre-fill with existing data to avoid accidental overwrites
+    $('uTracking').value = '';
+    $('uCourier').value  = '';
+    $('uFee').value      = '';
     $('uEta').value      = '';
     $('uMessage').value  = '';
-    $('updateLabel').textContent = 'Updating Delivery #' + id;
+
+    $('updateLabel').textContent = 'Updating Delivery #' + id + ' · Current: ' + fmtLabel(d.status);
     $('updateErr').classList.remove('show');
     $('updateModal').classList.add('open');
   }
@@ -543,31 +604,36 @@
   async function saveUpdate(){
     const id   = pendingUpdate.id;
     const body = { status: $('uStatus').value };
-    const trk = $('uTracking').value, cou = $('uCourier').value;
-    const fee = $('uFee').value,      eta = $('uEta').value;
-    const msg = $('uMessage').value;
-    if(trk) body.trackingNumber        = trk;
-    if(cou) body.courier               = cou;
-    if(fee) body.deliveryFee           = parseFloat(fee);
-    if(eta) body.estimatedDeliveryDate = eta;
-    if(msg) body.messageToUser         = msg;
+
+    // Only include fields the admin actually filled in
+    const trk = $('uTracking').value.trim();
+    const cou = $('uCourier').value.trim();
+    const fee = $('uFee').value.trim();
+    const eta = $('uEta').value.trim();
+    const msg = $('uMessage').value.trim();
+    if(trk) body.trackingNumber         = trk;
+    if(cou) body.courierName            = cou;
+    if(fee) body.deliveryFee            = parseFloat(fee);
+    if(eta) body.estimatedDeliveryTime  = eta;
+    if(msg) body.messageToUser          = msg;
 
     const btn = $('btnUpdateSave');
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin fa-xs"></i> Saving…';
     try{
       const r = await fetch(BASE_URL + '/api/admin/deliveries/' + id + '/status', {
-        method:'PATCH',
-        headers:{ ...authHeaders(), 'Content-Type':'application/json' },
-        body:JSON.stringify(body)
+        method: 'PATCH',
+        headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
       });
       const d = await r.json();
-      if(!r.ok) throw new Error();
-      toast('fas fa-check-circle', 'Delivery #' + id + ' updated');
-    }catch{
+      if(!r.ok) throw new Error(d.message || 'Server error');
+      toast('fas fa-check-circle', 'Delivery #' + id + ' updated to ' + fmtLabel(body.status));
+    }catch(err){
       toast('fas fa-check-circle', 'Delivery updated (demo)');
     }finally{
       btn.disabled = false; btn.innerHTML = '<i class="fas fa-check fa-xs"></i> Update Delivery';
-      closeUpdateModal(); loadDeliveries();
+      closeUpdateModal();
+      loadDeliveries();
     }
   }
 
@@ -585,15 +651,13 @@
 
   /* ── CANCEL ── */
   async function cancelDelivery(id){
-    const d = deliveries.find(x => x.id === id);
-    const name = d ? 'delivery #' + id : 'this delivery';
-    if(!confirm('Cancel ' + name + '?')) return;
+    if(!confirm('Cancel delivery #' + id + '? This cannot be undone.')) return;
     try{
       const r = await fetch(BASE_URL + '/api/admin/deliveries/' + id + '/cancel', { method:'PATCH', headers: authHeaders() });
       if(!r.ok) throw new Error();
       toast('fas fa-ban', 'Delivery #' + id + ' cancelled');
     }catch{
-      toast('fas fa-ban', 'Delivery cancelled (demo)');
+      toast('fas fa-ban', 'Delivery #' + id + ' cancelled (demo)');
     }
     loadDeliveries();
   }
