@@ -412,14 +412,8 @@
       const r=await fetch(url,{headers:authHeaders()});
       const d=await r.json();if(!r.ok)throw new Error();
       orders=d.data||[];renderOrders();
-    }catch{
-      orders=[
-        {orderId:1001,userId:'u1',orderDate:'2024-01-15T10:00:00Z',status:'PENDING',totalAmount:280,paymentMethod:'CREDIT_CARD',shippingAddress:'123 Main St, Accra',orderItems:[{orderItemId:1,productName:'Satin Dress',quantity:1,price:280,subtotal:280}]},
-        {orderId:1002,userId:'u2',orderDate:'2024-01-14T09:00:00Z',status:'DELIVERED',totalAmount:150,paymentMethod:'PAYPAL',shippingAddress:'456 Oak Ave, Kumasi',orderItems:[{orderItemId:2,productName:'Silk Top',quantity:2,price:75,subtotal:150}]},
-        {orderId:1003,userId:'u3',orderDate:'2024-01-13T14:00:00Z',status:'SHIPPED',totalAmount:420,paymentMethod:'CREDIT_CARD',shippingAddress:'789 Pine Rd, Tema',orderItems:[{orderItemId:3,productName:'Linen Blazer',quantity:1,price:420,subtotal:420}]},
-        {orderId:1004,userId:'u4',orderDate:'2024-01-12T11:00:00Z',status:'CONFIRMED',totalAmount:95,paymentMethod:'MOBILE_MONEY',shippingAddress:'12 Ring Rd, Accra',orderItems:[{orderItemId:4,productName:'Face Cream',quantity:2,price:47.5,subtotal:95}]},
-        {orderId:1005,userId:'u5',orderDate:'2024-01-11T08:00:00Z',status:'CANCELLED',totalAmount:60,paymentMethod:'PAYPAL',shippingAddress:'5 Beach Rd, Takoradi',orderItems:[{orderItemId:5,productName:'Moisturizer',quantity:1,price:60,subtotal:60}]},
-      ];
+    }catch(e){
+      orders=[]; 
       renderOrders();
     }
   }

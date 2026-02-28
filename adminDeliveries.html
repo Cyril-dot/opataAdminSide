@@ -457,15 +457,7 @@
       if(!r.ok) throw new Error(d.message || 'Server error');
       allDeliveries = d.data || [];
     }catch(err){
-      console.warn('Delivery fetch failed, using demo data:', err.message);
-      allDeliveries = [
-        { id:501, orderId:1001, status:'REQUESTED',   customerName:'Ama Owusu',   deliveryAddress:'456 Oak Ave, Accra',    contactNumber:'+233501234567', requestDate:'2024-01-15T10:00:00Z', trackingNumber:null,          courierName:null,    deliveryFee:null, estimatedDeliveryTime:null },
-        { id:502, orderId:1002, status:'IN_TRANSIT',  customerName:'Kofi Mensah', deliveryAddress:'789 Pine St, Kumasi',   contactNumber:'+233509876543', requestDate:'2024-01-14T09:00:00Z', trackingNumber:'TRACK502XYZ', courierName:'DHL',   deliveryFee:15,   estimatedDeliveryTime:'2024-01-18T17:00:00Z' },
-        { id:503, orderId:1003, status:'DELIVERED',   customerName:'Abena Asante',deliveryAddress:'12 Ring Rd, Tema',      contactNumber:'+233502345678', requestDate:'2024-01-10T08:00:00Z', trackingNumber:'TRACK503ABC', courierName:'FedEx', deliveryFee:10,   estimatedDeliveryTime:'2024-01-13T12:00:00Z' },
-        { id:504, orderId:1004, status:'CANCELLED',   customerName:'Yaw Boateng', deliveryAddress:'5 Beach Rd, Takoradi',  contactNumber:'+233503456789', requestDate:'2024-01-08T11:00:00Z', trackingNumber:null,          courierName:null,    deliveryFee:null, estimatedDeliveryTime:null },
-        { id:505, orderId:1005, status:'CONFIRMED',   customerName:'Akua Sarpong',deliveryAddress:'22 High St, Cape Coast',contactNumber:'+233504567890', requestDate:'2024-01-16T07:00:00Z', trackingNumber:null,          courierName:null,    deliveryFee:null, estimatedDeliveryTime:null },
-        { id:506, orderId:1006, status:'PICKED_UP',   customerName:'Kojo Asiedu', deliveryAddress:'3 Link Rd, Sunyani',    contactNumber:'+233505678901', requestDate:'2024-01-13T14:00:00Z', trackingNumber:'TRACK506DEF', courierName:'GHL',   deliveryFee:12,   estimatedDeliveryTime:'2024-01-17T12:00:00Z' },
-      ];
+      allDeliveries = [];
     }
 
     renderFiltered();

@@ -498,13 +498,8 @@
       const r=await fetch(API_BASE+'/api/admin/orders/recent?limit=6',{headers:authHeaders()});
       const d=await r.json();if(!r.ok)throw new Error();
       renderRecentOrders(d.data||[]);
-    }catch{
-      renderRecentOrders([
-        {orderId:1001,orderDate:'2024-01-15T10:00:00Z',status:'PENDING',totalAmount:280},
-        {orderId:1002,orderDate:'2024-01-14T09:00:00Z',status:'DELIVERED',totalAmount:150},
-        {orderId:1003,orderDate:'2024-01-13T14:00:00Z',status:'SHIPPED',totalAmount:420},
-        {orderId:1004,orderDate:'2024-01-12T11:00:00Z',status:'CONFIRMED',totalAmount:95},
-      ]);
+    }catch(e){
+      renderRecentOrders([]);
     }
   }
 

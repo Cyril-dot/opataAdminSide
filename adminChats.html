@@ -352,20 +352,8 @@
   $('sShop').textContent = admin.shopName || 'Beauty Empire';
 
   /* ── DEMO DATA ───────────────────────────────────────────── */
-  const DEMO_ROOMS = [
-    { id:1, type:'PRODUCT_ENQUIRY', product:{ id:123, name:'Satin Wrap Dress' },    user:{ id:'u1', firstName:'Ama',   lastName:'Owusu'  } },
-    { id:2, type:'ORDER_SUPPORT',   order:{ id:1001, status:'PENDING' },             user:{ id:'u2', firstName:'Kofi',  lastName:'Mensah' } },
-    { id:3, type:'DELIVERY_SUPPORT',delivery:{ id:501, status:'SHIPPED' },           user:{ id:'u3', firstName:'Abena', lastName:'Asante' } },
-    { id:4, type:'ORDER_SUPPORT',   order:{ id:1002, status:'CONFIRMED' },           user:{ id:'u4', firstName:'Yaw',   lastName:'Boateng'} },
-  ];
-  const DEMO_MESSAGES = {
-    1:[{ id:101, senderType:'USER',  content:'Hi! Is this dress available in size L?',                                    timestamp:'2024-01-15T10:05:00Z' },
-       { id:102, senderType:'ADMIN', content:'Yes! We have size L in black and white. Would you like to add it to your cart?', timestamp:'2024-01-15T10:07:00Z' }],
-    2:[{ id:103, senderType:'ADMIN', content:'Hi Kofi, your order #1001 is being prepared.',                              timestamp:'2024-01-15T11:00:00Z' },
-       { id:104, senderType:'USER',  content:'Thanks! When should I expect it?',                                           timestamp:'2024-01-15T11:05:00Z' }],
-    3:[{ id:105, senderType:'ADMIN', content:'Your delivery has been shipped with DHL. Tracking: TRACK502XYZ',            timestamp:'2024-01-15T12:00:00Z' }],
-    4:[],
-  };
+  const DEMO_ROOMS = [];
+  const DEMO_MESSAGES = [];
 
   /* ── SIDEBAR ─────────────────────────────────────────────── */
   // click only — touch-action:manipulation on body removes 300ms delay everywhere

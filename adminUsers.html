@@ -366,11 +366,7 @@
         renderUsers(data.users || data || []);
       })
       .catch(() => {
-        renderUsers([
-          {id:'user-uuid-001',firstName:'John',lastName:'Doe',email:'john.doe@example.com',createdAt:'2024-01-15T10:00:00Z'},
-          {id:'user-uuid-002',firstName:'Jane',lastName:'Smith',email:'jane.smith@example.com',createdAt:'2024-02-20T11:30:00Z'},
-          {id:'user-uuid-003',firstName:'Ama',lastName:'Asante',email:'ama@example.com',createdAt:'2024-03-05T09:00:00Z'},
-        ]);
+        renderUsers([]);
       });
   }
 
